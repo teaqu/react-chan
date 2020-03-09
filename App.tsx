@@ -8,12 +8,14 @@
  * @format
  */
 
-import React from 'react';
+import React, { Component, ReactNode } from 'react';
+import { FlatList, ListRenderItem } from 'react-native';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
+  Image,
   Text,
   StatusBar,
 } from 'react-native';
@@ -26,93 +28,135 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+type Catalog = {
+  page: number;
+  threads: Thread[];
+}
+
+type Thread = {
+  no: number;
+  now: string;
+  name: string;
+  sub: string;
+  com: string;
+  filename: string;
+  ext: string;
+  w: number;
+  h: number;
+  tn_w: number;
+  tn_h: number;
+  tim: number;
+  time: number;
+  md5: string;
+  fsize: number;
+  resto: number;
+  bumplimit: number;
+  imagelimit: number;
+  semantic_url: string;
+  custom_spoiler: number;
+  replies: number;
+  images : number;
+  omitted_posts: number;
+  omitted_images: number;
+  last_replies: Reply[];
+  last_modified: number;
+}
+
+type Reply = {
+  no: number;
+  now: string;
+  name: string;
+  com: string;
+  time: number;
+  resto: number;
+}
+
+type State = {
+  catalog: Catalog[]|null;
+}
+
+type Props = {}
+
+
 declare var global: {HermesInternal: null | {}};
 
-const App = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change
-                this screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+export default class App extends Component {
+
+  state: State;
+
+   constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      catalog: null
+    };
+
+    this.getCatalog();
+  }
+
+  getCatalog(): void {
+    fetch('https://a.4cdn.org/a/catalog.json')
+      .then((response) => {
+        response.json().then(value => {
+          this.setState({
+            catalog: value
+          })
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  // @todo variable height
+  render(): ReactNode {
+    if (this.state.catalog) {
+      var catalog: Catalog = this.state.catalog[0];
+      var threads: Thread[] = catalog.threads;
+      var html = [];
+      for (var i = 0; i < threads.length; ++i) {
+        html.push(
+          <View style={styles.thread}>
+            <Image 
+              source={{uri: 'https://i.4cdn.org/a/' + threads[i].tim + 's.jpg'}}
+              style={{width: '100%', height: 100}} />
+            <Text>{threads[i].com}</Text>
           </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+        );
+      }
+      return (
+        <FlatList<Thread>
+          data={threads}
+          numColumns={3}
+          renderItem={({ item }) => 
+            <View style={styles.thread}>
+              <Image 
+                source={{uri: 'https://i.4cdn.org/a/' + item.tim + 's.jpg'}}
+                style={{width: '100%', height: 100}} />
+              <Text>{item.com}</Text>
+            </View>
+          }
+        />
+      )
+    } else {
+      return (
+        <>
+            <Text>Loading...</Text>
+        </>
+      );
+    }
+  }
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  catalog: {
+    flexWrap: 'wrap'
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+  thread: {
+    borderWidth: 1,
+    margin: 5,
+    padding: 5,
+    flex: 1,
+    flexDirection: 'column'
+  }
 });
-
-export default App;
