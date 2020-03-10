@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "react": "16.9.0",
-    "react-native": "0.61.5"
+    "react-native": "0.61.5",
+    "react-native-render-html": "^4.2.0",
+    "react-native-webview": "^8.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

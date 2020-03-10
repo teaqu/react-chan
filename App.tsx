@@ -9,7 +9,10 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, TouchableHighlight } from 'react-native';
+
+import HTML from 'react-native-render-html'; 
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -111,7 +114,7 @@ export default class App extends Component {
   // @todo variable height
   render(): ReactNode {
     if (this.state.catalog) {
-      var catalog: Catalog = this.state.catalog[0];
+      var catalog: Catalog = this.state.catalog[1];
       var threads: Thread[] = catalog.threads;
       var html = [];
       for (var i = 0; i < threads.length; ++i) {
@@ -126,14 +129,29 @@ export default class App extends Component {
       }
       return (
         <FlatList<Thread>
+          style={styles.catalog}
           data={threads}
           numColumns={3}
           renderItem={({ item }) => 
-            <View style={styles.thread}>
+            <View style={styles.thread} key={item.no}>
               <Image 
                 source={{uri: 'https://i.4cdn.org/a/' + item.tim + 's.jpg'}}
-                style={{width: '100%', height: 100}} />
-              <Text>{item.com}</Text>
+                style={{width: '100%', height: 100}} 
+              /> 
+              <HTML
+                html={item.com} 
+                renderers = {{
+                    's': function (htmlAttribs, children) {
+                      return (
+                        <TouchableHighlight onPress = {() => {
+                          console.log('open spoiler')
+                        }}>
+                          <Text style={{ backgroundColor: 'black' }} >{children}</Text>
+                        </TouchableHighlight>
+                      )
+                    }
+                }}
+              />
             </View>
           }
         />
@@ -150,13 +168,20 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   catalog: {
-    flexWrap: 'wrap'
+    backgroundColor: '#eef2ff',
   },
   thread: {
-    borderWidth: 1,
-    margin: 5,
-    padding: 5,
+    margin: 2,
+    padding: 2,
     flex: 1,
+    height: 300,
+    maxHeight: 300,
     flexDirection: 'column'
+  },
+  thread_comment: {
+  },
+  s: {
+    backgroundColor: 'black',
+    color: 'red'
   }
 });
