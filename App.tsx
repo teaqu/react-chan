@@ -63,6 +63,7 @@ type Thread = {
   omitted_images: number;
   last_replies: Reply[];
   last_modified: number;
+  page?: number;
 }
 
 type Reply = {
@@ -75,7 +76,7 @@ type Reply = {
 }
 
 type State = {
-  catalog: Catalog[]|null;
+  catalog: Catalog[];
 }
 
 type Props = {}
@@ -91,7 +92,7 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      catalog: null
+      catalog: []
     };
 
     this.getCatalog();
@@ -114,8 +115,21 @@ export default class App extends Component {
   // @todo variable height
   render(): ReactNode {
     if (this.state.catalog) {
-      var catalog: Catalog = this.state.catalog[1];
-      var threads: Thread[] = catalog.threads;
+      const catalog = this.state.catalog;
+      var threads: Thread[] = [];
+      
+      // Loop through catalog pages
+      for (var i = 0; i < catalog.length; ++i) {
+
+        // Add catalog page to thread
+        catalog[i].threads.map((thread) => {
+          thread.page = catalog[i].page;
+        });[]
+
+        // Concat all thread pages
+        threads = threads.concat(catalog[i].threads);
+      }
+      
       var html = [];
       for (var i = 0; i < threads.length; ++i) {
         html.push(
@@ -132,8 +146,9 @@ export default class App extends Component {
           style={styles.catalog}
           data={threads}
           numColumns={3}
+          keyExtractor={(item) => item.no.toString()}
           renderItem={({ item }) => 
-            <View style={styles.thread} key={item.no}>
+            <View style={styles.thread}>
               <Image 
                 source={{uri: 'https://i.4cdn.org/a/' + item.tim + 's.jpg'}}
                 style={{width: '100%', height: 100}} 
@@ -143,11 +158,9 @@ export default class App extends Component {
                 renderers = {{
                     's': function (htmlAttribs, children) {
                       return (
-                        <TouchableHighlight onPress = {() => {
-                          console.log('open spoiler')
-                        }}>
-                          <Text style={{ backgroundColor: 'black' }} >{children}</Text>
-                        </TouchableHighlight>
+                        <Text style={{ backgroundColor: 'black' }} >
+                          {children}
+                        </Text>
                       )
                     }
                 }}
@@ -174,7 +187,6 @@ const styles = StyleSheet.create({
     margin: 2,
     padding: 2,
     flex: 1,
-    height: 300,
     maxHeight: 300,
     flexDirection: 'column'
   },
@@ -183,5 +195,14 @@ const styles = StyleSheet.create({
   s: {
     backgroundColor: 'black',
     color: 'red'
+  },
+  sub: {
+    fontWeight: 'bold',
+    color: '#0f0c5d'
+  },
+  stats: {
+    fontSize: 10,
+    textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
