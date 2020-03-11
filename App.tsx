@@ -153,6 +153,10 @@ export default class App extends Component {
                 source={{uri: 'https://i.4cdn.org/a/' + item.tim + 's.jpg'}}
                 style={{width: '100%', height: 100}} 
               /> 
+              <Text style={styles.stats}>
+                {item.replies} / {item.images} / {item.page}
+              </Text>
+              {item.sub && <Text style={styles.sub}>{item.sub}</Text>}
               <HTML
                 html={item.com} 
                 renderers = {{
