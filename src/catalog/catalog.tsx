@@ -1,4 +1,4 @@
-import { Thread } from './thread';
+import { Thread } from "src/thread/thread";
 
 export interface Catalog {
     page: number;

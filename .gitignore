@@ -33,6 +33,7 @@ local.properties
 # Visual Studio Code
 #
 .vscode/
+.history/
 
 # Sublime
 *.sublime-project

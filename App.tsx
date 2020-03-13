@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import React, { Component, ReactNode } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { CatalogScreen } from './src/screens/catalog_screen';
+import { CatalogComponent } from './src/catalog/catalog_component';
 
 declare var global: {HermesInternal: null | {}};
 
@@ -15,7 +15,7 @@ export default class App extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Catalog">
-        <Stack.Screen name="Catalog" component={CatalogScreen} />
+        <Stack.Screen name="Catalog" component={CatalogComponent}/>
         </Stack.Navigator>
       </NavigationContainer>  
     );

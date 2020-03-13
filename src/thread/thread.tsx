@@ -1,4 +1,4 @@
-import { Reply } from './reply'
+import { Reply } from "src/post/post";
 
 export interface Thread {
     no: number;
