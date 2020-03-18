@@ -40,20 +40,29 @@ export class CatalogThreadComponent extends Component<Props> {
     const thread = this.state.thread;
     return (
       <View style={styles.thread}>
+        <View style={styles.tn_container}>
           <Image 
             source={{uri: 'https://i.4cdn.org/a/' + thread.tim + 's.jpg'}}
-            style={{width: '100%', height: 100}} 
+            style={{height: thread.tn_h/2}}
+            resizeMode='cover'
           /> 
-          <Text style={styles.stats}>
-            {thread.replies} / {thread.images} / {thread.page}
-          </Text>
-          {thread.sub && <Text style={styles.sub}>{thread.sub}</Text>}
-          {thread.com && 
-            <HTML html={thread.com}
-                  renderers = {this.renderers(thread)}
-            />
-          }
-          
+        </View>
+        <Text style={styles.stats}>
+          {thread.replies} / {thread.images} / {thread.page}
+        </Text>
+        {thread.sub && <Text style={styles.sub}>{thread.sub}</Text>}
+        {thread.com && 
+          <HTML 
+            html={'<p>' + thread.com + '</p>'}
+            renderers={this.renderers(thread)}
+            tagsStyles={{
+              p: {
+                textAlign: 'center'
+              },
+            }}
+            containerStyle={styles.com_container}
+          />
+        }  
       </View>
     );
   }
@@ -102,7 +111,7 @@ export class CatalogThreadComponent extends Component<Props> {
 
     let html: ReactNode = 
         <Text key={thread.no}
-          style={ ! spoilers[key] && {backgroundColor: 'black'}}
+          style={ ! spoilers[key] && styles.s}
           onPress = {() => this.onSpoilerPress(key)}
         >
           {children}
@@ -130,24 +139,32 @@ export class CatalogThreadComponent extends Component<Props> {
 
 const styles = StyleSheet.create({
   thread: {
-    margin: 2,
-    padding: 2,
+    margin: 10,
     flex: 1,
     flexDirection: 'column',
-    maxHeight: 300,
-    overflow: "hidden"
+    alignItems: 'center',
   },
   s: {
-    backgroundColor: 'black',
-    color: 'red'
+    backgroundColor: 'black'
   },
   sub: {
     fontWeight: 'bold',
-    color: '#0f0c5d'
+    color: '#0f0c5d',
+    textAlign: 'center'
   },
   stats: {
     fontSize: 10,
     textAlign: 'center',
     fontWeight: 'bold'
+  },
+  tn_container: {
+    elevation:3, 
+    backgroundColor : "#eef2ff", 
+    width: '100%',
+    marginBottom: 2
+  },
+  com_container: {
+    maxHeight: 200,
+    overflow: "hidden"
   }
 });
