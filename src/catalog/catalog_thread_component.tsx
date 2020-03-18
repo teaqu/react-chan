@@ -6,7 +6,10 @@ import HTML, {
   PassProps, 
   NonRegisteredStylesProp 
 } from 'react-native-render-html'; 
-import { Thread } from 'src/thread/thread';
+import { Thread } from 'src/catalog/thread';
+import { RootStackParamList } from 'src/navigator';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type State = {
   spoilers: {
@@ -17,6 +20,7 @@ type State = {
 
 type Props = {
     thread: Thread;
+    navigation: StackNavigationProp<RootStackParamList, 'Catalog'>;
 }
 
 /**
@@ -39,30 +43,36 @@ export class CatalogThreadComponent extends Component<Props> {
   render(): ReactNode {
     const thread = this.state.thread;
     return (
-      <View style={styles.thread}>
-        <View style={styles.tn_container}>
-          <Image 
-            source={{uri: 'https://i.4cdn.org/a/' + thread.tim + 's.jpg'}}
-            style={{height: thread.tn_h/2}}
-            resizeMode='cover'
-          /> 
-        </View>
-        <Text style={styles.stats}>
-          {thread.replies} / {thread.images} / {thread.page}
-        </Text>
-        {thread.sub && <Text style={styles.sub}>{thread.sub}</Text>}
-        {thread.com && 
-          <HTML 
-            html={'<p>' + thread.com + '</p>'}
-            renderers={this.renderers(thread)}
-            tagsStyles={{
-              p: {
-                textAlign: 'center'
-              },
-            }}
-            containerStyle={styles.com_container}
-          />
-        }  
+      <View style={styles.thread} >
+        <TouchableOpacity 
+          onPress={()=>{
+            this.props.navigation.navigate('Thread', {no: thread.no});
+        }}
+        >
+          <View style={styles.tn_container}>
+            <Image 
+              source={{uri: 'https://i.4cdn.org/a/' + thread.tim + 's.jpg'}}
+              style={{height: thread.tn_h/2}}
+              resizeMode='cover'
+            /> 
+          </View>
+          <Text style={styles.stats}>
+            {thread.replies} / {thread.images} / {thread.page}
+          </Text>
+          {thread.sub && <Text style={styles.sub}>{thread.sub}</Text>}
+          {thread.com && 
+            <HTML 
+              html={'<p>' + thread.com + '</p>'}
+              renderers={this.renderers(thread)}
+              tagsStyles={{
+                p: {
+                  textAlign: 'center'
+                },
+              }}
+              containerStyle={styles.com_container}
+            />
+          }
+        </TouchableOpacity>
       </View>
     );
   }

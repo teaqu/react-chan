@@ -1,62 +1,56 @@
 import React, { Component, ReactNode } from 'react';
 import { Text, FlatList, StyleSheet, RefreshControl } from 'react-native';
-import { Catalog } from 'src/catalog/catalog';
-import { Thread } from 'src/catalog/thread';
-import { CatalogThreadComponent } from './catalog_thread_component';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { Thread } from './thread';
+import { Post } from './post';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from 'src/navigator';
+import HTML from 'react-native-render-html'; 
 
 type State = {
-  threads: Thread[];
+  thread: Thread|null;
   refreshing: boolean;
 }
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'Catalog'>;
+    route: RouteProp<RootStackParamList, 'Thread'>;
 }
 
 /**
  * Render the catalog
  */
-export class CatalogComponent extends Component {
+export class ThreadComponent extends Component<Props, State> {
 
   state: State;
 
-   constructor(props: Props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
-      threads: [],
-      refreshing: true
+      refreshing: true,
+      thread: null
     };
 
-    this.retriveCatalog();
+    this.retriveThread();
   }
 
   onRefresh = () => {
     this.setState({refreshing: true});
-    this.retriveCatalog();
+    this.retriveThread();
   }
 
   /**
    * Get the catalog from the 4chan api
    */
-  private retriveCatalog(): void {
-    fetch('https://a.4cdn.org/a/catalog.json')
+  private retriveThread(): void {
+    const no = this.props.route.params.no;
+    fetch('https://a.4cdn.org/a/thread/' + no + '.json')
       .then((response: Response) => {
-        let threads: Thread[] = [];
-
+        console.log(response);
         // Extract threads from the catalog and set the thread's page so that
         // we can use a single FlatList rather than one per page.
-        response.json().then((catalogs: Catalog[]) => {
-          catalogs.forEach((catalog) => {
-            catalog.threads.forEach((thread) => {
-              thread.page = catalog.page;
-              threads.push(thread);
-            })
-          });
+        response.json().then((thread: Thread) => {
           this.setState({
-            threads: threads,
+            thread: thread,
             refreshing: false
           });
         });
@@ -66,10 +60,10 @@ export class CatalogComponent extends Component {
   }
 
   render(): ReactNode {
-    if (this.state.threads.length > 0) {
-      const threads = this.state.threads;
+    if (this.state.thread) {
+      const thread = this.state.thread;
       return (
-        <FlatList<Thread>
+        <FlatList<Post>
           refreshControl= {
             <RefreshControl 
               refreshing={this.state.refreshing} 
@@ -77,14 +71,11 @@ export class CatalogComponent extends Component {
             />
           }
           style={styles.catalog}
-          data={threads}
-          numColumns={3}
+          data={thread.posts}
+          numColumns={1}
           keyExtractor={(item) => item.no.toString()}
           renderItem={({ item }) => 
-            <CatalogThreadComponent 
-              navigation={this.props.navigation}
-              thread={item}
-            />
+            <HTML html={item.com} key={item.no.toString()}/>
           }
         />
       )
