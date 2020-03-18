@@ -14,7 +14,8 @@ declare module "react-native-render-html" {
     GestureResponderEvent,
     RecursiveArray,
     Falsy,
-    TextStyle
+    TextStyle,
+    ViewStyle
   } from "react-native";
   namespace HTML {
     interface BaseNode {
@@ -150,7 +151,7 @@ declare module "react-native-render-html" {
       /**
        * Custom style for the default container of the renderered HTML.
        */
-      containerStyle?: StyleProp<View>;
+      containerStyle?: StyleProp<ViewStyle>;
       /**
        * Replace the default wrapper with a function that takes your content as the first parameter.
        */
