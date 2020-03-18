@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { View, Image, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Image, Text, StyleSheet } from 'react-native';
 import HTML, { 
   HtmlAttributesDictionary, 
   RendererDictionary, 
@@ -133,7 +133,9 @@ const styles = StyleSheet.create({
     margin: 2,
     padding: 2,
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    maxHeight: 300,
+    overflow: "hidden"
   },
   s: {
     backgroundColor: 'black',
