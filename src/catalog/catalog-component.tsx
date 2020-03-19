@@ -2,7 +2,7 @@ import React, { Component, ReactNode } from 'react';
 import { Text, FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { Catalog } from 'src/catalog/catalog';
 import { Thread } from 'src/catalog/thread';
-import { CatalogThreadComponent } from './catalog_thread_component';
+import { CatalogThreadComponent } from './catalog-thread-component';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'src/navigator';
 

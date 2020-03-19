@@ -1,7 +1,7 @@
 import React, { ReactNode, Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { CatalogComponent } from './catalog/catalog_component';
-import { ThreadComponent } from './thread/thread_component';
+import { CatalogComponent } from './catalog/catalog-component';
+import { ThreadComponent } from './thread/thread-component';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
