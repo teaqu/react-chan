@@ -5,8 +5,8 @@
 // TypeScript Version: 2.0
 // https://github.com/archriss/react-native-render-html/pull/341
 
-declare module "react-native-render-html" {
-  import { ComponentType, ReactNode, Component, HTMLAttributes } from "react";
+declare module 'react-native-render-html' {
+  import { ComponentType, ReactNode, Component, HTMLAttributes } from 'react';
   import {
     StyleProp,
     Text,
@@ -16,21 +16,21 @@ declare module "react-native-render-html" {
     Falsy,
     TextStyle,
     ViewStyle
-  } from "react-native";
+  } from 'react-native';
   namespace HTML {
     interface BaseNode {
-      type: "text" | "tag";
+      type: 'text' | 'tag';
       next: HTMLNode | null;
       prev: HTMLNode | null;
       parent: HTMLNode | null;
       attribs: HtmlAttributesDictionary;
     }
     interface HTMLTextNode extends BaseNode {
-      type: "text";
+      type: 'text';
       data: string;
     }
     interface HTMLTagNode extends BaseNode {
-      type: "tag";
+      type: 'tag';
       name: string;
       children: HTMLNode[];
     }
@@ -54,7 +54,7 @@ declare module "react-native-render-html" {
       key: string;
       nodeIndex: number;
       rawChildren: HTMLNode[];
-      parentWrapper: "Text" | string;
+      parentWrapper: 'Text' | string;
       listsPrefixesRenderers: RendererDictionary<P>;
       renderersProps: P;
       data: any;
@@ -67,7 +67,7 @@ declare module "react-native-render-html" {
     ) => ReactNode;
     type RendererDeclaration<P = {}> =
       | RendererFunction<P>
-      | { renderer: RendererFunction<P>; wrapper: "Text" | "View" };
+      | { renderer: RendererFunction<P>; wrapper: 'Text' | 'View' };
     interface RendererDictionary<P = {}> {
       [tag: string]: RendererDeclaration<P>;
     }
@@ -218,7 +218,7 @@ declare module "react-native-render-html" {
   export = HTML;
 }
 
-declare module "react-native-render-html/src/HTMLUtils" {
+declare module 'react-native-render-html/src/HTMLUtils' {
   type HTMLNode = any;
   /**
    * Returns an array with the tagname of every parent of a node or an empty array if nothing is found.

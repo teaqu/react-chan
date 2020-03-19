@@ -4,22 +4,21 @@ import { Thread } from './thread';
 import { Post } from './post';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from 'src/navigator';
-import HTML from 'react-native-render-html'; 
+import HTML from 'react-native-render-html';
 
 type State = {
-  thread: Thread|null;
+  thread: Thread | null;
   refreshing: boolean;
-}
+};
 
 type Props = {
-    route: RouteProp<RootStackParamList, 'Thread'>;
-}
+  route: RouteProp<RootStackParamList, 'Thread'>;
+};
 
 /**
  * Render the catalog
  */
 export class ThreadComponent extends Component<Props, State> {
-
   state: State;
 
   constructor(props: Props) {
@@ -34,9 +33,9 @@ export class ThreadComponent extends Component<Props, State> {
   }
 
   onRefresh = () => {
-    this.setState({refreshing: true});
+    this.setState({ refreshing: true });
     this.retriveThread();
-  }
+  };
 
   /**
    * Get the catalog from the 4chan api
@@ -54,7 +53,8 @@ export class ThreadComponent extends Component<Props, State> {
             refreshing: false
           });
         });
-      }).catch((error) => {
+      })
+      .catch(error => {
         console.error(error);
       });
   }
@@ -64,34 +64,33 @@ export class ThreadComponent extends Component<Props, State> {
       const thread = this.state.thread;
       return (
         <FlatList<Post>
-          refreshControl= {
-            <RefreshControl 
-              refreshing={this.state.refreshing} 
-              onRefresh={this.onRefresh} 
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
             />
           }
           style={styles.catalog}
           data={thread.posts}
           numColumns={1}
-          keyExtractor={(item) => item.no.toString()}
-          renderItem={({ item }) => 
-            <HTML html={item.com} key={item.no.toString()}/>
-          }
+          keyExtractor={item => item.no.toString()}
+          renderItem={({ item }) => (
+            <HTML html={item.com} key={item.no.toString()} />
+          )}
         />
-      )
+      );
     } else {
       return (
         <>
-            <Text>Loading...</Text>
+          <Text>Loading...</Text>
         </>
       );
     }
   }
-
 }
 
 const styles = StyleSheet.create({
   catalog: {
-    backgroundColor: '#eef2ff',
-  },
+    backgroundColor: '#eef2ff'
+  }
 });

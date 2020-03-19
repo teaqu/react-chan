@@ -1,5 +1,5 @@
-import { Post } from "./post";
+import { Post } from './post';
 
 export interface Thread {
-    posts: Post[]
+  posts: Post[];
 }
