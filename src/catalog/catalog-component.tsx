@@ -18,7 +18,7 @@ type Props = {
 /**
  * Render the catalog
  */
-export class CatalogComponent extends Component {
+export class CatalogComponent extends Component<Props, State> {
 
   state: State;
 
