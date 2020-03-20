@@ -16,7 +16,7 @@ type Props = {
 };
 
 /**
- * Render the catalog
+ * Render a thread
  */
 export class ThreadComponent extends Component<Props, State> {
   state: State;
@@ -38,15 +38,13 @@ export class ThreadComponent extends Component<Props, State> {
   };
 
   /**
-   * Get the catalog from the 4chan api
+   * Get the thread from the 4chan api
    */
   private retriveThread(): void {
     const no = this.props.route.params.no;
     fetch('https://a.4cdn.org/a/thread/' + no + '.json')
       .then((response: Response) => {
         console.log(response);
-        // Extract threads from the catalog and set the thread's page so that
-        // we can use a single FlatList rather than one per page.
         response.json().then((thread: Thread) => {
           this.setState({
             thread: thread,

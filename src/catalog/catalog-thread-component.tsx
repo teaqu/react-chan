@@ -27,9 +27,6 @@ type Props = {
  * Rendering a thread in the catalog
  */
 export class CatalogThreadComponent extends Component<Props> {
-  /**
-   * test
-   */
   state: State;
 
   constructor(props: Props) {
