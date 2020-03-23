@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Text, FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { Thread } from 'src/catalog/thread';
 import { CatalogThreadComponent } from './catalog-thread-component';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -35,34 +35,26 @@ class CatalogComponent extends Component<Props, RootState> {
 
   render(): ReactNode {
     const { catalog } = this.props;
-    if (catalog.threads.length > 0) {
-      return (
-        <FlatList<Thread>
-          refreshControl={
-            <RefreshControl
-              refreshing={catalog.isFetching}
-              onRefresh={this.onRefresh}
-            />
-          }
-          style={styles.catalog}
-          data={catalog.threads}
-          numColumns={3}
-          keyExtractor={item => item.no.toString()}
-          renderItem={({ item }) => (
-            <CatalogThreadComponent
-              navigation={this.props.navigation}
-              thread={item}
-            />
-          )}
-        />
-      );
-    } else {
-      return (
-        <>
-          <Text>Loading...</Text>
-        </>
-      );
-    }
+    return (
+      <FlatList<Thread>
+        refreshControl={
+          <RefreshControl
+            refreshing={catalog.isFetching}
+            onRefresh={this.onRefresh}
+          />
+        }
+        style={styles.catalog}
+        data={catalog.threads}
+        numColumns={3}
+        keyExtractor={item => item.no.toString()}
+        renderItem={({ item }) => (
+          <CatalogThreadComponent
+            navigation={this.props.navigation}
+            thread={item}
+          />
+        )}
+      />
+    );
   }
 }
 
