@@ -1,10 +1,12 @@
 import { ThunkAction } from 'redux-thunk';
 import { createAction, Action } from '@reduxjs/toolkit';
+import { normalize } from 'normalizr';
 
 import { RootState } from 'src/shared/root-reducer';
 
 import { Thread } from './thread';
 import { Catalog } from './catalog';
+import { catalogSchema } from './catalog-schemas';
 
 type ThunkResult<R> = ThunkAction<R, RootState, undefined, Action<string>>;
 
@@ -31,16 +33,9 @@ export function fetchCatalog(board: string): ThunkResult<void> {
         error => console.log('An error occurred.', error)
       )
       .then((catalogs: Catalog[]) => {
-        const threads = catalogs
-          .map(catalog => {
-            return catalog.threads.map(thread => {
-              thread.page = catalog.page;
-              return thread;
-            });
-          })
-          .reduce((prev, curr) => {
-            return prev.concat(curr);
-          });
+        const threads: Thread[] = Object.values(
+          normalize(catalogs, [catalogSchema]).entities.threads || []
+        );
         dispatch(recieveCatalog(board, threads));
       });
   };
