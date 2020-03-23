@@ -2,36 +2,23 @@ import { Catalog } from './catalog';
 import { Thread } from './thread';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from 'src/shared/root-reducer';
+import { createAction, Action } from '@reduxjs/toolkit';
 
-type ThunkResult<R> = ThunkAction<R, RootState, undefined, CatalogActionTypes>;
+type ThunkResult<R> = ThunkAction<R, RootState, undefined, Action<string>>;
 
-export const REQUEST_CATALOG = 'REQUEST_CATALOG';
-export interface RequestCatalogAction {
-  type: typeof REQUEST_CATALOG;
-  board: string;
-}
-function requestCatalog(board: string): RequestCatalogAction {
+export const requestCatalog = createAction<string>('REQUEST_CATALOG');
+export const recieveCatalog = createAction('RECEVE_CATALOG', function prepare(
+  board: string,
+  threads: Thread[]
+) {
   return {
-    type: REQUEST_CATALOG,
-    board
+    payload: {
+      board,
+      threads,
+      receivedAt: Date.now()
+    }
   };
-}
-
-export const RECEIVE_CATALOG = 'RECEIVE_CATALOG';
-export interface ReciveCatalogAction {
-  type: typeof RECEIVE_CATALOG;
-  board: string;
-  threads: Thread[];
-  receivedAt: number;
-}
-function recieveCatalog(board: string, threads: Thread[]): ReciveCatalogAction {
-  return {
-    type: RECEIVE_CATALOG,
-    board,
-    threads: threads,
-    receivedAt: Date.now()
-  };
-}
+});
 
 export function fetchCatalog(board: string): ThunkResult<void> {
   return function(dispatch) {
@@ -75,5 +62,3 @@ export function fetchCatalogIfNeeded(board: string): ThunkResult<void> {
     }
   };
 }
-
-export type CatalogActionTypes = RequestCatalogAction | ReciveCatalogAction;

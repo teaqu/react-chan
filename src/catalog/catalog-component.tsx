@@ -4,11 +4,12 @@ import { Thread } from 'src/catalog/thread';
 import { CatalogThreadComponent } from './catalog-thread-component';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'src/shared/navigator';
-import { fetchCatalogIfNeeded, CatalogActionTypes } from './catalog-actions';
+import { fetchCatalogIfNeeded } from './catalog-actions';
 import { RootState } from 'src/shared/root-reducer';
 import { connect } from 'react-redux';
 import { CatalogState } from './catalog-reducers';
 import { ThunkDispatch } from 'redux-thunk';
+import { Action } from 'redux';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Catalog'>;
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<RootState, undefined, CatalogActionTypes>
+  dispatch: ThunkDispatch<RootState, undefined, Action<string>>
 ) => {
   return {
     fetchCatalogIfNeeded: (board: string) => {
