@@ -1,6 +1,8 @@
 import { ThunkAction } from 'redux-thunk';
 import { createAction, Action } from '@reduxjs/toolkit';
+
 import { RootState } from 'src/shared/root-reducer';
+
 import { Thread } from './thread';
 import { Catalog } from './catalog';
 

@@ -8,7 +8,9 @@ import HTML, {
 } from 'react-native-render-html';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import { RootStackParamList } from 'src/shared/navigator';
+
 import { Thread } from './thread';
 
 type State = {

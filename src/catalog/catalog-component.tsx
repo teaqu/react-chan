@@ -4,10 +4,12 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
+
 import { RootStackParamList } from 'src/shared/navigator';
 import { RootState } from 'src/shared/root-reducer';
-import { Thread } from './thread';
+
 import { CatalogState } from './catalog-reducers';
+import { Thread } from './thread';
 import { fetchCatalogIfNeeded } from './catalog-actions';
 import { CatalogThreadComponent } from './catalog-thread-component';
 

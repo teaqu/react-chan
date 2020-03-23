@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
+
 import store from 'src/shared/store';
 import { Navigator } from 'src/shared/navigator';
 

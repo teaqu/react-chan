@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+
 import catalogReducer, { CatalogState } from 'src/catalog/catalog-reducers';
 
 export interface RootState {

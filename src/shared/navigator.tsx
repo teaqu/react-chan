@@ -1,5 +1,6 @@
 import React, { ReactNode, Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+
 import { ThreadComponent } from 'src/thread/thread-component';
 import CatalogComponent from 'src/catalog/catalog-component';
 
