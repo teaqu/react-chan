@@ -1,83 +1,50 @@
 import React, { Component, ReactNode } from 'react';
 import { Text, FlatList, StyleSheet, RefreshControl } from 'react-native';
-import { Catalog } from 'src/catalog/catalog';
 import { Thread } from 'src/catalog/thread';
 import { CatalogThreadComponent } from './catalog-thread-component';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from 'src/navigator';
-
-type State = {
-  threads: Thread[];
-  refreshing: boolean;
-};
+import { RootStackParamList } from 'src/shared/navigator';
+import { fetchCatalogIfNeeded, CatalogActionTypes } from './catalog-actions';
+import { RootState } from 'src/shared/root-reducer';
+import { connect } from 'react-redux';
+import { CatalogState } from './catalog-reducers';
+import { ThunkDispatch } from 'redux-thunk';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Catalog'>;
+  catalog: CatalogState;
+  fetchCatalogIfNeeded: (board: string) => void;
 };
 
 /**
  * Render the catalog
  */
-export class CatalogComponent extends Component<Props, State> {
-  state: State;
-
+class CatalogComponent extends Component<Props, RootState> {
   constructor(props: Props) {
     super(props);
+  }
 
-    this.state = {
-      threads: [],
-      refreshing: true
-    };
-
-    this.retriveCatalog();
+  componentDidMount() {
+    this.props.fetchCatalogIfNeeded('a');
   }
 
   onRefresh = () => {
-    this.setState({ refreshing: true });
-    this.retriveCatalog();
+    this.props.fetchCatalogIfNeeded('a');
   };
 
-  /**
-   * Get the catalog from the 4chan api
-   */
-  private retriveCatalog(): void {
-    fetch('https://a.4cdn.org/a/catalog.json')
-      .then((response: Response) => {
-        let threads: Thread[] = [];
-
-        // Extract threads from the catalog and set the thread's page so that
-        // we can use a single FlatList rather than one per page.
-        response.json().then((catalogs: Catalog[]) => {
-          catalogs.forEach(catalog => {
-            catalog.threads.forEach(thread => {
-              thread.page = catalog.page;
-              threads.push(thread);
-            });
-          });
-          this.setState({
-            threads: threads,
-            refreshing: false
-          });
-        });
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
-
   render(): ReactNode {
-    if (this.state.threads.length > 0) {
-      const threads = this.state.threads;
+    const { catalog } = this.props;
+    if (catalog.threads.length > 0) {
       return (
         <FlatList<Thread>
           refreshControl={
             <RefreshControl
-              refreshing={this.state.refreshing}
+              refreshing={catalog.isFetching}
               onRefresh={this.onRefresh}
             />
           }
           style={styles.catalog}
-          data={threads}
+          data={catalog.threads}
           numColumns={3}
           keyExtractor={item => item.no.toString()}
           renderItem={({ item }) => (
@@ -103,3 +70,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#eef2ff'
   }
 });
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<RootState, undefined, CatalogActionTypes>
+) => {
+  return {
+    fetchCatalogIfNeeded: (board: string) => {
+      dispatch(fetchCatalogIfNeeded(board));
+    }
+  };
+};
+
+const mapStateToProps = (state: RootState) => ({
+  catalog: state.catalog
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CatalogComponent);

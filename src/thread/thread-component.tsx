@@ -3,7 +3,7 @@ import { Text, FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { Thread } from './thread';
 import { Post } from './post';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from 'src/navigator';
+import { RootStackParamList } from 'src/shared/navigator';
 import HTML from 'react-native-render-html';
 
 type State = {

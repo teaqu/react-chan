@@ -1,12 +1,12 @@
 import React, { ReactNode, Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { CatalogComponent } from './catalog/catalog-component';
-import { ThreadComponent } from './thread/thread-component';
+import { ThreadComponent } from 'src/thread/thread-component';
+import CatalogComponent from 'src/catalog/catalog-component';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
 export type RootStackParamList = {
-  Catalog: CatalogComponent;
+  Catalog: typeof CatalogComponent;
   Thread: { no: number };
 };
 
