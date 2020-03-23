@@ -1,15 +1,15 @@
 import React, { Component, ReactNode } from 'react';
 import { FlatList, StyleSheet, RefreshControl } from 'react-native';
-import { Thread } from 'src/catalog/thread';
-import { CatalogThreadComponent } from './catalog-thread-component';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from 'src/shared/navigator';
-import { fetchCatalogIfNeeded } from './catalog-actions';
-import { RootState } from 'src/shared/root-reducer';
 import { connect } from 'react-redux';
-import { CatalogState } from './catalog-reducers';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
+import { RootStackParamList } from 'src/shared/navigator';
+import { RootState } from 'src/shared/root-reducer';
+import { Thread } from './thread';
+import { CatalogState } from './catalog-reducers';
+import { fetchCatalogIfNeeded } from './catalog-actions';
+import { CatalogThreadComponent } from './catalog-thread-component';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Catalog'>;

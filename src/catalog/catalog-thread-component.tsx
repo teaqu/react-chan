@@ -6,10 +6,10 @@ import HTML, {
   PassProps,
   NonRegisteredStylesProp
 } from 'react-native-render-html';
-import { Thread } from 'src/catalog/thread';
-import { RootStackParamList } from 'src/shared/navigator';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { RootStackParamList } from 'src/shared/navigator';
+import { Thread } from './thread';
 
 type State = {
   spoilers: {

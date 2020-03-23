@@ -1,10 +1,10 @@
 import React, { Component, ReactNode } from 'react';
 import { Text, FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { RouteProp } from '@react-navigation/native';
+import HTML from 'react-native-render-html';
+import { RootStackParamList } from 'src/shared/navigator';
 import { Thread } from './thread';
 import { Post } from './post';
-import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from 'src/shared/navigator';
-import HTML from 'react-native-render-html';
 
 type State = {
   thread: Thread | null;

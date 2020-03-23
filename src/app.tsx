@@ -1,10 +1,8 @@
-import 'react-native-gesture-handler';
-
 import React, { Component, ReactNode } from 'react';
-import { Navigator } from 'src/shared/navigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import store from 'src/shared/store';
+import { Navigator } from 'src/shared/navigator';
 
 declare var global: { HermesInternal: null | {} };
 
