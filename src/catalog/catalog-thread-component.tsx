@@ -46,7 +46,10 @@ export class CatalogThreadComponent extends Component<Props> {
       <View style={styles.thread}>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Thread', { no: thread.no });
+            this.props.navigation.navigate('Thread', {
+              boardId: 'a',
+              threadNo: thread.no
+            });
           }}
         >
           <View style={styles.tn_container}>
