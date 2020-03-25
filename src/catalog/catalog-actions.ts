@@ -36,6 +36,9 @@ export function fetchCatalog(board: string): ThunkResult<void> {
         const threads: Thread[] = Object.values(
           normalize(catalogs, [catalogSchema]).entities.threads || []
         );
+        threads.sort((a: Thread, b: Thread) => {
+          return a.last_modified < b.last_modified ? 1 : 0;
+        });
         dispatch(recieveCatalog(board, threads));
       });
   };
