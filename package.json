@@ -34,17 +34,20 @@
     "@types/jest": "^24.0.24",
     "@types/react-native": "^0.60.25",
     "@types/react-test-renderer": "16.9.1",
+    "@types/redux-mock-store": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.24.0",
     "babel-jest": "^24.9.0",
     "eslint": "^6.5.1",
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.20.1",
+    "fetch-mock": "^9.3.1",
     "husky": "^4.2.3",
     "jest": "^24.9.0",
     "lint-staged": "^10.0.8",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-test-renderer": "16.9.0",
+    "redux-mock-store": "^1.5.4",
     "typescript": "^3.7.3"
   },
   "jest": {
@@ -67,7 +70,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && jest"
     }
   },
   "lint-staged": {
