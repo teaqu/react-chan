@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import { Thread } from './thread';
-import { requestCatalog, recieveCatalog } from './catalog-actions';
+import { requestCatalog, receiveCatalog } from './catalog-actions';
 
 export interface CatalogState {
   isFetching: boolean;
@@ -17,7 +17,7 @@ export default createReducer(initialState, {
   [requestCatalog.type]: state => {
     state.isFetching = true;
   },
-  [recieveCatalog.type]: (state, action) => {
+  [receiveCatalog.type]: (state, action) => {
     state.isFetching = false;
     state.threads = action.payload.threads;
   }

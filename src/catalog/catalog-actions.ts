@@ -9,7 +9,7 @@ import { Catalog } from './catalog';
 type ThunkResult<R> = ThunkAction<R, RootState, undefined, Action<string>>;
 
 export const requestCatalog = createAction<string>('REQUEST_CATALOG');
-export const recieveCatalog = createAction('RECEVE_CATALOG', function prepare(
+export const receiveCatalog = createAction('RECEIVE_CATALOG', function prepare(
   board: string,
   threads: Thread[]
 ) {
@@ -22,7 +22,7 @@ export const recieveCatalog = createAction('RECEVE_CATALOG', function prepare(
   };
 });
 
-export function fetchCatalog(board: string): ThunkResult<void> {
+function fetchCatalog(board: string): ThunkResult<Promise<Thread[]>> {
   return function(dispatch) {
     dispatch(requestCatalog(board));
     return fetch(`https://a.4cdn.org/${board}/catalog.json`)
@@ -36,26 +36,24 @@ export function fetchCatalog(board: string): ThunkResult<void> {
             return { ...thread, page: catalog.page };
           });
         });
-        dispatch(recieveCatalog(board, threads));
+        dispatch(receiveCatalog(board, threads));
+        return threads;
       });
   };
 }
 
 function shouldFetchCatalog(state: RootState) {
-  const catalog = state.catalog;
-  if (!catalog) {
-    return true;
-  } else if (catalog.isFetching) {
-    return false;
-  } else {
-    return true;
-  }
+  return !state.catalog.isFetching;
 }
 
-export function fetchCatalogIfNeeded(board: string): ThunkResult<void> {
+export function fetchCatalogIfNeeded(
+  board: string
+): ThunkResult<Promise<Thread[]>> {
   return (dispatch, getState) => {
     if (shouldFetchCatalog(getState())) {
       return dispatch(fetchCatalog(board));
+    } else {
+      return Promise.resolve([]);
     }
   };
 }
