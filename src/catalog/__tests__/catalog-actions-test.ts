@@ -44,8 +44,10 @@ describe('catalog actions', () => {
   });
 
   it('should create an action to recive and request the catalog', async () => {
+    const board = 'a';
     const initialState = {
       catalog: {
+        board: board,
         isFetching: false
       }
     };
@@ -55,7 +57,6 @@ describe('catalog actions', () => {
     >(middlewares);
 
     Date.now = jest.fn(() => 1234);
-    const board = 'a';
     fetchMock.getOnce(`https://a.4cdn.org/${board}/catalog.json`, {
       body: catalogResponse,
       headers: { 'content-type': 'application/json' }
@@ -66,8 +67,10 @@ describe('catalog actions', () => {
   });
 
   it('should not fetchCatalog if not needed', async () => {
+    const board = 'g';
     const initialState = {
       catalog: {
+        board: board,
         isFetching: true
       }
     };
@@ -75,7 +78,6 @@ describe('catalog actions', () => {
       typeof initialState,
       ThunkDispatch<RootState, any, AnyAction>
     >(middlewares);
-    const board = 'g';
     const store = mockStore(initialState);
     await store.dispatch(actions.fetchCatalogIfNeeded(board));
     expect(store.getActions()).toHaveLength(0);
