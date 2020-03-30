@@ -22,7 +22,7 @@ type Props = {
 /**
  * Render the catalog
  */
-class CatalogComponent extends Component<Props, RootState> {
+export class CatalogComponent extends Component<Props, RootState> {
   constructor(props: Props) {
     super(props);
   }

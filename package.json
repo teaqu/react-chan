@@ -14,7 +14,6 @@
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
     "@reduxjs/toolkit": "^1.2.5",
-    "@types/react-redux": "^7.1.7",
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-gesture-handler": "^1.6.0",
@@ -37,6 +36,7 @@
     "@types/redux-mock-store": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.24.0",
+    "@types/react-redux": "^7.1.7",
     "babel-jest": "^24.9.0",
     "eslint": "^6.5.1",
     "eslint-import-resolver-typescript": "^2.0.0",
@@ -46,6 +46,7 @@
     "jest": "^24.9.0",
     "lint-staged": "^10.0.8",
     "metro-react-native-babel-preset": "^0.56.0",
+    "react-native-testing-library": "^1.13.0",
     "react-test-renderer": "16.9.0",
     "redux-mock-store": "^1.5.4",
     "typescript": "^3.7.3"
