@@ -1,28 +1,35 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { Thread } from './thread';
-import { requestCatalog, receiveCatalog } from './catalog-actions';
+import { Thread } from '../thread/thread';
+
+import actions from './catalog-actions';
 
 export interface CatalogState {
-  board: string;
+  boardId: string;
+  error: string;
   isFetching: boolean;
   threads: Thread[];
 }
 
 const initialState: CatalogState = {
-  board: '',
+  boardId: '',
+  error: '',
   isFetching: false,
   threads: []
 };
 
 export default createReducer(initialState, {
-  [requestCatalog.type]: (state, action) => {
-    state.board = action.payload;
+  [actions.fetchCatalog.type]: (state, action) => {
+    state.boardId = action.payload;
     state.isFetching = true;
   },
-  [receiveCatalog.type]: (state, action) => {
-    state.board = action.payload.board;
+  [actions.fetchCatalogSucceeded.type]: (state, action) => {
+    state.boardId = action.payload.boardId;
     state.isFetching = false;
     state.threads = action.payload.threads;
+  },
+  [actions.fetchCatalogFailed.type]: (state, action) => {
+    state.error = action.payload;
+    state.isFetching = true;
   }
 });

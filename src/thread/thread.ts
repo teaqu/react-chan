@@ -1,5 +1,3 @@
-import { Reply } from 'src/catalog/reply';
-
 export interface Thread {
   no: number;
   now: string;
@@ -28,4 +26,13 @@ export interface Thread {
   last_replies: Reply[];
   last_modified: number;
   page?: number;
+}
+
+interface Reply {
+  no: number;
+  now: string;
+  name: string;
+  com: string;
+  time: number;
+  resto: number;
 }

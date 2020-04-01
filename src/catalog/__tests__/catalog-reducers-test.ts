@@ -1,14 +1,15 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import reducer from '../catalog-reducers';
-import { requestCatalog, receiveCatalog } from '../catalog-actions';
+import catalogResponse from 'src/shared/__tests__/__mocks__/catalog-response.json';
 
-import catalogResponse from './__mocks__/catalog-response.json';
+import reducer from '../catalog-reducers';
+import actions from '../catalog-actions';
 
 describe('catalog reducer', () => {
   it('should return the initial state', () => {
     expect(reducer(undefined, createAction('test'))).toEqual({
-      board: '',
+      boardId: '',
+      error: '',
       isFetching: false,
       threads: []
     });
@@ -17,22 +18,23 @@ describe('catalog reducer', () => {
   it('should handle REQUEST_CATALOG', () => {
     expect(
       reducer(undefined, {
-        type: requestCatalog.type,
+        type: actions.fetchCatalog.type,
         payload: 'a'
       })
-    ).toEqual({ board: 'a', isFetching: true, threads: [] });
+    ).toEqual({ boardId: 'a', error: '', isFetching: true, threads: [] });
   });
 
   it('should handle RECEIVE_CATALOG', () => {
     const threads = catalogResponse[1].threads;
     expect(
       reducer(undefined, {
-        type: receiveCatalog.type,
+        type: actions.fetchCatalogSucceeded.type,
         payload: {
-          board: 'a',
+          boardId: 'a',
+          error: '',
           threads: threads
         }
       })
-    ).toEqual({ board: 'a', isFetching: false, threads: threads });
+    ).toEqual({ boardId: 'a', error: '', isFetching: false, threads: threads });
   });
 });

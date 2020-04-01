@@ -11,7 +11,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { RootStackParamList } from 'src/shared/navigator';
 
-import { Thread } from './thread';
+import { Thread } from '../thread/thread';
 
 type State = {
   spoilers: {

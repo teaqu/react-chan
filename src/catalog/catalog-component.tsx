@@ -1,38 +1,35 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Dispatch, Component, ReactNode } from 'react';
 import { FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
 
 import { RootStackParamList } from 'src/shared/navigator';
 import { RootState } from 'src/shared/root-reducer';
 
+import { Thread } from '../thread/thread';
+
 import { CatalogState } from './catalog-reducers';
-import { Thread } from './thread';
-import { fetchCatalogIfNeeded } from './catalog-actions';
 import { CatalogThreadComponent } from './catalog-thread-component';
+import actions from './catalog-actions';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Catalog'>;
   catalog: CatalogState;
-  fetchCatalogIfNeeded: (board: string) => void;
+  fetchCatalog: (boardId: string) => void;
 };
 
-/**
- * Render the catalog
- */
 export class CatalogComponent extends Component<Props, RootState> {
   constructor(props: Props) {
     super(props);
   }
 
   componentDidMount() {
-    this.props.fetchCatalogIfNeeded('a');
+    this.props.fetchCatalog('a');
   }
 
   onRefresh = () => {
-    this.props.fetchCatalogIfNeeded('a');
+    this.props.fetchCatalog('a');
   };
 
   render(): ReactNode {
@@ -66,15 +63,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<RootState, undefined, Action<string>>
-) => {
-  return {
-    fetchCatalogIfNeeded: (board: string) => {
-      dispatch(fetchCatalogIfNeeded(board));
-    }
-  };
-};
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  fetchCatalog: (boardId: string) => {
+    dispatch(actions.fetchCatalog(boardId));
+  }
+});
 
 const mapStateToProps = (state: RootState) => ({
   catalog: state.catalog

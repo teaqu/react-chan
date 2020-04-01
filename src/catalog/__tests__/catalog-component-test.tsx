@@ -15,13 +15,13 @@ describe('catalog component', () => {
       isFetching: true,
       threads: []
     },
-    fetchCatalogIfNeeded: jest.fn()
+    fetchCatalog: jest.fn()
   });
   const catalogComponent = render(<CatalogComponent {...props} />);
 
   it('renders correctly', () => {
     expect(catalogComponent.toJSON()).toMatchSnapshot();
-    expect(props.fetchCatalogIfNeeded).toHaveBeenCalled();
+    expect(props.fetchCatalog).toHaveBeenCalled();
   });
 
   afterEach(cleanup);

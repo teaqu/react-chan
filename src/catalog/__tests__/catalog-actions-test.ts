@@ -1,31 +1,24 @@
 import 'react-native';
 
-import thunk, { ThunkDispatch } from 'redux-thunk';
-import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock';
-import { AnyAction } from 'redux';
 
-import { RootState } from 'src/shared/root-reducer';
+import catalogResponse from 'src/shared/__tests__/__mocks__/catalog-response.json';
 
-import * as actions from '../catalog-actions';
-import { Thread } from '../thread';
-
-import catalogResponse from './__mocks__/catalog-response.json';
-
-const middlewares = [thunk];
+import actions from '../catalog-actions';
+import { Thread } from '../../thread/thread';
 
 describe('catalog actions', () => {
   afterEach(() => {
     fetchMock.restore();
   });
 
-  it('should create an action to request the catalog', () => {
+  it('should create an action to fetch the catalog', () => {
     const board = 'qa';
     const expectedAction = {
       payload: board,
-      type: actions.requestCatalog.type
+      type: actions.fetchCatalog.type
     };
-    expect(actions.requestCatalog(board)).toEqual(expectedAction);
+    expect(actions.fetchCatalog(board)).toEqual(expectedAction);
   });
 
   it('should create an action to receive the catalog', () => {
@@ -35,51 +28,13 @@ describe('catalog actions', () => {
     const expectedAction = {
       payload: {
         receivedAt: 1111,
-        board: board,
+        boardId: board,
         threads: threads
       },
-      type: actions.receiveCatalog.type
+      type: actions.fetchCatalogSucceeded.type
     };
-    expect(actions.receiveCatalog(board, threads)).toEqual(expectedAction);
-  });
-
-  it('should create an action to recive and request the catalog', async () => {
-    const board = 'a';
-    const initialState = {
-      catalog: {
-        board: board,
-        isFetching: false
-      }
-    };
-    const mockStore = configureMockStore<
-      typeof initialState,
-      ThunkDispatch<RootState, any, AnyAction>
-    >(middlewares);
-
-    Date.now = jest.fn(() => 1234);
-    fetchMock.getOnce(`https://a.4cdn.org/${board}/catalog.json`, {
-      body: catalogResponse,
-      headers: { 'content-type': 'application/json' }
-    });
-    const store = mockStore(initialState);
-    await store.dispatch(actions.fetchCatalogIfNeeded(board));
-    expect(store.getActions()).toMatchSnapshot();
-  });
-
-  it('should not fetchCatalog if not needed', async () => {
-    const board = 'g';
-    const initialState = {
-      catalog: {
-        board: board,
-        isFetching: true
-      }
-    };
-    const mockStore = configureMockStore<
-      typeof initialState,
-      ThunkDispatch<RootState, any, AnyAction>
-    >(middlewares);
-    const store = mockStore(initialState);
-    await store.dispatch(actions.fetchCatalogIfNeeded(board));
-    expect(store.getActions()).toHaveLength(0);
+    expect(actions.fetchCatalogSucceeded(board, threads)).toEqual(
+      expectedAction
+    );
   });
 });

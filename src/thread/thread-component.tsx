@@ -8,15 +8,15 @@ import { connect } from 'react-redux';
 
 import { RootStackParamList } from 'src/shared/navigator';
 import { RootState } from 'src/shared/root-reducer';
+import { Post } from 'src/post/post';
 
-import { Post } from './post';
-import { fetchThreadIfNeeded, invalidateThread } from './thread-actions';
+import * as actions from './thread-actions';
 import { ThreadState } from './thread-reducuer';
 
 type Props = {
   route: RouteProp<RootStackParamList, 'Thread'>;
   thread: ThreadState;
-  fetchThreadIfNeeded: (boardId: string, threadNo: number) => void;
+  fetchThread: (boardId: string, threadNo: number) => void;
   invalidateThread: () => void;
 };
 
@@ -37,7 +37,7 @@ class ThreadComponent extends Component<Props, RootState> {
   }
 
   onRefresh = () => {
-    this.props.fetchThreadIfNeeded(
+    this.props.fetchThread(
       this.props.route.params.boardId,
       this.props.route.params.threadNo
     );
@@ -74,11 +74,11 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<RootState, undefined, Action<string>>
 ) => {
   return {
-    fetchThreadIfNeeded: (boardId: string, threadNo: number) => {
-      dispatch(fetchThreadIfNeeded(boardId, threadNo));
+    fetchThread: (boardId: string, threadNo: number) => {
+      dispatch(actions.fetchThread(boardId, threadNo));
     },
     invalidateThread: () => {
-      dispatch(invalidateThread());
+      dispatch(actions.invalidateThread());
     }
   };
 };
