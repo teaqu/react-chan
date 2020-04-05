@@ -20,7 +20,7 @@ export const CatalogCommentComponent = (props: Props) => {
           convertedCSSStyles: NonRegisteredStylesProp<any>,
           passProps: PassProps
         ) => <SpoilerComponent children={children} key={passProps.key} />,
-        wrapper: 'View'
+        wrapper: 'Text'
       }
     };
   };
@@ -32,6 +32,7 @@ export const CatalogCommentComponent = (props: Props) => {
     <HTML
       html={'<p>' + comment + '</p>'}
       renderers={renderers()}
+      textSelectable={true}
       tagsStyles={{
         p: {
           textAlign: 'center'

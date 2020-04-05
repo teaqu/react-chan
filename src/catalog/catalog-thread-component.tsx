@@ -35,7 +35,9 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
         {thread.replies} / {thread.images} / {thread.page}
       </Text>
       {thread.sub && (
-        <Text style={styles.sub}>{entities.decode(thread.sub)}</Text>
+        <Text selectable={true} key={thread.no + 'sub'} style={styles.sub}>
+          {entities.decode(thread.sub)}
+        </Text>
       )}
       {thread.com && <CatalogCommentComponent comment={thread.com} />}
     </View>

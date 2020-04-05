@@ -246,6 +246,7 @@ exports[`catalog component renders correctly 1`] = `
              / 
           </Text>
           <Text
+            selectable={true}
             style={
               Object {
                 "color": "#0f0c5d",
@@ -266,7 +267,7 @@ exports[`catalog component renders correctly 1`] = `
           >
             <Text
               allowFontScaling={true}
-              selectable={false}
+              selectable={true}
               style={
                 Array [
                   Object {
@@ -279,7 +280,7 @@ exports[`catalog component renders correctly 1`] = `
             >
               <Text
                 allowFontScaling={true}
-                selectable={false}
+                selectable={true}
                 style={
                   Array [
                     Object {},
@@ -289,7 +290,7 @@ exports[`catalog component renders correctly 1`] = `
               >
                 <Text
                   allowFontScaling={true}
-                  selectable={false}
+                  selectable={true}
                   style={
                     Array [
                       Object {},
@@ -326,7 +327,7 @@ exports[`catalog component renders correctly 1`] = `
               </Text>
               <Text
                 allowFontScaling={true}
-                selectable={false}
+                selectable={true}
                 style={
                   Array [
                     Object {},
@@ -336,7 +337,7 @@ exports[`catalog component renders correctly 1`] = `
               >
                 <Text
                   allowFontScaling={true}
-                  selectable={false}
+                  selectable={true}
                   style={
                     Array [
                       Object {},
@@ -373,7 +374,7 @@ exports[`catalog component renders correctly 1`] = `
               </Text>
               <Text
                 allowFontScaling={true}
-                selectable={false}
+                selectable={true}
                 style={
                   Array [
                     Object {},
@@ -444,6 +445,7 @@ exports[`catalog component renders correctly 1`] = `
              / 
           </Text>
           <Text
+            selectable={true}
             style={
               Object {
                 "color": "#0f0c5d",
@@ -464,7 +466,7 @@ exports[`catalog component renders correctly 1`] = `
           >
             <Text
               allowFontScaling={true}
-              selectable={false}
+              selectable={true}
               style={
                 Array [
                   Object {
@@ -477,7 +479,7 @@ exports[`catalog component renders correctly 1`] = `
             >
               <Text
                 allowFontScaling={true}
-                selectable={false}
+                selectable={true}
                 style={
                   Array [
                     Object {},

@@ -35,6 +35,8 @@ export function CatalogComponent() {
   };
 
   return (
+    // Selectable text requires removeClippedSubviews={false}
+    // https://github.com/facebook/react-native/issues/26264#issuecomment-558989904
     <FlatList<Thread>
       refreshControl={
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
@@ -42,6 +44,7 @@ export function CatalogComponent() {
       style={styles.catalog}
       data={threads}
       numColumns={3}
+      removeClippedSubviews={false}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
     />
