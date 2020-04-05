@@ -1,7 +1,7 @@
 import { call, put, takeLatest, getContext } from 'redux-saga/effects';
 
-import { ChanAPI } from 'src/shared/chan-api';
 import { Post } from 'src/post/post';
+import { ChanAPI } from 'src/shared/chan-api';
 
 import actions from './thread-actions';
 

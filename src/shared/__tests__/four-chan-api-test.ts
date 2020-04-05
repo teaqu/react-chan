@@ -2,7 +2,7 @@ import fetchMock from 'fetch-mock';
 
 import { Thread } from 'src/thread/thread';
 
-import FourChanAPI from '../4chan-api';
+import FourChanAPI from '../chan-api/four-chan-api';
 
 import catalogResponse from './__mocks__/catalog-response.json';
 
@@ -16,8 +16,7 @@ describe('catalog reducer', () => {
       body: catalogResponse,
       headers: { 'content-type': 'application/json' }
     });
-    const chanAPI = new FourChanAPI();
-    const threads: Thread[] = await chanAPI.fetchCatalog(boardId);
+    const threads: Thread[] = await FourChanAPI.fetchCatalog(boardId);
     expect(threads).toMatchSnapshot();
   });
 });

@@ -3,6 +3,9 @@ import { View, Image, Text, StyleSheet } from 'react-native';
 import { AllHtmlEntities } from 'html-entities';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+
+import { RootState } from 'src/shared/root-reducer';
 
 import { Thread } from '../thread/thread';
 
@@ -17,6 +20,14 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
   const entities = new AllHtmlEntities();
   const navigation = useNavigation();
 
+  const thumbnailURI = useSelector(
+    (state: RootState) => state.chanAPI.thumbnail
+  );
+
+  const fileDeletedURI = useSelector(
+    (state: RootState) => state.chanAPI.fileDeleted
+  );
+
   return (
     <View style={styles.thread}>
       <TouchableOpacity
@@ -29,7 +40,11 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
       >
         {(thread.tim && (
           <Image
-            source={{ uri: `https://i.4cdn.org/${boardId}/${thread.tim}s.jpg` }}
+            source={{
+              uri: thumbnailURI
+                .replace('%BOARDID%', boardId)
+                .replace('%TIM%', thread.tim.toString())
+            }}
             style={[
               { height: thread.tn_h / 2, width: thread.tn_w / 2 },
               styles.thumbnail
@@ -38,7 +53,7 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
           />
         )) || (
           <Image
-            source={{ uri: 'https://s.4cdn.org/image/filedeleted.gif' }}
+            source={{ uri: fileDeletedURI }}
             style={[styles.file_deleted, styles.thumbnail]}
             resizeMode="contain"
           />

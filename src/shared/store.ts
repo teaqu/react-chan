@@ -3,13 +3,11 @@ import createSagaMiddleware from 'redux-saga';
 
 import rootReducer from './root-reducer';
 import rootSaga from './root-saga';
-import FourChanAPI from './4chan-api';
-
-const chanAPI = new FourChanAPI();
+import FourChanAPI from './chan-api/four-chan-api';
 
 const sagaMiddleware = createSagaMiddleware({
   context: {
-    chanAPI
+    chanAPI: FourChanAPI
   }
 });
 
