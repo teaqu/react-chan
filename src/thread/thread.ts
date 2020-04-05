@@ -10,7 +10,7 @@ export interface Thread {
   h: number;
   tn_w: number;
   tn_h: number;
-  tim: number;
+  tim?: number;
   time: number;
   md5: string;
   fsize: number;
