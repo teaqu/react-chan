@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 import { AllHtmlEntities } from 'html-entities';
 
-import { CommentComponent } from 'src/comment/comment-component';
-
 import { Thread } from '../thread/thread';
+
+import { CatalogCommentComponent } from './catalog-comment-component';
 
 /**
  * Rendering a thread in the catalog
@@ -37,7 +37,7 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
       {thread.sub && (
         <Text style={styles.sub}>{entities.decode(thread.sub)}</Text>
       )}
-      {thread.com && <CommentComponent comment={thread.com} />}
+      {thread.com && <CatalogCommentComponent comment={thread.com} />}
     </View>
   );
 });

@@ -2,7 +2,7 @@ export interface Thread {
   no: number;
   now: string;
   name: string;
-  sub: string;
+  sub?: string;
   com: string;
   filename: string;
   ext: string;

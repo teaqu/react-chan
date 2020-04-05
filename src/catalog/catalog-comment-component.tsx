@@ -7,10 +7,10 @@ import HTML, {
 } from 'react-native-render-html';
 import { StyleSheet } from 'react-native';
 
-import { SpoilerComponent } from './spoiler-component';
+import { SpoilerComponent } from '../comment/spoiler-component';
 
 type Props = { comment: string };
-export const CommentComponent = (props: Props) => {
+export const CatalogCommentComponent = (props: Props) => {
   const renderers = (): RendererDictionary => {
     return {
       s: {
@@ -25,9 +25,12 @@ export const CommentComponent = (props: Props) => {
     };
   };
 
+  // Remove unnecessary whitespace
+  const comment = props.comment.replace('<br><br>', '<br>');
+
   return (
     <HTML
-      html={'<p>' + props.comment + '</p>'}
+      html={'<p>' + comment + '</p>'}
       renderers={renderers()}
       tagsStyles={{
         p: {
