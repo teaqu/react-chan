@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
+import { AllHtmlEntities } from 'html-entities';
 
 import { CommentComponent } from 'src/comment/comment-component';
 
@@ -11,6 +12,7 @@ import { Thread } from '../thread/thread';
 type Props = { thread: Thread };
 export const CatalogThreadComponent = React.memo((props: Props) => {
   const thread = props.thread;
+  const entities = new AllHtmlEntities();
   return (
     <View style={styles.thread}>
       {(thread.tim && (
@@ -32,7 +34,9 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
       <Text style={styles.stats}>
         {thread.replies} / {thread.images} / {thread.page}
       </Text>
-      {thread.sub && <Text style={styles.sub}>{thread.sub}</Text>}
+      {thread.sub && (
+        <Text style={styles.sub}>{entities.decode(thread.sub)}</Text>
+      )}
       {thread.com && <CommentComponent comment={thread.com} />}
     </View>
   );

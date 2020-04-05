@@ -1,36 +1,33 @@
 import React from 'react';
 import { render, cleanup } from 'react-native-testing-library';
+import { useSelector } from 'react-redux';
 
+import catalogResponse from 'src/shared/__tests__/__mocks__/catalog-response.json';
 import { CatalogComponent } from 'src/catalog/catalog-component';
 import actions from 'src/catalog/catalog-actions';
 
-const mockedSelector = jest.fn();
 const mockedDispatch = jest.fn();
 jest.mock('react-redux', () => ({
-  useSelector: () => mockedSelector,
+  useSelector: jest.fn(),
   useDispatch: () => mockedDispatch
 }));
-
-const createTestProps = (props: Object) => ({
-  navigation: {
-    navigate: jest.fn()
-  },
-  ...props
-});
-
+const mockedSelector = useSelector as jest.Mock;
 describe('catalog component', () => {
-  const props: any = createTestProps({
+  const mockAppState = {
     catalog: {
-      isFetching: true,
-      threads: []
+      threads: catalogResponse[0].threads,
+      isFetching: false
     }
-  });
+  };
 
-  const catalogComponent = render(<CatalogComponent {...props} />);
+  mockedSelector.mockImplementation(callback => callback(mockAppState));
+
+  const catalogComponent = render(<CatalogComponent />);
 
   it('renders correctly', () => {
     expect(catalogComponent.toJSON()).toMatchSnapshot();
     expect(mockedDispatch).toHaveBeenCalledWith(actions.fetchCatalog('a'));
+    expect(mockedSelector).toHaveBeenCalled();
   });
 
   afterEach(cleanup);
