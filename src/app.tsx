@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 
@@ -7,14 +7,12 @@ import { Navigator } from 'src/shared/navigator';
 
 declare var global: { HermesInternal: null | {} };
 
-export default class App extends Component {
-  render(): ReactNode {
-    return (
-      <Provider store={store}>
-        <NavigationContainer>
-          <Navigator />
-        </NavigationContainer>
-      </Provider>
-    );
-  }
+export default function App() {
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Navigator />
+      </NavigationContainer>
+    </Provider>
+  );
 }

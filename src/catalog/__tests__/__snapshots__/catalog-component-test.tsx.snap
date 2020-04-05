@@ -2,7 +2,7 @@
 
 exports[`catalog component renders correctly 1`] = `
 <RCTScrollView
-  data={Array []}
+  data={[MockFunction]}
   disableVirtualization={false}
   getItem={[Function]}
   getItemCount={[Function]}
@@ -21,7 +21,7 @@ exports[`catalog component renders correctly 1`] = `
   refreshControl={
     <RefreshControlMock
       onRefresh={[Function]}
-      refreshing={true}
+      refreshing={[MockFunction]}
     />
   }
   removeClippedSubviews={false}

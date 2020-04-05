@@ -1,7 +1,15 @@
 import React from 'react';
 import { render, cleanup } from 'react-native-testing-library';
 
-import { CatalogComponent } from '../catalog-component';
+import { CatalogComponent } from 'src/catalog/catalog-component';
+import actions from 'src/catalog/catalog-actions';
+
+const mockedSelector = jest.fn();
+const mockedDispatch = jest.fn();
+jest.mock('react-redux', () => ({
+  useSelector: () => mockedSelector,
+  useDispatch: () => mockedDispatch
+}));
 
 const createTestProps = (props: Object) => ({
   navigation: {
@@ -9,19 +17,20 @@ const createTestProps = (props: Object) => ({
   },
   ...props
 });
+
 describe('catalog component', () => {
-  let props: any = createTestProps({
+  const props: any = createTestProps({
     catalog: {
       isFetching: true,
       threads: []
-    },
-    fetchCatalog: jest.fn()
+    }
   });
+
   const catalogComponent = render(<CatalogComponent {...props} />);
 
   it('renders correctly', () => {
     expect(catalogComponent.toJSON()).toMatchSnapshot();
-    expect(props.fetchCatalog).toHaveBeenCalled();
+    expect(mockedDispatch).toHaveBeenCalledWith(actions.fetchCatalog('a'));
   });
 
   afterEach(cleanup);
