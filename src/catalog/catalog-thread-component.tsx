@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 import { AllHtmlEntities } from 'html-entities';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 import { Thread } from '../thread/thread';
 
@@ -9,28 +11,39 @@ import { CatalogCommentComponent } from './catalog-comment-component';
 /**
  * Rendering a thread in the catalog
  */
-type Props = { thread: Thread };
+type Props = { boardId: string; thread: Thread };
 export const CatalogThreadComponent = React.memo((props: Props) => {
-  const thread = props.thread;
+  const { thread, boardId } = props;
   const entities = new AllHtmlEntities();
+  const navigation = useNavigation();
+
   return (
     <View style={styles.thread}>
-      {(thread.tim && (
-        <Image
-          source={{ uri: 'https://i.4cdn.org/a/' + thread.tim + 's.jpg' }}
-          style={[
-            { height: thread.tn_h / 2, width: thread.tn_w / 2 },
-            styles.thumbnail
-          ]}
-          resizeMode="contain"
-        />
-      )) || (
-        <Image
-          source={{ uri: 'https://s.4cdn.org/image/filedeleted.gif' }}
-          style={[styles.file_deleted, styles.thumbnail]}
-          resizeMode="contain"
-        />
-      )}
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Thread', {
+            boardId: props.boardId,
+            threadNo: thread.no
+          });
+        }}
+      >
+        {(thread.tim && (
+          <Image
+            source={{ uri: `https://i.4cdn.org/${boardId}/${thread.tim}s.jpg` }}
+            style={[
+              { height: thread.tn_h / 2, width: thread.tn_w / 2 },
+              styles.thumbnail
+            ]}
+            resizeMode="contain"
+          />
+        )) || (
+          <Image
+            source={{ uri: 'https://s.4cdn.org/image/filedeleted.gif' }}
+            style={[styles.file_deleted, styles.thumbnail]}
+            resizeMode="contain"
+          />
+        )}
+      </TouchableOpacity>
       <Text style={styles.stats}>
         {thread.replies} / {thread.images} / {thread.page}
       </Text>

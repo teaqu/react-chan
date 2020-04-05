@@ -10,9 +10,10 @@ import { CatalogThreadComponent } from './catalog-thread-component';
 import actions from './catalog-actions';
 
 export function CatalogComponent() {
+  const boardId = 'a';
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(actions.fetchCatalog('a'));
+    dispatch(actions.fetchCatalog(boardId));
   }, [dispatch]);
 
   const threads: Thread[] = useSelector(
@@ -23,11 +24,11 @@ export function CatalogComponent() {
   );
 
   const onRefresh = React.useCallback(() => {
-    dispatch(actions.fetchCatalog('a'));
+    dispatch(actions.fetchCatalog(boardId));
   }, [dispatch]);
 
   const renderItem = (item: any) => {
-    return <CatalogThreadComponent thread={item.item} />;
+    return <CatalogThreadComponent boardId={boardId} thread={item.item} />;
   };
 
   const keyExtractor = (item: any) => {
