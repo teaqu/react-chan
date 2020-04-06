@@ -19,6 +19,9 @@ describe('catalog component', () => {
     catalog: {
       threads: [],
       isFetching: false
+    },
+    boardPicker: {
+      boardId: 'a'
     }
   };
 

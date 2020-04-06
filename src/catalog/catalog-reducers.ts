@@ -31,5 +31,8 @@ export default createReducer(initialState, {
   [actions.fetchCatalogFailed.type]: (state, action) => {
     state.error = action.payload;
     state.isFetching = true;
+  },
+  [actions.invalidateCatalog.type]: state => {
+    state.threads = [];
   }
 });

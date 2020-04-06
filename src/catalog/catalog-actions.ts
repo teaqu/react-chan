@@ -16,9 +16,11 @@ const fetchCatalogSucceeded = createAction(
     };
   }
 );
+const invalidateCatalog = createAction('INVALIDATE_CATALOG');
 
 export default {
   fetchCatalog,
   fetchCatalogFailed,
-  fetchCatalogSucceeded
+  fetchCatalogSucceeded,
+  invalidateCatalog
 };

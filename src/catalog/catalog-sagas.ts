@@ -2,7 +2,7 @@ import { call, put, takeLatest, getContext } from 'redux-saga/effects';
 import { AnyAction } from 'redux';
 
 import { Thread } from 'src/thread/thread';
-import { ChanAPI } from 'src/shared/chan-api';
+import { ChanAPI } from 'src/shared/chan-api/chan-api';
 
 import actions from './catalog-actions';
 

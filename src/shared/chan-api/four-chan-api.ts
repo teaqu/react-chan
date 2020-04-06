@@ -1,5 +1,6 @@
 import { Thread } from 'src/thread/thread';
 import { Post } from 'src/post/post';
+import { Board } from 'src/board/board';
 
 import { ChanAPIState } from './chan-reducers';
 
@@ -12,14 +13,21 @@ type ThreadAPI = {
   posts: Post[];
 };
 
+type BoardAPI = {
+  boards: Board[];
+  troll_flags: {
+    [flag: string]: string;
+  };
+};
+
 export const FourChanState: ChanAPIState = {
   thumbnail: 'https://i.4cdn.org/%BOARDID%/%TIM%s.jpg',
   fileDeleted: 'https://s.4cdn.org/image/filedeleted.gif'
 };
 
 export const fetchCatalog = (boardId: string): Promise<Thread[]> => {
-  const url = `https://a.4cdn.org/${boardId}/catalog.json`;
-  return fetch(url)
+  const uri = `https://a.4cdn.org/${boardId}/catalog.json`;
+  return fetch(uri)
     .then(response => response.json())
     .catch(error => error)
     .then((catalogs: CatalogAPI[]) => {
@@ -37,11 +45,19 @@ export const fetchThread = (
   boardId: string,
   threadNo: number
 ): Promise<Post[]> => {
-  const url = `https://a.4cdn.org/${boardId}/thread/${threadNo}.json`;
-  return fetch(url)
+  const uri = `https://a.4cdn.org/${boardId}/thread/${threadNo}.json`;
+  return fetch(uri)
     .then(response => response.json())
     .catch(error => error)
     .then((thread: ThreadAPI) => thread.posts);
 };
 
-export default { fetchCatalog, fetchThread };
+export const fetchBoards = (): Promise<Board[]> => {
+  const uri = 'https://a.4cdn.org/boards.json';
+  return fetch(uri)
+    .then(response => response.json())
+    .catch(error => error)
+    .then((api: BoardAPI) => api.boards);
+};
+
+export default { fetchCatalog, fetchThread, fetchBoards };
