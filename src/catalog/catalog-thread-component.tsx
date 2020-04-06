@@ -77,7 +77,9 @@ const styles = StyleSheet.create({
     margin: 10,
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    maxHeight: 277,
+    overflow: 'hidden'
   },
   sub: {
     fontWeight: 'bold',
