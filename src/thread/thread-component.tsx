@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { FlatList, StyleSheet, RefreshControl } from 'react-native';
-import HTML from 'react-native-render-html';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteProp, useRoute } from '@react-navigation/native';
 
 import { Post } from 'src/post/post';
 import { RootStackParamList } from 'src/shared/navigator';
 import { RootState } from 'src/shared/root-reducer';
+import { PostComponent } from 'src/post/post-component';
 
 import * as actions from './thread-actions';
 
@@ -23,7 +23,7 @@ export const ThreadComponent = () => {
 
   useEffect(() => {
     dispatch(actions.fetchThread(boardId, threadNo));
-    return function cleanup() {
+    return function cleanUp() {
       dispatch(actions.invalidateThread());
     };
   }, [dispatch, boardId, threadNo]);
@@ -36,6 +36,10 @@ export const ThreadComponent = () => {
     dispatch(actions.fetchThread(boardId, threadNo));
   }, [dispatch, boardId, threadNo]);
 
+  const renderItem = (item: any) => {
+    return <PostComponent post={item.item} />;
+  };
+
   return (
     <FlatList<Post>
       refreshControl={
@@ -44,7 +48,7 @@ export const ThreadComponent = () => {
       style={styles.thread}
       data={posts}
       keyExtractor={item => item.no.toString()}
-      renderItem={({ item }) => <HTML html={item.com || '<span></span>'} />}
+      renderItem={renderItem}
     />
   );
 };

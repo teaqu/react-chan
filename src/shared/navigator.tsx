@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Text, StyleSheet } from 'react-native';
 
 import { ThreadComponent } from 'src/thread/thread-component';
 import { CatalogComponent } from 'src/catalog/catalog-component';
@@ -20,14 +21,25 @@ export function Navigator() {
         component={CatalogComponent}
         options={{
           headerTitle: () => <BoardPickerComponent />,
-          headerStyle: {
-            backgroundColor: '#eef2ff',
-            height: 40,
-            elevation: 2
-          }
+          headerStyle: styles.header
         }}
       />
-      <RootStack.Screen name="Thread" component={ThreadComponent} />
+      <RootStack.Screen
+        name="Thread"
+        component={ThreadComponent}
+        options={{
+          headerTitle: () => <Text />,
+          headerStyle: styles.header
+        }}
+      />
     </RootStack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: '#d6daf0',
+    height: 40,
+    elevation: 2
+  }
+});
