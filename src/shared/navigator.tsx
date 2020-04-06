@@ -19,7 +19,12 @@ export function Navigator() {
         name="Catalog"
         component={CatalogComponent}
         options={{
-          headerTitle: () => <BoardPickerComponent />
+          headerTitle: () => <BoardPickerComponent />,
+          headerStyle: {
+            backgroundColor: '#eef2ff',
+            height: 40,
+            elevation: 2
+          }
         }}
       />
       <RootStack.Screen name="Thread" component={ThreadComponent} />
