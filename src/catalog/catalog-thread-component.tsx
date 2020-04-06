@@ -54,7 +54,7 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
         )) || (
           <Image
             source={{ uri: fileDeletedURI }}
-            style={[styles.file_deleted, styles.thumbnail]}
+            style={[styles.thumbnail, styles.file_deleted]}
             resizeMode="contain"
           />
         )}
@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
   file_deleted: {
     height: 10,
     margin: 10,
-    width: '100%'
+    width: 100,
+    maxWidth: '100%'
   },
   thumbnail: {
     maxWidth: '100%',

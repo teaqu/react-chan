@@ -49,6 +49,7 @@ export const CatalogCommentComponent = (props: Props) => {
 
 const styles = StyleSheet.create({
   com_container: {
+    maxHeight: 135,
     overflow: 'hidden'
   }
 });
