@@ -53,6 +53,15 @@ export const PostComponent = React.memo((props: Props) => {
       <View style={[styles.post_header, op && styles.op_header]}>
         <View style={styles.header_flex}>
           <Text style={styles.name}>{post.name}</Text>
+          {post.trip && <Text>!{post.trip}</Text>}
+          {post.since4pass && (
+            <Image
+              source={{
+                uri: 'https://s.4cdn.org/image/minileaf.gif'
+              }}
+              style={styles.capcode}
+            />
+          )}
           <Text style={styles.date_no}>
             {post.now} No.{post.no}
           </Text>
@@ -303,5 +312,10 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 'auto',
     borderRadius: 2
+  },
+  capcode: {
+    height: 14,
+    width: 14,
+    marginLeft: 2
   }
 });

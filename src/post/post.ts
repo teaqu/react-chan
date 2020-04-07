@@ -14,6 +14,7 @@ export interface Post {
   h: number;
   tn_w: number;
   tn_h: number;
+  trip: string;
   tim: number;
   time: number;
   troll_country: string;
@@ -22,6 +23,7 @@ export interface Post {
   resto: number;
   capcode: string;
   semantic_url: string;
+  since4pass: number;
   replies: number;
   id: string;
   images: number;
