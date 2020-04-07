@@ -48,7 +48,6 @@ export const PostComponent = React.memo((props: Props) => {
   );
   const entities = new AllHtmlEntities();
   const op = post.replies !== undefined;
-
   return (
     <View style={[styles.post_container, op && styles.op_container]}>
       <View style={[styles.post_header, op && styles.op_header]}>
@@ -79,7 +78,22 @@ export const PostComponent = React.memo((props: Props) => {
             />
           )}
           {post.country_name && <Text>{post.country_name}</Text>}
-          {post.id && <Text style={styles.date_no}>ID: {post.id}</Text>}
+          {post.id && (
+            <Text
+              style={[
+                styles.id,
+                {
+                  backgroundColor: `rgb(
+                    ${post.id.charCodeAt(0) + post.id.charCodeAt(1)},
+                    ${post.id.charCodeAt(2) + post.id.charCodeAt(3)},
+                    ${post.id.charCodeAt(4) + post.id.charCodeAt(5)}
+                  )`
+                }
+              ]}
+            >
+              ID: {post.id}
+            </Text>
+          )}
         </View>
       </View>
       <View style={[styles.post, op && styles.op_post]}>
@@ -224,7 +238,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     flexWrap: 'wrap'
   },
   name: {
@@ -282,5 +295,13 @@ const styles = StyleSheet.create({
     height: 11,
     width: 16,
     marginRight: 5
+  },
+  id: {
+    padding: 2,
+    paddingLeft: 4,
+    paddingRight: 4,
+    fontSize: 10,
+    marginLeft: 'auto',
+    borderRadius: 2
   }
 });
