@@ -2,6 +2,8 @@ export interface Post {
   no: number;
   sticky: number;
   closed: number;
+  country: string;
+  country_name: string;
   now: string;
   name: string;
   sub: string;
@@ -14,12 +16,14 @@ export interface Post {
   tn_h: number;
   tim: number;
   time: number;
+  troll_country: string;
   md5: string;
   fsize: number;
   resto: number;
   capcode: string;
   semantic_url: string;
   replies: number;
+  id: string;
   images: number;
   unique_ips: number;
 }

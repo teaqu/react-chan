@@ -7,6 +7,8 @@ export interface ChanAPIState {
   thumbnail: string;
   image: string;
   fileDeleted: string;
+  flag: string;
+  trollFlag: string;
 }
 
 const initialState = FourChanState;

@@ -21,9 +21,11 @@ type BoardAPI = {
 };
 
 export const FourChanState: ChanAPIState = {
-  thumbnail: 'https://i.4cdn.org/%BOARDID%/%TIM%s.jpg',
-  image: 'https://i.4cdn.org/%BOARDID%/%TIM%',
-  fileDeleted: 'https://s.4cdn.org/image/filedeleted.gif'
+  thumbnail: 'https://i.4cdn.org/[board]/[tim]s.jpg',
+  image: 'https://i.4cdn.org/[board]/[tim]',
+  fileDeleted: 'https://s.4cdn.org/image/filedeleted.gif',
+  flag: 'https://s.4cdn.org/image/country/[country].gif',
+  trollFlag: 'https://s.4cdn.org/image/country/troll/[country].gif'
 };
 
 export const fetchCatalog = (boardId: string): Promise<Thread[]> => {

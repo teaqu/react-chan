@@ -22,6 +22,10 @@ export const PostComponent = React.memo((props: Props) => {
     (state: RootState) => state.chanAPI.thumbnail
   );
   const imageURI = useSelector((state: RootState) => state.chanAPI.image);
+  const flagURI = useSelector((state: RootState) => state.chanAPI.flag);
+  const trollFlagURI = useSelector(
+    (state: RootState) => state.chanAPI.trollFlag
+  );
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
   const screen = useSelector((state: RootState) => state.screen);
 
@@ -42,17 +46,41 @@ export const PostComponent = React.memo((props: Props) => {
     80,
     post.tn_h
   );
-
   const entities = new AllHtmlEntities();
   const op = post.replies !== undefined;
 
   return (
     <View style={[styles.post_container, op && styles.op_container]}>
       <View style={[styles.post_header, op && styles.op_header]}>
-        <Text style={styles.name}>{post.name}</Text>
-        <Text style={styles.date_no}>
-          {post.now} No.{post.no}
-        </Text>
+        <View style={styles.header_flex}>
+          <Text style={styles.name}>{post.name}</Text>
+          <Text style={styles.date_no}>
+            {post.now} No.{post.no}
+          </Text>
+        </View>
+        <View style={styles.header_flex}>
+          {post.country && (
+            <Image
+              source={{
+                uri: flagURI.replace('[country]', post.country.toLowerCase())
+              }}
+              style={styles.flag}
+            />
+          )}
+          {post.troll_country && (
+            <Image
+              source={{
+                uri: trollFlagURI.replace(
+                  '[country]',
+                  post.troll_country.toLowerCase()
+                )
+              }}
+              style={styles.flag}
+            />
+          )}
+          {post.country_name && <Text>{post.country_name}</Text>}
+          {post.id && <Text style={styles.date_no}>ID: {post.id}</Text>}
+        </View>
       </View>
       <View style={[styles.post, op && styles.op_post]}>
         {post.tim && showImage && (
@@ -68,8 +96,8 @@ export const PostComponent = React.memo((props: Props) => {
                 <Image
                   source={{
                     uri: thumbnailURI
-                      .replace('%BOARDID%', boardId)
-                      .replace('%TIM%', post.tim.toString())
+                      .replace('[board]', boardId)
+                      .replace('[tim]', post.tim.toString())
                   }}
                   style={{ height: image.height, width: image.width }}
                   resizeMode="contain"
@@ -85,8 +113,8 @@ export const PostComponent = React.memo((props: Props) => {
               source={{
                 uri:
                   imageURI
-                    .replace('%BOARDID%', boardId)
-                    .replace('%TIM%', post.tim.toString()) + post.ext
+                    .replace('[board]', boardId)
+                    .replace('[tim]', post.tim.toString()) + post.ext
               }}
               style={[
                 // eslint-disable-next-line react-native/no-inline-styles
@@ -124,8 +152,8 @@ export const PostComponent = React.memo((props: Props) => {
                   }}
                   source={{
                     uri: thumbnailURI
-                      .replace('%BOARDID%', boardId)
-                      .replace('%TIM%', post.tim.toString())
+                      .replace('[board]', boardId)
+                      .replace('[tim]', post.tim.toString())
                   }}
                   style={[
                     styles.thumbnail,
@@ -189,10 +217,14 @@ const styles = StyleSheet.create({
     flex: 1
   },
   post_header: {
-    flex: 1,
-    flexDirection: 'row',
     padding: 5,
     backgroundColor: '#c9cde8'
+  },
+  header_flex: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   name: {
     color: '#117743',
@@ -200,8 +232,7 @@ const styles = StyleSheet.create({
   },
   date_no: {
     marginLeft: 'auto',
-    fontSize: 12,
-    marginTop: 2
+    fontSize: 12
   },
   op_container: {
     paddingLeft: 0,
@@ -245,5 +276,10 @@ const styles = StyleSheet.create({
     zIndex: 1,
     height: 2,
     backgroundColor: 'red'
+  },
+  flag: {
+    height: 11,
+    width: 16,
+    marginRight: 5
   }
 });

@@ -50,8 +50,8 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
           <Image
             source={{
               uri: thumbnailURI
-                .replace('%BOARDID%', boardId)
-                .replace('%TIM%', thread.tim.toString())
+                .replace('[board]', boardId)
+                .replace('[tim]', thread.tim.toString())
             }}
             style={[
               { height: image.height, width: image.width },
