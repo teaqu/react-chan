@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import { RootState } from 'src/shared/root-reducer';
+import imageUtils from 'src/shared/utils/image-utils';
 
 import { Thread } from '../thread/thread';
 
@@ -28,6 +29,13 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
     (state: RootState) => state.chanAPI.fileDeleted
   );
 
+  const image = imageUtils.calculateAspectRatioFit(
+    thread.tn_w,
+    thread.tn_h,
+    100,
+    150
+  );
+
   return (
     <View style={styles.thread}>
       <TouchableOpacity
@@ -46,7 +54,7 @@ export const CatalogThreadComponent = React.memo((props: Props) => {
                 .replace('%TIM%', thread.tim.toString())
             }}
             style={[
-              { height: thread.tn_h / 2, width: thread.tn_w / 2 },
+              { height: image.height, width: image.width },
               styles.thumbnail
             ]}
             resizeMode="contain"
@@ -78,7 +86,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    maxHeight: 277,
+    maxHeight: 270,
     overflow: 'hidden'
   },
   sub: {
@@ -98,7 +106,6 @@ const styles = StyleSheet.create({
     maxWidth: '100%'
   },
   thumbnail: {
-    maxWidth: '100%',
     borderColor: '#D6DAF0',
     borderWidth: 1
   }
