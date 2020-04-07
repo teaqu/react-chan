@@ -34,13 +34,13 @@ export const PostComponent = React.memo((props: Props) => {
     post.w,
     post.h,
     Math.min(screen.width - 22, post.w),
-    1000
+    post.h
   );
   const thumbnail = imageUtils.calculateAspectRatioFit(
     post.tn_w,
     post.tn_h,
     80,
-    200
+    post.tn_h
   );
 
   const entities = new AllHtmlEntities();
