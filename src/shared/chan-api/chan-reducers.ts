@@ -5,6 +5,7 @@ import { FourChanState } from './four-chan-api';
 
 export interface ChanAPIState {
   thumbnail: string;
+  image: string;
   fileDeleted: string;
 }
 

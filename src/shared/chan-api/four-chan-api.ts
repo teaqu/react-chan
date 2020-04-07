@@ -22,6 +22,7 @@ type BoardAPI = {
 
 export const FourChanState: ChanAPIState = {
   thumbnail: 'https://i.4cdn.org/%BOARDID%/%TIM%s.jpg',
+  image: 'https://i.4cdn.org/%BOARDID%/%TIM%',
   fileDeleted: 'https://s.4cdn.org/image/filedeleted.gif'
 };
 
