@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector, useDispatch } from 'react-redux';
 import FastImage from 'react-native-fast-image';
@@ -11,11 +11,10 @@ import { Post } from './post';
 import postActions from './post-actions';
 
 type Props = { post: Post };
-export const PostThumbnailComponent = (props: Props) => {
+export const PostThumbnailComponent = React.memo((props: Props) => {
   const dispatch = useDispatch();
   const post = props.post;
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
-  const [thumbnailLoaded, setThumbnailLoaded] = useState(false);
   const thumbnailURI = useSelector(
     (state: RootState) => state.chanAPI.thumbnail
   );
@@ -39,20 +38,12 @@ export const PostThumbnailComponent = (props: Props) => {
       <View
         style={[
           styles.thumbnailContainer,
-          // eslint-disable-next-line react-native/no-inline-styles
           {
-            height: thumbnail.height,
-            backgroundColor: thumbnailLoaded ? 'rgba(0,0,0,0)' : '#c9cde8'
+            height: thumbnail.height
           }
         ]}
       >
-        {!thumbnailLoaded && (
-          <ActivityIndicator style={styles.thumbnailIndicator} />
-        )}
         <FastImage
-          onLoadEnd={() => {
-            setThumbnailLoaded(true);
-          }}
           source={{
             uri: thumbnailURI
               .replace('[board]', boardId)
@@ -60,9 +51,8 @@ export const PostThumbnailComponent = (props: Props) => {
           }}
           style={[
             styles.thumbnail,
-            // eslint-disable-next-line react-native/no-inline-styles
             {
-              height: thumbnailLoaded ? thumbnail.height : 0,
+              height: thumbnail.height,
               width: thumbnail.width
             }
           ]}
@@ -77,7 +67,7 @@ export const PostThumbnailComponent = (props: Props) => {
       )}
     </TouchableOpacity>
   );
-};
+});
 
 const styles = StyleSheet.create({
   thumbnail: {},
@@ -85,12 +75,15 @@ const styles = StyleSheet.create({
   thumbnailContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1
+    flex: 1,
+    marginTop: 4
   },
   imageInfo: {
     fontSize: 12,
     color: '#555',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop: 2,
+    marginBottom: -2
   },
   touchable: {
     marginRight: 5,

@@ -10,8 +10,8 @@ import { PostThumbnailComponent } from './post-thumbnail-component';
 
 type Props = { post: Post };
 export const PostComponent = React.memo((props: Props) => {
+  console.log(Math.random());
   const { post } = props;
-
   const entities = new AllHtmlEntities();
   const op = post.replies !== undefined;
   return (
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     borderColor: '#b7c5d9',
     borderWidth: 1,
     padding: 5,
+    paddingTop: 1,
     backgroundColor: '#d6daf0'
   },
   postFlex: {
@@ -65,7 +66,8 @@ const styles = StyleSheet.create({
   },
   opPost: {
     borderWidth: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0)'
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    paddingTop: 0
   },
   filename: {
     fontSize: 12,

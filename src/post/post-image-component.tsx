@@ -30,6 +30,7 @@ export const PostImageComponent = (props: Props) => {
 
   return (
     <TouchableWithoutFeedback
+      style={styles.imageContainer}
       onPress={() => {
         dispatch(postActions.toggleImage(post.tim));
       }}
@@ -54,19 +55,22 @@ export const PostImageComponent = (props: Props) => {
           const total = event.nativeEvent.total;
           setImageLoading((loaded / total) * 100);
         }}
+        onLoadEnd={() => {
+          setImageLoading(100);
+        }}
         source={{
           uri:
             imageURI
               .replace('[board]', boardId)
               .replace('[tim]', post.tim.toString()) + post.ext
         }}
-        style={[
+        style={
           // eslint-disable-next-line react-native/no-inline-styles
           {
             height: imageLoading < 100 ? 0 : image.height,
             width: image.width
           }
-        ]}
+        }
         resizeMode={'contain'}
       />
     </TouchableWithoutFeedback>
@@ -75,9 +79,12 @@ export const PostImageComponent = (props: Props) => {
 
 const styles = StyleSheet.create({
   loading: {
-    marginBottom: -4,
     zIndex: 1,
     height: 2,
-    backgroundColor: 'red'
+    backgroundColor: 'red',
+    marginBottom: -2
+  },
+  imageContainer: {
+    marginTop: 4
   }
 });

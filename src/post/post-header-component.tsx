@@ -19,8 +19,8 @@ export const PostHeaderComponent = (props: Props) => {
   const op = post.replies !== undefined;
 
   return (
-    <View style={[styles.post_header, op && styles.op_header]}>
-      <View style={styles.header_flex}>
+    <View style={[styles.postHeader, op && styles.opHeader]}>
+      <View style={styles.headerFlex}>
         <Text style={styles.name}>{post.name}</Text>
         {post.trip && <Text>!{post.trip}</Text>}
         {post.since4pass && (
@@ -31,11 +31,11 @@ export const PostHeaderComponent = (props: Props) => {
             style={styles.capCode}
           />
         )}
-        <Text style={styles.date_no}>
+        <Text style={styles.dateNo}>
           {post.now} No.{post.no}
         </Text>
       </View>
-      <View style={styles.header_flex}>
+      <View style={styles.headerFlex}>
         {post.country && (
           <Image
             source={{
@@ -83,8 +83,10 @@ const styles = StyleSheet.create({
     width: 16,
     marginRight: 5
   },
-  op_header: {
-    backgroundColor: 'rgba(0, 0, 0, 0)'
+  opHeader: {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    paddingTop: 0,
+    paddingBottom: 0
   },
   id: {
     padding: 2,
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     borderRadius: 2
   },
-  date_no: {
+  dateNo: {
     marginLeft: 'auto',
     fontSize: 12
   },
@@ -103,11 +105,17 @@ const styles = StyleSheet.create({
     width: 14,
     marginLeft: 2
   },
-  post_header: {
+  postHeader: {
     padding: 5,
-    backgroundColor: '#c9cde8'
+    paddingTop: 3,
+    paddingBottom: 3,
+    backgroundColor: '#c9cde8',
+    borderColor: '#b7c5d9',
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1
   },
-  header_flex: {
+  headerFlex: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
