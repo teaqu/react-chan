@@ -40,8 +40,12 @@ export const ThreadComponent = () => {
     return <PostComponent post={item.item} />;
   };
 
+  // A large window size does mean every post is loaded at once which isn't
+  // ideal but it leads to less renders in the long run as it stops FlatList
+  // unmounting every post out of view.
   return (
     <FlatList<Post>
+      windowSize={1000}
       refreshControl={
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
       }
