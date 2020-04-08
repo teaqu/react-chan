@@ -6,7 +6,7 @@ import threadReducer, { ThreadState } from 'src/thread/thread-reducer';
 import boardReducer, { BoardsState } from 'src/board/board-reducer';
 import chanAPIReducer, {
   ChanAPIState
-} from 'src/shared/chan-api/chan-reducers';
+} from 'src/shared/chan-api/chan-api-reducers';
 import boardPickerReducer, {
   BoardPickerState
 } from 'src/board/board-picker/board-picker-reducer';

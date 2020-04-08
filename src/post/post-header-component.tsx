@@ -10,6 +10,9 @@ type Props = { post: Post };
 export const PostHeaderComponent = (props: Props) => {
   const post = props.post;
   const flagURI = useSelector((state: RootState) => state.chanAPI.flag);
+  const since4passURI = useSelector(
+    (state: RootState) => state.chanAPI.since4pass
+  );
   const trollFlagURI = useSelector(
     (state: RootState) => state.chanAPI.trollFlag
   );
@@ -23,7 +26,7 @@ export const PostHeaderComponent = (props: Props) => {
         {post.since4pass && (
           <Image
             source={{
-              uri: 'https://s.4cdn.org/image/minileaf.gif'
+              uri: since4passURI
             }}
             style={styles.capCode}
           />

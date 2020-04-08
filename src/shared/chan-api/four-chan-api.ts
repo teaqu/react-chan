@@ -2,7 +2,7 @@ import { Thread } from 'src/thread/thread';
 import { Post } from 'src/post/post';
 import { Board } from 'src/board/board';
 
-import { ChanAPIState } from './chan-reducers';
+import { ChanAPIState } from './chan-api-reducers';
 
 type CatalogAPI = {
   page: number;
@@ -25,7 +25,8 @@ export const FourChanState: ChanAPIState = {
   image: 'https://i.4cdn.org/[board]/[tim]',
   fileDeleted: 'https://s.4cdn.org/image/filedeleted.gif',
   flag: 'https://s.4cdn.org/image/country/[country].gif',
-  trollFlag: 'https://s.4cdn.org/image/country/troll/[country].gif'
+  trollFlag: 'https://s.4cdn.org/image/country/troll/[country].gif',
+  since4pass: 'https://s.4cdn.org/image/minileaf.gif'
 };
 
 export const fetchCatalog = (boardId: string): Promise<Thread[]> => {

@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { setContext, takeLatest } from 'redux-saga/effects';
 
-import actions from './chan-actions';
+import actions from './chan-api-actions';
 import fourChanAPI from './four-chan-api';
 
 export function* switchChanAPI(action: AnyAction) {

@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import actions from './chan-actions';
+import actions from './chan-api-actions';
 import { FourChanState } from './four-chan-api';
 
 export interface ChanAPIState {
@@ -9,6 +9,7 @@ export interface ChanAPIState {
   fileDeleted: string;
   flag: string;
   trollFlag: string;
+  since4pass: string;
 }
 
 const initialState = FourChanState;
