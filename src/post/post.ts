@@ -28,4 +28,8 @@ export interface Post {
   id: string;
   images: number;
   unique_ips: number;
+
+  // App state
+  show_image: boolean;
+  show_image_info: boolean;
 }
