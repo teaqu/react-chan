@@ -6,21 +6,13 @@ import renderers from 'src/comment/renderers';
 import tagStyles from 'src/comment/tag-styles';
 
 type Props = { comment: string };
-export const CatalogCommentComponent = (props: Props) => {
-  // Remove unnecessary whitespace
-  const comment = props.comment.replace('<br><br>', '<br>');
-
+export const PostCommentComponent = (props: Props) => {
   return (
     <HTML
-      html={`<p>${comment}</p>`}
+      html={props.comment}
       renderers={renderers()}
       textSelectable={true}
-      tagsStyles={{
-        p: {
-          textAlign: 'center'
-        },
-        ...tagStyles
-      }}
+      tagsStyles={tagStyles}
       containerStyle={styles.com_container}
     />
   );

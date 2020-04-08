@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import HTML from 'react-native-render-html';
 import { View, StyleSheet, Text, Image, ActivityIndicator } from 'react-native';
 import {
   TouchableOpacity,
@@ -13,6 +12,7 @@ import { RootState } from 'src/shared/root-reducer';
 import imageUtils from 'src/shared/utils/image-utils';
 
 import { Post } from './post';
+import { PostCommentComponent } from './post-comment-componenet';
 
 type Props = { post: Post };
 export const PostComponent = React.memo((props: Props) => {
@@ -211,11 +211,7 @@ export const PostComponent = React.memo((props: Props) => {
                 {entities.decode(post.sub)}
               </Text>
             )}
-            {post.com && (
-              <View style={styles.comment_container}>
-                <HTML html={post.com} />
-              </View>
-            )}
+            {post.com && <PostCommentComponent comment={post.com} />}
           </View>
         </View>
       </View>
@@ -277,9 +273,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   },
-  comment_container: {
-    flex: 1
-  },
   imageInfo: {
     fontSize: 12,
     color: '#555',
@@ -317,5 +310,8 @@ const styles = StyleSheet.create({
     height: 14,
     width: 14,
     marginLeft: 2
+  },
+  comment_container: {
+    flex: 1
   }
 });
