@@ -10,7 +10,6 @@ import { PostThumbnailComponent } from './post-thumbnail-component';
 
 type Props = { post: Post };
 export const PostComponent = React.memo((props: Props) => {
-  console.log(Math.random());
   const { post } = props;
   const entities = new AllHtmlEntities();
   const op = post.replies !== undefined;
