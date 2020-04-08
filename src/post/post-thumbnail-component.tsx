@@ -28,6 +28,7 @@ export const PostThumbnailComponent = (props: Props) => {
 
   return (
     <TouchableOpacity
+      style={[styles.touchable, { width: thumbnail.width }]}
       onLongPress={() => {
         dispatch(postActions.toggleImageInfo(post.tim));
       }}
@@ -35,7 +36,16 @@ export const PostThumbnailComponent = (props: Props) => {
         dispatch(postActions.toggleImage(post.tim));
       }}
     >
-      <View style={[styles.thumbnailContainer, { height: thumbnail.height }]}>
+      <View
+        style={[
+          styles.thumbnailContainer,
+          // eslint-disable-next-line react-native/no-inline-styles
+          {
+            height: thumbnail.height,
+            backgroundColor: thumbnailLoaded ? 'rgba(0,0,0,0)' : '#c9cde8'
+          }
+        ]}
+      >
         {!thumbnailLoaded && (
           <ActivityIndicator style={styles.thumbnailIndicator} />
         )}
@@ -73,8 +83,6 @@ const styles = StyleSheet.create({
   thumbnail: {},
   thumbnailIndicator: {},
   thumbnailContainer: {
-    backgroundColor: '#c9cde8',
-    marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1
@@ -82,7 +90,10 @@ const styles = StyleSheet.create({
   imageInfo: {
     fontSize: 12,
     color: '#555',
-    textAlign: 'center',
-    width: 80
+    textAlign: 'center'
+  },
+  touchable: {
+    marginRight: 5,
+    minWidth: 40
   }
 });
