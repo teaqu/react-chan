@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FastImage from 'react-native-fast-image';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -39,7 +39,7 @@ export const PostImageComponent = (props: Props) => {
         // Show the thumbnail while image is loading
         <View style={{ width: image.width }}>
           <View style={[styles.loading, { width: `${imageLoading}%` }]} />
-          <Image
+          <FastImage
             source={{
               uri: thumbnailURI
                 .replace('[board]', boardId)
