@@ -64,4 +64,18 @@ export const fetchBoards = (): Promise<Board[]> => {
     .then((api: BoardAPI) => api.boards);
 };
 
-export default { fetchCatalog, fetchThread, fetchBoards };
+export const calcReplies = (index: number, posts: Post[]): number[] => {
+  const replies = [];
+  const no = posts[index].no;
+  for (let i = index; i < posts.length; i++) {
+    // get replies from the comment
+    if (posts[i].com) {
+      if (posts[i].com.search(`>&gt;&gt;${no}<`) > -1) {
+        replies.push(posts[i].no);
+      }
+    }
+  }
+  return replies;
+};
+
+export default { fetchCatalog, fetchThread, fetchBoards, calcReplies };

@@ -6,4 +6,5 @@ export interface ChanAPI {
   fetchCatalog(boardId: string): Promise<Thread[]>;
   fetchThread(boardId: string, threadNo: number): Promise<Post[]>;
   fetchBoards(): Promise<Board[]>;
+  calcReplies(index: number, posts: Post[]): number[];
 }

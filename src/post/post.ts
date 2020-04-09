@@ -32,4 +32,6 @@ export interface Post {
   // App state
   show_image: boolean;
   show_image_info: boolean;
+  post_replies: number[];
+  index: number;
 }

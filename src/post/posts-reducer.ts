@@ -18,11 +18,13 @@ export default createReducer(initialState, {
     state.posts = [];
   },
   [threadActions.fetchThreadSucceeded.type]: (state, action) => {
-    state.posts = action.payload.posts;
-    state.posts.map(post => {
-      post.show_image = false;
-      post.show_image_info = false;
-    });
+    let posts = action.payload.posts;
+    for (let i = 0; i < posts.length; i++) {
+      posts[i].show_image = false;
+      posts[i].show_image_info = false;
+      posts[i].index = i;
+    }
+    state.posts = posts;
   },
   [postActions.toggleImage.type]: (state, action) => {
     let post = state.posts.find(p => p.tim === action.payload);
@@ -34,6 +36,12 @@ export default createReducer(initialState, {
     let post = state.posts.find(p => p.tim === action.payload);
     if (post) {
       post.show_image_info = !post.show_image_info;
+    }
+  },
+  [postActions.saveReplies.type]: (state, action) => {
+    let post = state.posts[action.payload.index];
+    if (post) {
+      post.post_replies = action.payload.replies;
     }
   }
 });

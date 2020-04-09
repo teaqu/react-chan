@@ -7,6 +7,7 @@ import { PostCommentComponent } from './post-comment-component';
 import { PostHeaderComponent } from './post-header-component';
 import { PostImageComponent } from './post-image-component';
 import { PostThumbnailComponent } from './post-thumbnail-component';
+import { PostRepliesComponent } from './post-replies-component';
 
 type Props = { post: Post };
 export const PostComponent = React.memo((props: Props) => {
@@ -16,7 +17,7 @@ export const PostComponent = React.memo((props: Props) => {
   return (
     <View style={[styles.post_container, op && styles.opContainer]}>
       <PostHeaderComponent post={post} />
-      <View style={[styles.post, op && styles.opPost]}>
+      <View style={[styles.post]}>
         {post.tim && post.show_image && <PostImageComponent post={post} />}
         <View style={styles.postFlex}>
           {post.tim && !post.show_image && (
@@ -38,6 +39,7 @@ export const PostComponent = React.memo((props: Props) => {
           </View>
         </View>
       </View>
+      <PostRepliesComponent post={post} />
     </View>
   );
 });
@@ -62,11 +64,6 @@ const styles = StyleSheet.create({
   opContainer: {
     paddingLeft: 0,
     paddingRight: 0
-  },
-  opPost: {
-    borderWidth: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    paddingTop: 0
   },
   filename: {
     fontSize: 12,

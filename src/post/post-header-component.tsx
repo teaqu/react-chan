@@ -16,10 +16,9 @@ export const PostHeaderComponent = (props: Props) => {
   const trollFlagURI = useSelector(
     (state: RootState) => state.chanAPI.trollFlag
   );
-  const op = post.replies !== undefined;
 
   return (
-    <View style={[styles.postHeader, op && styles.opHeader]}>
+    <View style={styles.postHeader}>
       <View style={styles.headerFlex}>
         <Text style={styles.name}>{post.name}</Text>
         {post.trip && <Text>!{post.trip}</Text>}
@@ -82,11 +81,6 @@ const styles = StyleSheet.create({
     height: 11,
     width: 16,
     marginRight: 5
-  },
-  opHeader: {
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    paddingTop: 0,
-    paddingBottom: 0
   },
   id: {
     padding: 2,

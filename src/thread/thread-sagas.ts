@@ -18,7 +18,10 @@ export function* fetchThread(action: fetchThreadAction) {
     const chanAPI: ChanAPI = yield getContext('chanAPI');
     const boardId = action.payload.boardId;
     const threadNo = action.payload.threadNo;
-    const posts: Post[] = yield call(chanAPI.fetchThread, boardId, threadNo);
+    let posts: Post[] = yield call(chanAPI.fetchThread, boardId, threadNo);
+    posts = posts.map(post => {
+      return post;
+    });
     yield put(actions.fetchThreadSucceeded(boardId, threadNo, posts));
   } catch (e) {
     yield put(actions.fetchThreadFailed(e.message));
