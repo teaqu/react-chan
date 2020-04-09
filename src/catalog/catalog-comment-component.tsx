@@ -1,9 +1,7 @@
 import React from 'react';
-import HTML from 'react-native-render-html';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
-import renderers from 'src/comment/renderers';
-import tagStyles from 'src/comment/tag-styles';
+import { HTMLComponent } from 'src/shared/html/html-component';
 
 type Props = { comment: string };
 export const CatalogCommentComponent = (props: Props) => {
@@ -11,21 +9,14 @@ export const CatalogCommentComponent = (props: Props) => {
   const comment = props.comment.replace('<br><br>', '<br>');
 
   return (
-    <HTML
-      html={`<p>${comment}</p>`}
-      renderers={renderers()}
-      textSelectable={true}
-      tagsStyles={{
-        p: {
-          textAlign: 'center'
-        },
-        ...tagStyles
-      }}
-      containerStyle={styles.com_container}
-    />
+    <Text selectable={true} style={styles.comment}>
+      <HTMLComponent html={comment} />
+    </Text>
   );
 };
 
 const styles = StyleSheet.create({
-  com_container: {}
+  comment: {
+    textAlign: 'center'
+  }
 });

@@ -1,23 +1,14 @@
 import React from 'react';
-import HTML from 'react-native-render-html';
-import { StyleSheet } from 'react-native';
+import { SelectableText } from '@astrocoders/react-native-selectable-text';
 
-import renderers from 'src/comment/renderers';
-import tagStyles from 'src/comment/tag-styles';
+import { HTMLComponent } from 'src/shared/html/html-component';
 
 type Props = { comment: string };
 export const PostCommentComponent = (props: Props) => {
   return (
-    <HTML
-      html={props.comment}
-      renderers={renderers()}
-      textSelectable={true}
-      tagsStyles={tagStyles}
-      containerStyle={styles.com_container}
+    <SelectableText
+      menuItems={['quote']}
+      value={<HTMLComponent html={props.comment} />}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  com_container: {}
-});
