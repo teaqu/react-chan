@@ -45,7 +45,6 @@ export const ThreadComponent = () => {
   // unmounting every post out of view.
   return (
     <FlatList<Post>
-      windowSize={1000}
       refreshControl={
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
       }
@@ -53,6 +52,7 @@ export const ThreadComponent = () => {
       data={posts}
       keyExtractor={item => item.no.toString()}
       renderItem={renderItem}
+      removeClippedSubviews={false}
     />
   );
 };

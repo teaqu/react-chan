@@ -54,7 +54,6 @@ export function CatalogComponent() {
       removeClippedSubviews={false}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
-      windowSize={1000}
     />
   );
 }
