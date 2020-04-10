@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from 'src/shared/root-reducer';
 
-import { Post } from './post';
-
-type Props = { post: Post };
-export const PostHeaderComponent = (props: Props) => {
-  const post = props.post;
+type Props = { postIndex: number };
+export const PostHeaderComponent = React.memo((props: Props) => {
+  const post = useSelector(
+    (state: RootState) => state.posts.posts[props.postIndex]
+  );
   const flagURI = useSelector((state: RootState) => state.chanAPI.flag);
   const since4passURI = useSelector(
     (state: RootState) => state.chanAPI.since4pass
@@ -74,7 +74,7 @@ export const PostHeaderComponent = (props: Props) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   flag: {

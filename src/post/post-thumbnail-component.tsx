@@ -7,13 +7,14 @@ import FastImage from 'react-native-fast-image';
 import { RootState } from 'src/shared/root-reducer';
 import imageUtils from 'src/shared/utils/image-utils';
 
-import { Post } from './post';
 import postActions from './post-actions';
 
-type Props = { post: Post };
+type Props = { postIndex: number };
 export const PostThumbnailComponent = React.memo((props: Props) => {
   const dispatch = useDispatch();
-  const post = props.post;
+  const post = useSelector(
+    (state: RootState) => state.posts.posts[props.postIndex]
+  );
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
   const thumbnailURI = useSelector(
     (state: RootState) => state.chanAPI.thumbnail

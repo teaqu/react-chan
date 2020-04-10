@@ -64,18 +64,37 @@ export const fetchBoards = (): Promise<Board[]> => {
     .then((api: BoardAPI) => api.boards);
 };
 
-export const calcReplies = (index: number, posts: Post[]): number[] => {
-  const replies = [];
-  const no = posts[index].no;
-  for (let i = index; i < posts.length; i++) {
-    // get replies from the comment
+export const calcReplies = (posts: Post[]): Post[] => {
+  const length = posts.length;
+  const regex = />&gt;&gt;(.*?)</g;
+  let matches = null;
+  for (let i = 0; i < length; i++) {
+    let inline_reply_links: number[] = [];
     if (posts[i].com) {
-      if (posts[i].com.search(`>&gt;&gt;${no}<`) > -1) {
-        replies.push(posts[i].no);
+      do {
+        matches = regex.exec(posts[i].com);
+        if (matches) {
+          inline_reply_links.push(parseInt(matches[1], 10));
+        }
+      } while (matches);
+    }
+    posts[i].inline_reply_links = inline_reply_links;
+  }
+  for (let i = 0; i < length; i++) {
+    let replies = [];
+    for (let x = i + 1; x < length; x++) {
+      if (posts[x].com) {
+        if (
+          posts[x].inline_reply_links &&
+          posts[x].inline_reply_links.includes(posts[i].no)
+        ) {
+          replies.push({ index: x, no: posts[x].no });
+        }
       }
     }
+    posts[i].reply_links = replies;
   }
-  return replies;
+  return posts;
 };
 
 export default { fetchCatalog, fetchThread, fetchBoards, calcReplies };

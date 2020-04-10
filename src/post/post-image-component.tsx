@@ -7,24 +7,30 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'src/shared/root-reducer';
 import imageUtils from 'src/shared/utils/image-utils';
 
-import { Post } from './post';
 import postActions from './post-actions';
 
-type Props = { post: Post };
+type Props = { postIndex: number };
 export const PostImageComponent = (props: Props) => {
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
-  const post = props.post;
-  const screen = useSelector((state: RootState) => state.screen);
+  const post = useSelector(
+    (state: RootState) => state.posts.posts[props.postIndex]
+  );
   const imageURI = useSelector((state: RootState) => state.chanAPI.image);
   const [imageLoading, setImageLoading] = useState(0);
   const thumbnailURI = useSelector(
     (state: RootState) => state.chanAPI.thumbnail
   );
+
+  const [width, setWidth] = useState(0);
+  const onLayout = (event: any) => {
+    setWidth(event.nativeEvent.layout.width);
+  };
+
   const image = imageUtils.calculateAspectRatioFit(
     post.w,
     post.h,
-    Math.min(screen.width - 22, post.w),
+    width,
     post.h
   );
 
@@ -34,6 +40,7 @@ export const PostImageComponent = (props: Props) => {
       onPress={() => {
         dispatch(postActions.toggleImage(post.tim));
       }}
+      onLayout={onLayout}
     >
       {imageLoading < 100 && (
         // Show the thumbnail while image is loading
@@ -71,7 +78,7 @@ export const PostImageComponent = (props: Props) => {
             width: image.width
           }
         }
-        resizeMode={'contain'}
+        resizeMode={'stretch'}
       />
     </TouchableWithoutFeedback>
   );

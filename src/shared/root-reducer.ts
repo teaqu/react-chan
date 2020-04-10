@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { ScaledSize } from 'react-native';
 
 import catalogReducer, { CatalogState } from 'src/catalog/catalog-reducers';
 import threadReducer, { ThreadState } from 'src/thread/thread-reducer';
@@ -12,8 +11,6 @@ import boardPickerReducer, {
 } from 'src/board/board-picker/board-picker-reducer';
 import postsReducer, { PostsState } from 'src/post/posts-reducer';
 
-import screenReducer from './screen/screen-reducer';
-
 export interface RootState {
   catalog: CatalogState;
   thread: ThreadState;
@@ -21,7 +18,6 @@ export interface RootState {
   chanAPI: ChanAPIState;
   boards: BoardsState;
   boardPicker: BoardPickerState;
-  screen: ScaledSize;
 }
 
 const rootReducer = combineReducers({
@@ -30,8 +26,7 @@ const rootReducer = combineReducers({
   posts: postsReducer,
   chanAPI: chanAPIReducer,
   boards: boardReducer,
-  boardPicker: boardPickerReducer,
-  screen: screenReducer
+  boardPicker: boardPickerReducer
 });
 
 export default rootReducer;

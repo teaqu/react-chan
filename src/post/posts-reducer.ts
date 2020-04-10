@@ -19,10 +19,13 @@ export default createReducer(initialState, {
   },
   [threadActions.fetchThreadSucceeded.type]: (state, action) => {
     let posts = action.payload.posts;
-    for (let i = 0; i < posts.length; i++) {
+    let length = posts.length;
+    for (let i = 0; i < length; i++) {
+      // set default state
       posts[i].show_image = false;
       posts[i].show_image_info = false;
       posts[i].index = i;
+      posts[i].reply_links_showing = [];
     }
     state.posts = posts;
   },
@@ -38,10 +41,37 @@ export default createReducer(initialState, {
       post.show_image_info = !post.show_image_info;
     }
   },
-  [postActions.saveReplies.type]: (state, action) => {
-    let post = state.posts[action.payload.index];
-    if (post) {
-      post.post_replies = action.payload.replies;
+  [postActions.toggleReply.type]: (state, action) => {
+    const pIndex = action.payload.postIndex; // the post
+    const rIndex = action.payload.replyIndex; // The reply we want to inline
+    let post = state.posts[pIndex];
+    if (!post.reply_links_showing.includes(rIndex)) {
+      // Show inline reply
+      post.reply_links_showing.unshift(rIndex);
+      state.posts[rIndex].hidden = true;
+    } else {
+      // Clear inline reply
+      clearInline(state.posts, rIndex);
+      post.reply_links_showing = post.reply_links_showing.filter(
+        r => r !== rIndex
+      );
     }
   }
 });
+
+/**
+ * Recursively clear inline replies from given index
+ *
+ * @param posts our posts
+ * @param index the post to clear
+ */
+function clearInline(posts: Post[], index: number) {
+  const post = posts[index];
+  if (post.reply_links_showing.length > 0) {
+    post.reply_links_showing.map(replyIndex => {
+      clearInline(posts, replyIndex);
+    });
+    post.reply_links_showing = [];
+  }
+  post.hidden = false;
+}

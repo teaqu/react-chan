@@ -2,15 +2,14 @@ import { createAction } from '@reduxjs/toolkit';
 
 const toggleImage = createAction<number>('TOGGLE_IMAGE');
 const toggleImageInfo = createAction<number>('TOGGLE_IMAGE_INFO');
-const calcReplies = createAction<number>('CALC_REPLIES');
-const saveReplies = createAction('SAVE_REPLIES', function prepare(
-  index: number,
-  replies: number[]
+const toggleReply = createAction('TOGGLE_REPLY', function prepare(
+  postIndex: number,
+  replyIndex: number
 ) {
   return {
     payload: {
-      index,
-      replies
+      postIndex,
+      replyIndex
     }
   };
 });
@@ -18,6 +17,5 @@ const saveReplies = createAction('SAVE_REPLIES', function prepare(
 export default {
   toggleImage,
   toggleImageInfo,
-  calcReplies,
-  saveReplies
+  toggleReply
 };

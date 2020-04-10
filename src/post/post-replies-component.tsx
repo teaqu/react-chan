@@ -1,38 +1,74 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Post } from './post';
+import { RootState } from 'src/shared/root-reducer';
+
 import postActions from './post-actions';
+import { PostComponent } from './post-component';
 
-type Props = { post: Post };
-export const PostRepliesComponent = (props: Props) => {
-  const post = props.post;
-
+type Props = { postIndex: number };
+export const PostRepliesComponent = React.memo((props: Props) => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (typeof post.post_replies === 'undefined') {
-      dispatch(postActions.calcReplies(post.index));
-    }
-  });
+  const post = useSelector(
+    (state: RootState) => state.posts.posts[props.postIndex]
+  );
+
+  const showReply = (replyIndex: number) => {
+    dispatch(postActions.toggleReply(post.index, replyIndex));
+  };
 
   return (
-    (typeof post.post_replies === 'object' && post.post_replies.length > 0 && (
-      <View style={styles.replies}>
-        {post.post_replies.map(reply => (
-          <Text style={styles.reply}>>>{reply} </Text>
+    (typeof post.reply_links === 'object' && post.reply_links.length > 0 && (
+      <>
+        <View style={styles.replies}>
+          {post.reply_links.map(reply => (
+            <Text
+              style={[
+                post.reply_links_showing.includes(reply.index) &&
+                  styles.inlined,
+                styles.reply
+              ]}
+              onPress={() => showReply(reply.index)}
+            >
+              >>{reply.no}
+            </Text>
+          ))}
+        </View>
+        {post.reply_links_showing.map(reply => (
+          <View style={styles.repliesShowing}>
+            <PostComponent
+              key={'reply' + reply}
+              postIndex={reply}
+              isReply={true}
+            />
+          </View>
         ))}
-      </View>
+      </>
     )) ||
     null
   );
-};
+});
 
 const styles = StyleSheet.create({
   replies: {
-    padding: 5,
+    padding: 3,
     paddingTop: 3,
     paddingBottom: 3,
+    backgroundColor: '#c9cde8',
+    borderColor: '#b7c5d9',
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  repliesShowing: {
+    paddingLeft: 3,
+    paddingRight: 3,
+    paddingTop: 3,
+    marginTop: -5,
+    paddingBottom: 0,
     backgroundColor: '#c9cde8',
     borderColor: '#b7c5d9',
     borderBottomWidth: 1,
@@ -44,5 +80,8 @@ const styles = StyleSheet.create({
   reply: {
     color: '#34345c',
     fontSize: 13
+  },
+  inlined: {
+    opacity: 0.5
   }
 });

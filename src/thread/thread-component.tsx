@@ -37,7 +37,7 @@ export const ThreadComponent = () => {
   }, [dispatch, boardId, threadNo]);
 
   const renderItem = (item: any) => {
-    return <PostComponent post={item.item} />;
+    return <PostComponent postIndex={item.item.index} isReply={false} />;
   };
 
   // A large window size does mean every post is loaded at once which isn't

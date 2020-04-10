@@ -1,3 +1,5 @@
+import { Reply } from 'src/shared/chan-api/chan-api';
+
 export interface Post {
   no: number;
   sticky: number;
@@ -29,9 +31,17 @@ export interface Post {
   images: number;
   unique_ips: number;
 
-  // App state
+  // Post state
   show_image: boolean;
   show_image_info: boolean;
-  post_replies: number[];
+
+  // Replies to this post
+  reply_links: Reply[];
+  reply_links_showing: number[];
+
+  // posts this post is replying to
+  com_replies: number[];
+
   index: number;
+  hidden: boolean;
 }
