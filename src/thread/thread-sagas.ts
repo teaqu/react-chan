@@ -5,13 +5,13 @@ import { ChanAPI } from 'src/shared/chan-api/chan-api';
 
 import actions from './thread-actions';
 
-type fetchThreadAction = {
+interface fetchThreadAction {
   type: string;
   payload: {
     boardId: string;
     threadNo: number;
   };
-};
+}
 
 export function* fetchThread(action: fetchThreadAction) {
   try {
@@ -20,9 +20,6 @@ export function* fetchThread(action: fetchThreadAction) {
     const threadNo = action.payload.threadNo;
     let posts: Post[] = yield call(chanAPI.fetchThread, boardId, threadNo);
     posts = yield call(chanAPI.calcReplies, posts);
-    posts = posts.map(post => {
-      return post;
-    });
     yield put(actions.fetchThreadSucceeded(boardId, threadNo, posts));
   } catch (e) {
     yield put(actions.fetchThreadFailed(e.message));

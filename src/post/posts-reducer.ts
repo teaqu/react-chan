@@ -24,7 +24,6 @@ export default createReducer(initialState, {
       // set default state
       posts[i].show_image = false;
       posts[i].show_image_info = false;
-      posts[i].index = i;
       posts[i].reply_links_showing = [];
     }
     state.posts = posts;

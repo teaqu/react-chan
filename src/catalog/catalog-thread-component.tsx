@@ -8,77 +8,83 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/shared/root-reducer';
 import imageUtils from 'src/shared/utils/image-utils';
 
-import { Thread } from '../thread/thread';
-
 import { CatalogCommentComponent } from './catalog-comment-component';
 
 /**
- * Rendering a thread in the catalog
+ * For Rendering a thread within the catalog
  */
-type Props = { boardId: string; thread: Thread };
-export const CatalogThreadComponent = React.memo((props: Props) => {
-  const { thread, boardId } = props;
-  const entities = new AllHtmlEntities();
-  const navigation = useNavigation();
+interface Props {
+  boardId: string;
+  threadIndex: number;
+}
+export const CatalogThreadComponent = React.memo(
+  ({ boardId, threadIndex }: Props) => {
+    const entities = new AllHtmlEntities();
+    const navigation = useNavigation();
 
-  const thumbnailURI = useSelector(
-    (state: RootState) => state.chanAPI.thumbnail
-  );
+    const thread = useSelector(
+      (state: RootState) => state.catalog.threads[threadIndex]
+    );
+    const thumbnailURI = useSelector(
+      (state: RootState) => state.chanAPI.thumbnail
+    );
+    const fileDeletedURI = useSelector(
+      (state: RootState) => state.chanAPI.fileDeleted
+    );
 
-  const fileDeletedURI = useSelector(
-    (state: RootState) => state.chanAPI.fileDeleted
-  );
+    // Scale our images to fit within the list of threads
+    const image = imageUtils.calculateAspectRatioFit(
+      thread.tn_w,
+      thread.tn_h,
+      100,
+      150
+    );
 
-  const image = imageUtils.calculateAspectRatioFit(
-    thread.tn_w,
-    thread.tn_h,
-    100,
-    150
-  );
-
-  return (
-    <View style={styles.thread}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Thread', {
-            boardId: props.boardId,
-            threadNo: thread.no
-          });
-        }}
-      >
-        {(thread.tim && (
-          <Image
-            source={{
-              uri: thumbnailURI
-                .replace('[board]', boardId)
-                .replace('[tim]', thread.tim.toString())
-            }}
-            style={[
-              { height: image.height, width: image.width },
-              styles.thumbnail
-            ]}
-            resizeMode="contain"
-          />
-        )) || (
-          <Image
-            source={{ uri: fileDeletedURI }}
-            style={[styles.thumbnail, styles.file_deleted]}
-            resizeMode="contain"
-          />
-        )}
-      </TouchableOpacity>
-      <Text style={styles.stats}>
-        {thread.replies} / {thread.images} / {thread.page}
-      </Text>
-      {thread.sub && (
-        <Text selectable={true} key={thread.no + 'sub'} style={styles.sub}>
-          {entities.decode(thread.sub)}
+    return (
+      <View style={styles.thread}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Thread', {
+              boardId: boardId,
+              threadNo: thread.no
+            });
+          }}
+        >
+          {(thread.tim && (
+            <Image
+              source={{
+                uri: thumbnailURI
+                  .replace('[board]', boardId)
+                  .replace('[tim]', thread.tim.toString())
+              }}
+              style={[
+                { height: image.height, width: image.width },
+                styles.thumbnail
+              ]}
+              resizeMode="contain"
+            />
+          )) || (
+            // If no image found, show the file deleted image instead
+            <Image
+              source={{ uri: fileDeletedURI }}
+              style={[styles.thumbnail, styles.file_deleted]}
+              resizeMode="contain"
+            />
+          )}
+        </TouchableOpacity>
+        <Text style={styles.stats}>
+          {thread.replies} / {thread.images} / {thread.page}
         </Text>
-      )}
-      {thread.com && <CatalogCommentComponent comment={thread.com} />}
-    </View>
-  );
-});
+        {thread.sub && (
+          <Text selectable={true} key={thread.no + 'sub'} style={styles.sub}>
+            {entities.decode(thread.sub)}
+          </Text>
+        )}
+        {thread.com && <CatalogCommentComponent comment={thread.com} />}
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   thread: {

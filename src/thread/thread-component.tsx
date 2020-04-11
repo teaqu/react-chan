@@ -24,6 +24,7 @@ export const ThreadComponent = () => {
   useEffect(() => {
     dispatch(actions.fetchThread(boardId, threadNo));
     return function cleanUp() {
+      // Remove thread from memory when the user leaves it.
       dispatch(actions.invalidateThread());
     };
   }, [dispatch, boardId, threadNo]);
@@ -37,12 +38,13 @@ export const ThreadComponent = () => {
   }, [dispatch, boardId, threadNo]);
 
   const renderItem = (item: any) => {
-    return <PostComponent postIndex={item.item.index} isReply={false} />;
+    return <PostComponent postIndex={item.index} />;
   };
 
-  // A large window size does mean every post is loaded at once which isn't
-  // ideal but it leads to less renders in the long run as it stops FlatList
-  // unmounting every post out of view.
+  const keyExtractor = (item: any) => {
+    return item.no.toString();
+  };
+
   return (
     <FlatList<Post>
       refreshControl={
@@ -50,7 +52,7 @@ export const ThreadComponent = () => {
       }
       style={styles.thread}
       data={posts}
-      keyExtractor={item => item.no.toString()}
+      keyExtractor={keyExtractor}
       renderItem={renderItem}
       removeClippedSubviews={false}
     />

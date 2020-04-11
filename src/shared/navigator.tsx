@@ -6,12 +6,12 @@ import { ThreadComponent } from 'src/thread/thread-component';
 import { CatalogComponent } from 'src/catalog/catalog-component';
 import { BoardPickerComponent } from 'src/board/board-picker/board-picker-component';
 
-const RootStack = createStackNavigator<RootStackParamList>();
-
 export type RootStackParamList = {
   Catalog: typeof CatalogComponent;
   Thread: { boardId: string; threadNo: number };
 };
+
+const RootStack = createStackNavigator<RootStackParamList>();
 
 export function Navigator() {
   return (

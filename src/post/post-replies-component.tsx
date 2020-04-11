@@ -7,15 +7,15 @@ import { RootState } from 'src/shared/root-reducer';
 import postActions from './post-actions';
 import { PostComponent } from './post-component';
 
-type Props = { postIndex: number };
-export const PostRepliesComponent = React.memo((props: Props) => {
+interface Props {
+  postIndex: number;
+}
+export const PostRepliesComponent = React.memo(({ postIndex }: Props) => {
   const dispatch = useDispatch();
-  const post = useSelector(
-    (state: RootState) => state.posts.posts[props.postIndex]
-  );
+  const post = useSelector((state: RootState) => state.posts.posts[postIndex]);
 
   const showReply = (replyIndex: number) => {
-    dispatch(postActions.toggleReply(post.index, replyIndex));
+    dispatch(postActions.toggleReply(postIndex, replyIndex));
   };
 
   return (
@@ -24,6 +24,7 @@ export const PostRepliesComponent = React.memo((props: Props) => {
         <View style={styles.replies}>
           {post.reply_links.map(reply => (
             <Text
+              key={'reply-link-' + reply.no}
               style={[
                 post.reply_links_showing.includes(reply.index) &&
                   styles.inlined,
@@ -38,7 +39,7 @@ export const PostRepliesComponent = React.memo((props: Props) => {
         {post.reply_links_showing.map(reply => (
           <View style={styles.repliesShowing}>
             <PostComponent
-              key={'reply' + reply}
+              key={'reply-' + reply}
               postIndex={reply}
               isReply={true}
             />

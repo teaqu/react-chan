@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,12 +13,7 @@ export function CatalogComponent() {
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
 
-  const mounted = useRef(false);
   useEffect(() => {
-    if (mounted.current) {
-      dispatch(actions.invalidateCatalog());
-    }
-    mounted.current = true;
     dispatch(actions.fetchCatalog(boardId));
   }, [boardId, dispatch]);
 
@@ -34,7 +29,9 @@ export function CatalogComponent() {
   }, [boardId, dispatch]);
 
   const renderItem = (item: any) => {
-    return <CatalogThreadComponent boardId={boardId} thread={item.item} />;
+    return (
+      <CatalogThreadComponent boardId={boardId} threadIndex={item.index} />
+    );
   };
 
   const keyExtractor = (item: any) => {

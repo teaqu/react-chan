@@ -1,7 +1,7 @@
-export type Ratio = {
+export interface Ratio {
   width: number;
   height: number;
-};
+}
 
 /**
  * Conserve aspect ratio of the original region. Useful when shrinking/enlarging
@@ -25,9 +25,13 @@ export function calculateAspectRatioFit(
   return { width: srcWidth * ratio, height: srcHeight * ratio };
 }
 
-// https://stackoverflow.com/a/18650828/2047666
+/**
+ * Convert size in bytes to KB, MB
+ * https://stackoverflow.com/a/18650828/2047666
+ * @param bytes
+ */
 function bytesToSize(bytes: number): string {
-  var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  var sizes = ['Bytes', 'KB', 'MB'];
   if (bytes === 0) {
     return '0 Byte';
   }

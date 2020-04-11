@@ -1,16 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-import { HTMLComponent } from 'src/shared/html/html-component';
+import { CommentComponent } from 'src/comment/comment-component';
 
-type Props = { comment: string };
-export const CatalogCommentComponent = (props: Props) => {
-  // Remove unnecessary whitespace
-  const comment = props.comment.replace('<br><br>', '<br>');
-
+interface Props {
+  comment: string;
+}
+export const CatalogCommentComponent = ({ comment }: Props) => {
+  // Remove whitespace as we want to show as much of the comment as possible
+  const trimmedComment = comment.replace('<br><br>', '<br>');
   return (
     <Text selectable={true} style={styles.comment}>
-      <HTMLComponent html={comment} />
+      <CommentComponent html={trimmedComment} />
     </Text>
   );
 };

@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from 'src/shared/root-reducer';
 
-type Props = { postIndex: number };
-export const PostHeaderComponent = React.memo((props: Props) => {
-  const post = useSelector(
-    (state: RootState) => state.posts.posts[props.postIndex]
-  );
+interface Props {
+  postIndex: number;
+}
+export const PostHeaderComponent = React.memo(({ postIndex }: Props) => {
+  const post = useSelector((state: RootState) => state.posts.posts[postIndex]);
   const flagURI = useSelector((state: RootState) => state.chanAPI.flag);
   const since4passURI = useSelector(
     (state: RootState) => state.chanAPI.since4pass
@@ -60,6 +60,8 @@ export const PostHeaderComponent = React.memo((props: Props) => {
             style={[
               styles.id,
               {
+                // So that the colour is the same for every id, we use the id
+                // to calculate it.
                 backgroundColor: `rgb(
                     ${post.id.charCodeAt(0) + post.id.charCodeAt(1)},
                     ${post.id.charCodeAt(2) + post.id.charCodeAt(3)},

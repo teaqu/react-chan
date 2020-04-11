@@ -11,53 +11,61 @@ import { PostImageComponent } from './post-image-component';
 import { PostThumbnailComponent } from './post-thumbnail-component';
 import { PostRepliesComponent } from './post-replies-component';
 
-type Props = { postIndex: number; isReply: boolean };
-export const PostComponent = React.memo((props: Props) => {
-  const post = useSelector(
-    (state: RootState) => state.posts.posts[props.postIndex]
-  );
-  const entities = new AllHtmlEntities();
-  const op = post.replies !== undefined;
-  if (post.hidden && !props.isReply) {
-    return <></>;
-  }
-  return (
-    <View
-      style={[
-        styles.postContainer,
-        op && styles.opContainer,
-        props.isReply && styles.postReply
-      ]}
-    >
-      <PostHeaderComponent postIndex={props.postIndex} />
-      <View style={[styles.post]}>
-        {post.tim && post.show_image && (
-          <PostImageComponent postIndex={props.postIndex} />
-        )}
-        <View style={styles.postFlex}>
-          {post.tim && !post.show_image && (
-            <PostThumbnailComponent postIndex={props.postIndex} />
+interface Props {
+  postIndex: number;
+  isReply?: boolean;
+}
+export const PostComponent = React.memo(
+  ({ postIndex, isReply = false }: Props) => {
+    const post = useSelector(
+      (state: RootState) => state.posts.posts[postIndex]
+    );
+
+    // If the post is hidden and not an inline reply, return an empty view so
+    // the post isn't shown twice.
+    if (post.hidden && !isReply) {
+      return <></>;
+    }
+    const entities = new AllHtmlEntities();
+    const op = post.replies !== undefined; // as the replies var is only on op
+    return (
+      <View
+        style={[
+          styles.postContainer,
+          op && styles.opContainer,
+          isReply && styles.postReply
+        ]}
+      >
+        <PostHeaderComponent postIndex={postIndex} />
+        <View style={[styles.post]}>
+          {post.tim && post.show_image && (
+            <PostImageComponent postIndex={postIndex} />
           )}
-          <View style={styles.commentContainer}>
-            {post.tim && post.show_image_info && (
-              <Text style={styles.filename}>
-                {post.filename}
-                {post.ext}
-              </Text>
+          <View style={styles.postFlex}>
+            {post.tim && !post.show_image && (
+              <PostThumbnailComponent postIndex={postIndex} />
             )}
-            {post.sub && (
-              <Text selectable={true} style={styles.sub}>
-                {entities.decode(post.sub)}
-              </Text>
-            )}
-            {post.com && <PostCommentComponent comment={post.com} />}
+            <View style={styles.commentContainer}>
+              {post.tim && post.show_image_info && (
+                <Text style={styles.filename}>
+                  {post.filename}
+                  {post.ext}
+                </Text>
+              )}
+              {post.sub && (
+                <Text selectable={true} style={styles.sub}>
+                  {entities.decode(post.sub)}
+                </Text>
+              )}
+              {post.com && <PostCommentComponent comment={post.com} />}
+            </View>
           </View>
         </View>
+        {post.com && <PostRepliesComponent postIndex={postIndex} />}
       </View>
-      <PostRepliesComponent postIndex={props.postIndex} />
-    </View>
-  );
-});
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   postReply: {

@@ -34,14 +34,9 @@ export interface Post {
   // Post state
   show_image: boolean;
   show_image_info: boolean;
+  hidden: boolean;
 
   // Replies to this post
   reply_links: Reply[];
   reply_links_showing: number[];
-
-  // posts this post is replying to
-  com_replies: number[];
-
-  index: number;
-  hidden: boolean;
 }

@@ -9,16 +9,18 @@ import imageUtils from 'src/shared/utils/image-utils';
 
 import postActions from './post-actions';
 
-type Props = { postIndex: number };
-export const PostThumbnailComponent = React.memo((props: Props) => {
+interface Props {
+  postIndex: number;
+}
+export const PostThumbnailComponent = React.memo(({ postIndex }: Props) => {
   const dispatch = useDispatch();
-  const post = useSelector(
-    (state: RootState) => state.posts.posts[props.postIndex]
-  );
+  const post = useSelector((state: RootState) => state.posts.posts[postIndex]);
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
   const thumbnailURI = useSelector(
     (state: RootState) => state.chanAPI.thumbnail
   );
+
+  // Set image width to <= 80
   const thumbnail = imageUtils.calculateAspectRatioFit(
     post.tn_w,
     post.tn_h,
@@ -36,14 +38,7 @@ export const PostThumbnailComponent = React.memo((props: Props) => {
         dispatch(postActions.toggleImage(post.tim));
       }}
     >
-      <View
-        style={[
-          styles.thumbnailContainer,
-          {
-            height: thumbnail.height
-          }
-        ]}
-      >
+      <View style={[styles.thumbnailContainer, { height: thumbnail.height }]}>
         <FastImage
           source={{
             uri: thumbnailURI

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 
-type Props = { spoiler: string };
+interface Props {
+  spoiler: string;
+}
 export const SpoilerComponent = (props: Props) => {
   const [showSpoiler, setSpoiler] = useState(false);
   return (

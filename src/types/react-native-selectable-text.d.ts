@@ -1,5 +1,5 @@
 declare module '@astrocoders/react-native-selectable-text' {
-  import { Component, ReactNode, ReactNodeArray } from 'react';
+  import { Component } from 'react';
   import { TextProps } from 'react-native';
 
   interface ContainerProps<P = {}> extends TextProps {

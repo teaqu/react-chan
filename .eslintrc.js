@@ -4,6 +4,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'eslint-plugin-import'],
   rules: {
+    'no-param-reassign': 'error',
     'comma-dangle': ['error', 'never'],
     'import/order': [
       'error',

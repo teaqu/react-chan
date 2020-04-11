@@ -9,13 +9,13 @@ import imageUtils from 'src/shared/utils/image-utils';
 
 import postActions from './post-actions';
 
-type Props = { postIndex: number };
-export const PostImageComponent = (props: Props) => {
+interface Props {
+  postIndex: number;
+}
+export const PostImageComponent = ({ postIndex }: Props) => {
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
-  const post = useSelector(
-    (state: RootState) => state.posts.posts[props.postIndex]
-  );
+  const post = useSelector((state: RootState) => state.posts.posts[postIndex]);
   const imageURI = useSelector((state: RootState) => state.chanAPI.image);
   const [imageLoading, setImageLoading] = useState(0);
   const thumbnailURI = useSelector(
