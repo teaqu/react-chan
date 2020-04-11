@@ -1,7 +1,6 @@
 import { call, put, takeLatest, getContext } from 'redux-saga/effects';
 
-import { Post } from 'src/post/post';
-import { ChanAPI } from 'src/shared/chan-api/chan-api';
+import { ChanAPI, Posts } from 'src/shared/chan-api/chan-api';
 
 import actions from './thread-actions';
 
@@ -18,7 +17,7 @@ export function* fetchThread(action: fetchThreadAction) {
     const chanAPI: ChanAPI = yield getContext('chanAPI');
     const boardId = action.payload.boardId;
     const threadNo = action.payload.threadNo;
-    let posts: Post[] = yield call(chanAPI.fetchThread, boardId, threadNo);
+    let posts: Posts = yield call(chanAPI.fetchThread, boardId, threadNo);
     posts = yield call(chanAPI.calcReplies, posts);
     yield put(actions.fetchThreadSucceeded(boardId, threadNo, posts));
   } catch (e) {

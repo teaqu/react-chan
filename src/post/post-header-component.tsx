@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/shared/root-reducer';
 
 interface Props {
-  postIndex: number;
+  postNo: number;
 }
-export const PostHeaderComponent = React.memo(({ postIndex }: Props) => {
-  const post = useSelector((state: RootState) => state.posts.posts[postIndex]);
+export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
+  const post = useSelector((state: RootState) => state.posts.posts[postNo]);
   const flagURI = useSelector((state: RootState) => state.chanAPI.flag);
   const since4passURI = useSelector(
     (state: RootState) => state.chanAPI.since4pass

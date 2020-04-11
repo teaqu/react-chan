@@ -15,15 +15,15 @@ import { CatalogCommentComponent } from './catalog-comment-component';
  */
 interface Props {
   boardId: string;
-  threadIndex: number;
+  threadNo: number;
 }
 export const CatalogThreadComponent = React.memo(
-  ({ boardId, threadIndex }: Props) => {
+  ({ boardId, threadNo }: Props) => {
     const entities = new AllHtmlEntities();
     const navigation = useNavigation();
 
     const thread = useSelector(
-      (state: RootState) => state.catalog.threads[threadIndex]
+      (state: RootState) => state.catalog.threads[threadNo]
     );
     const thumbnailURI = useSelector(
       (state: RootState) => state.chanAPI.thumbnail

@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from 'src/shared/root-reducer';
+import { Threads } from 'src/shared/chan-api/chan-api';
 
 import { Thread } from '../thread/thread';
 
@@ -17,7 +18,7 @@ export function CatalogComponent() {
     dispatch(actions.fetchCatalog(boardId));
   }, [boardId, dispatch]);
 
-  const threads: Thread[] = useSelector(
+  const threads: Threads = useSelector(
     (state: RootState) => state.catalog.threads
   );
   const isFetching: boolean = useSelector(
@@ -28,15 +29,11 @@ export function CatalogComponent() {
     dispatch(actions.fetchCatalog(boardId));
   }, [boardId, dispatch]);
 
-  const renderItem = (item: any) => {
-    return (
-      <CatalogThreadComponent boardId={boardId} threadIndex={item.index} />
-    );
-  };
+  const renderItem = (item: any) => (
+    <CatalogThreadComponent boardId={boardId} threadNo={item.item.no} />
+  );
 
-  const keyExtractor = (item: any) => {
-    return item.no.toString();
-  };
+  const keyExtractor = (item: any) => item.no.toString();
 
   return (
     // Selectable text requires removeClippedSubviews={false}
@@ -46,7 +43,7 @@ export function CatalogComponent() {
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
       }
       style={styles.catalog}
-      data={threads}
+      data={Object.values(threads)}
       numColumns={3}
       removeClippedSubviews={false}
       keyExtractor={keyExtractor}

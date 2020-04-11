@@ -1,7 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import catalogResponse from 'src/shared/__tests__/__mocks__/catalog-response.json';
-
 import reducer from '../catalog-reducers';
 import actions from '../catalog-actions';
 
@@ -11,7 +9,7 @@ describe('catalog reducer', () => {
       boardId: '',
       error: '',
       isFetching: false,
-      threads: []
+      threads: {}
     });
   });
 
@@ -21,20 +19,19 @@ describe('catalog reducer', () => {
         type: actions.fetchCatalog.type,
         payload: 'a'
       })
-    ).toEqual({ boardId: 'a', error: '', isFetching: true, threads: [] });
+    ).toEqual({ boardId: 'a', error: '', isFetching: true, threads: {} });
   });
 
   it('should handle RECEIVE_CATALOG', () => {
-    const threads = catalogResponse[1].threads;
     expect(
       reducer(undefined, {
         type: actions.fetchCatalogSucceeded.type,
         payload: {
           boardId: 'a',
           error: '',
-          threads: threads
+          threads: {}
         }
       })
-    ).toEqual({ boardId: 'a', error: '', isFetching: false, threads: threads });
+    ).toEqual({ boardId: 'a', error: '', isFetching: false, threads: {} });
   });
 });

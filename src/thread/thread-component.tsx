@@ -37,21 +37,18 @@ export const ThreadComponent = () => {
     dispatch(actions.fetchThread(boardId, threadNo));
   }, [dispatch, boardId, threadNo]);
 
-  const renderItem = (item: any) => {
-    return <PostComponent postIndex={item.index} />;
-  };
+  const renderItem = (item: any) => <PostComponent postNo={item.item.no} />;
 
   const keyExtractor = (item: any) => {
     return item.no.toString();
   };
-
   return (
     <FlatList<Post>
       refreshControl={
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
       }
       style={styles.thread}
-      data={posts}
+      data={Object.values(posts)}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       removeClippedSubviews={false}

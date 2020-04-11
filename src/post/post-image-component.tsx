@@ -10,18 +10,17 @@ import imageUtils from 'src/shared/utils/image-utils';
 import postActions from './post-actions';
 
 interface Props {
-  postIndex: number;
+  postNo: number;
 }
-export const PostImageComponent = ({ postIndex }: Props) => {
+export const PostImageComponent = ({ postNo }: Props) => {
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
-  const post = useSelector((state: RootState) => state.posts.posts[postIndex]);
+  const post = useSelector((state: RootState) => state.posts.posts[postNo]);
   const imageURI = useSelector((state: RootState) => state.chanAPI.image);
   const [imageLoading, setImageLoading] = useState(0);
   const thumbnailURI = useSelector(
     (state: RootState) => state.chanAPI.thumbnail
   );
-
   const [width, setWidth] = useState(0);
   const onLayout = (event: any) => {
     setWidth(event.nativeEvent.layout.width);
@@ -38,7 +37,7 @@ export const PostImageComponent = ({ postIndex }: Props) => {
     <TouchableWithoutFeedback
       style={styles.imageContainer}
       onPress={() => {
-        dispatch(postActions.toggleImage(post.tim));
+        dispatch(postActions.toggleImage(post.no));
       }}
       onLayout={onLayout}
     >

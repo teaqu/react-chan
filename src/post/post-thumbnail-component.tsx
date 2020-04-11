@@ -10,11 +10,11 @@ import imageUtils from 'src/shared/utils/image-utils';
 import postActions from './post-actions';
 
 interface Props {
-  postIndex: number;
+  postNo: number;
 }
-export const PostThumbnailComponent = React.memo(({ postIndex }: Props) => {
+export const PostThumbnailComponent = React.memo(({ postNo }: Props) => {
   const dispatch = useDispatch();
-  const post = useSelector((state: RootState) => state.posts.posts[postIndex]);
+  const post = useSelector((state: RootState) => state.posts.posts[postNo]);
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
   const thumbnailURI = useSelector(
     (state: RootState) => state.chanAPI.thumbnail
@@ -32,10 +32,10 @@ export const PostThumbnailComponent = React.memo(({ postIndex }: Props) => {
     <TouchableOpacity
       style={[styles.touchable, { width: thumbnail.width }]}
       onLongPress={() => {
-        dispatch(postActions.toggleImageInfo(post.tim));
+        dispatch(postActions.toggleImageInfo(post.no));
       }}
       onPress={() => {
-        dispatch(postActions.toggleImage(post.tim));
+        dispatch(postActions.toggleImage(post.no));
       }}
     >
       <View style={[styles.thumbnailContainer, { height: thumbnail.height }]}>

@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { Thread } from '../thread/thread';
+import { Threads } from 'src/shared/chan-api/chan-api';
 
 import actions from './catalog-actions';
 
@@ -8,14 +8,14 @@ export interface CatalogState {
   boardId: string;
   error: string;
   isFetching: boolean;
-  threads: Thread[];
+  threads: Threads;
 }
 
 const initialState: CatalogState = {
   boardId: '',
   error: '',
   isFetching: false,
-  threads: []
+  threads: {}
 };
 
 export default createReducer(initialState, {
@@ -33,6 +33,6 @@ export default createReducer(initialState, {
     state.isFetching = true;
   },
   [actions.invalidateCatalog.type]: state => {
-    state.threads = [];
+    state.threads = {};
   }
 });

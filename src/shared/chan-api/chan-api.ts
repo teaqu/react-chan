@@ -4,13 +4,16 @@ import { Board } from 'src/board/board';
 
 // So we can support more image boards in the future...
 export interface ChanAPI {
-  fetchCatalog(boardId: string): Promise<Thread[]>;
-  fetchThread(boardId: string, threadNo: number): Promise<Post[]>;
+  fetchCatalog(boardId: string): Promise<Threads>;
+  fetchThread(boardId: string, threadNo: number): Promise<Posts>;
   fetchBoards(): Promise<Board[]>;
-  calcReplies(posts: Post[]): Reply[];
+  calcReplies(posts: Posts): Posts;
 }
 
-export interface Reply {
-  index: number;
-  no: number;
+export interface Posts {
+  [no: string]: Post;
+}
+
+export interface Threads {
+  [no: string]: Thread;
 }

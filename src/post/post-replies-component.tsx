@@ -8,43 +8,42 @@ import postActions from './post-actions';
 import { PostComponent } from './post-component';
 
 interface Props {
-  postIndex: number;
+  postNo: number;
 }
-export const PostRepliesComponent = React.memo(({ postIndex }: Props) => {
+export const PostRepliesComponent = React.memo(({ postNo }: Props) => {
   const dispatch = useDispatch();
-  const post = useSelector((state: RootState) => state.posts.posts[postIndex]);
+  const post = useSelector((state: RootState) => state.posts.posts[postNo]);
 
-  const showReply = (replyIndex: number) => {
-    dispatch(postActions.toggleReply(postIndex, replyIndex));
+  const showReply = (replyNo: number) => {
+    dispatch(postActions.toggleReply(postNo, replyNo));
   };
 
   return (
-    (typeof post.reply_links === 'object' && post.reply_links.length > 0 && (
+    (post.reply_links.length > 0 && (
       <>
         <View style={styles.replies}>
-          {post.reply_links.map(reply => (
+          {post.reply_links.map((replyNo, index) => (
             <Text
-              key={'reply-link-' + reply.no}
+              key={'reply-link-' + post.no + '-' + index}
               style={[
-                post.reply_links_showing.includes(reply.index) &&
-                  styles.inlined,
+                post.reply_links_showing.includes(replyNo) && styles.inlined,
                 styles.reply
               ]}
-              onPress={() => showReply(reply.index)}
+              onPress={() => showReply(replyNo)}
             >
-              >>{reply.no}
+              >>{replyNo}
             </Text>
           ))}
         </View>
-        {post.reply_links_showing.map(reply => (
-          <View style={styles.repliesShowing}>
+        <View style={styles.repliesShowing}>
+          {post.reply_links_showing.map((replyNo, index) => (
             <PostComponent
-              key={'reply-' + reply}
-              postIndex={reply}
+              key={'reply-' + post.no + '-' + index}
+              postNo={replyNo}
               isReply={true}
             />
-          </View>
-        ))}
+          ))}
+        </View>
       </>
     )) ||
     null

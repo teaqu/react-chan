@@ -1,12 +1,12 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import { Thread } from '../thread/thread';
+import { Threads } from 'src/shared/chan-api/chan-api';
 
 const fetchCatalog = createAction<string>('FETCH_CATALOG');
 const fetchCatalogFailed = createAction<string>('FETCH_CATALOG_FAILED');
 const fetchCatalogSucceeded = createAction(
   'FETCH_CATALOG_SUCCEEDED',
-  function prepare(boardId: string, threads: Thread[]) {
+  function prepare(boardId: string, threads: Threads) {
     return {
       payload: {
         boardId,

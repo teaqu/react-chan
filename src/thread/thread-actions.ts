@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import { Post } from 'src/post/post';
+import { Posts } from 'src/shared/chan-api/chan-api';
 
 export const invalidateThread = createAction('INVALIDATE_THREAD');
 export const fetchThreadFailed = createAction<string>('FETCH_THREAD_FAILED');
@@ -17,7 +17,7 @@ export const fetchThread = createAction('FETCH_THREAD', function prepare(
 });
 export const fetchThreadSucceeded = createAction(
   'FETCH_THREAD_SUCCEEDED',
-  function prepare(boardId: string, threadNo: number, posts: Post[]) {
+  function prepare(boardId: string, threadNo: number, posts: Posts) {
     return {
       payload: {
         boardId,

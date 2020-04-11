@@ -3,7 +3,7 @@ import { Post } from 'src/post/post';
 import { Board } from 'src/board/board';
 
 import { ChanAPIState } from './chan-api-reducers';
-import { Reply } from './chan-api';
+import { Posts, Threads } from './chan-api';
 
 interface CatalogAPI {
   page: number;
@@ -30,31 +30,41 @@ export const FourChanState: ChanAPIState = {
   since4pass: 'https://s.4cdn.org/image/minileaf.gif'
 };
 
-export const fetchCatalog = (boardId: string): Promise<Thread[]> => {
+export const fetchCatalog = (boardId: string): Promise<Threads> => {
   const uri = `https://a.4cdn.org/${boardId}/catalog.json`;
   return fetch(uri)
     .then(response => response.json())
     .catch(error => error)
-    .then((catalogs: CatalogAPI[]) => {
+    .then((catalogs: CatalogAPI[]) =>
       // Normalise the catalogs into threads with their current page.
-      const threads = catalogs.flatMap((catalog: CatalogAPI) => {
-        return catalog.threads.map((thread: Thread) => {
-          return { ...thread, page: catalog.page };
-        });
-      });
-      return threads;
-    });
+      catalogs.flatMap((catalog: CatalogAPI) =>
+        catalog.threads.map((thread: Thread) => ({
+          ...thread,
+          page: catalog.page
+        }))
+      )
+    )
+    .then(threads =>
+      threads.reduce(
+        (acc, curr) => ({ ...acc, [curr.no.toString()]: curr }),
+        {}
+      )
+    );
 };
 
 export const fetchThread = (
   boardId: string,
   threadNo: number
-): Promise<Post[]> => {
+): Promise<Posts> => {
   const uri = `https://a.4cdn.org/${boardId}/thread/${threadNo}.json`;
   return fetch(uri)
     .then(response => response.json())
     .catch(error => error)
-    .then((thread: ThreadAPI) => thread.posts);
+    .then((thread: ThreadAPI) => thread.posts)
+    .then(posts =>
+      // Set posts array to no => post key value object
+      posts.reduce((acc, curr) => ({ ...acc, [curr.no]: { ...curr } }), {})
+    );
 };
 
 export const fetchBoards = (): Promise<Board[]> => {
@@ -71,31 +81,24 @@ export const fetchBoards = (): Promise<Board[]> => {
  * it must use as few loops and regex as possible.
  * @param posts
  */
-export const calcReplies = (posts: Post[]): Post[] => {
-  const length = posts.length;
-  const regex = />&gt;&gt;(.*?)</g; // look for >>(postNo)
+export const calcReplies = (posts: Posts): Posts => {
+  const regex = /class="quotelink">&gt;&gt;(.*?)</g; // look for >>(postNo)
   let matches = null;
-  // An associate array of replies
-  let replyLinks: { [no: string]: Reply[] } = {};
-
   // Find all replies within each post
-  for (let i = 0; i < length; i++) {
-    if (posts[i].com) {
-      do {
-        matches = regex.exec(posts[i].com);
-        if (matches) {
-          // Add this post to the reply links of the post it's replying to.
-          replyLinks[matches[1]] = replyLinks[matches[1]] || [];
-          replyLinks[matches[1]].push({ index: i, no: posts[i].no });
+  for (let no in posts) {
+    posts[no].reply_links = [];
+    do {
+      matches = regex.exec(posts[no].com);
+      if (matches) {
+        const match = parseInt(matches[1], 10);
+
+        // Add this post to the reply links of the post it's replying to.
+        if (posts[match]) {
+          posts[match].reply_links.push(posts[no].no);
         }
-      } while (matches);
-    }
+      }
+    } while (matches);
   }
-
-  for (let i = 0; i < length; i++) {
-    posts[i].reply_links = replyLinks[posts[i].no];
-  }
-
   return posts;
 };
 

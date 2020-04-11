@@ -1,58 +1,53 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import threadActions from 'src/thread/thread-actions';
+import { Posts } from 'src/shared/chan-api/chan-api';
 
-import { Post } from './post';
 import postActions from './post-actions';
 
 export interface PostsState {
-  posts: Post[];
+  posts: Posts;
 }
 
 const initialState: PostsState = {
-  posts: []
+  posts: {}
 };
 
 export default createReducer(initialState, {
   [threadActions.invalidateThread.type]: state => {
-    state.posts = [];
+    state.posts = {};
   },
   [threadActions.fetchThreadSucceeded.type]: (state, action) => {
     let posts = action.payload.posts;
-    let length = posts.length;
-    for (let i = 0; i < length; i++) {
-      // set default state
-      posts[i].show_image = false;
-      posts[i].show_image_info = false;
-      posts[i].reply_links_showing = [];
+    // set default state
+    for (let no in posts) {
+      posts[no].show_image = false;
+      posts[no].show_image_info = false;
+      posts[no].reply_links_showing = [];
     }
-    state.posts = posts;
+    state.posts = action.payload.posts;
   },
   [postActions.toggleImage.type]: (state, action) => {
-    let post = state.posts.find(p => p.tim === action.payload);
-    if (post) {
-      post.show_image = !post.show_image;
-    }
+    const post = state.posts[action.payload];
+    post.show_image = !post.show_image;
   },
   [postActions.toggleImageInfo.type]: (state, action) => {
-    let post = state.posts.find(p => p.tim === action.payload);
-    if (post) {
-      post.show_image_info = !post.show_image_info;
-    }
+    const post = state.posts[action.payload];
+    post.show_image_info = !post.show_image_info;
   },
   [postActions.toggleReply.type]: (state, action) => {
-    const pIndex = action.payload.postIndex; // the post
-    const rIndex = action.payload.replyIndex; // The reply we want to inline
-    let post = state.posts[pIndex];
-    if (!post.reply_links_showing.includes(rIndex)) {
+    const postNo = action.payload.postNo; // the post
+    const replyNo = action.payload.replyNo; // The reply we want to inline
+    let post = state.posts[postNo];
+    if (!post.reply_links_showing.includes(replyNo)) {
       // Show inline reply
-      post.reply_links_showing.unshift(rIndex);
-      state.posts[rIndex].hidden = true;
+      post.reply_links_showing.unshift(replyNo);
+      state.posts[replyNo].hidden = true;
     } else {
       // Clear inline reply
-      clearInline(state.posts, rIndex);
+      clearInline(state.posts, replyNo);
       post.reply_links_showing = post.reply_links_showing.filter(
-        r => r !== rIndex
+        r => r !== replyNo
       );
     }
   }
@@ -61,14 +56,14 @@ export default createReducer(initialState, {
 /**
  * Recursively clear inline replies from given index
  *
- * @param posts our posts
- * @param index the post to clear
+ * @param posts
+ * @param postNo
  */
-function clearInline(posts: Post[], index: number) {
-  const post = posts[index];
+function clearInline(posts: Posts, postNo: number) {
+  const post = posts[postNo];
   if (post.reply_links_showing.length > 0) {
-    post.reply_links_showing.map(replyIndex => {
-      clearInline(posts, replyIndex);
+    post.reply_links_showing.map(replyNo => {
+      clearInline(posts, replyNo);
     });
     post.reply_links_showing = [];
   }

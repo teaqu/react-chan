@@ -12,15 +12,12 @@ import { PostThumbnailComponent } from './post-thumbnail-component';
 import { PostRepliesComponent } from './post-replies-component';
 
 interface Props {
-  postIndex: number;
+  postNo: number;
   isReply?: boolean;
 }
 export const PostComponent = React.memo(
-  ({ postIndex, isReply = false }: Props) => {
-    const post = useSelector(
-      (state: RootState) => state.posts.posts[postIndex]
-    );
-
+  ({ postNo, isReply = false }: Props) => {
+    const post = useSelector((state: RootState) => state.posts.posts[postNo]);
     // If the post is hidden and not an inline reply, return an empty view so
     // the post isn't shown twice.
     if (post.hidden && !isReply) {
@@ -36,14 +33,14 @@ export const PostComponent = React.memo(
           isReply && styles.postReply
         ]}
       >
-        <PostHeaderComponent postIndex={postIndex} />
+        <PostHeaderComponent postNo={postNo} />
         <View style={[styles.post]}>
           {post.tim && post.show_image && (
-            <PostImageComponent postIndex={postIndex} />
+            <PostImageComponent postNo={postNo} />
           )}
           <View style={styles.postFlex}>
             {post.tim && !post.show_image && (
-              <PostThumbnailComponent postIndex={postIndex} />
+              <PostThumbnailComponent postNo={postNo} />
             )}
             <View style={styles.commentContainer}>
               {post.tim && post.show_image_info && (
@@ -61,7 +58,9 @@ export const PostComponent = React.memo(
             </View>
           </View>
         </View>
-        {post.com && <PostRepliesComponent postIndex={postIndex} />}
+        {post.reply_links.length > 0 && (
+          <PostRepliesComponent postNo={postNo} />
+        )}
       </View>
     );
   }

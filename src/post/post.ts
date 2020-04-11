@@ -1,5 +1,3 @@
-import { Reply } from 'src/shared/chan-api/chan-api';
-
 export interface Post {
   no: number;
   sticky: number;
@@ -37,6 +35,6 @@ export interface Post {
   hidden: boolean;
 
   // Replies to this post
-  reply_links: Reply[];
+  reply_links: number[];
   reply_links_showing: number[];
 }
