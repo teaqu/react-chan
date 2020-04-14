@@ -39,6 +39,7 @@ export const PostComponent = React.memo(
     const htmlEntities = new AllHtmlEntities(); // For parsing post titles
     const isOp = post.replies !== undefined;
     const isInline = postStateKey.includes('-');
+    const hasInline = postState.com_reply_links_showing.length > 0;
     return (
       <View
         style={[
@@ -53,7 +54,7 @@ export const PostComponent = React.memo(
           {post.tim && postState.show_image && (
             <PostImageComponent postNo={postNo} postStateKey={postStateKey} />
           )}
-          <View style={styles.postFlex}>
+          <View style={[styles.postFlex, hasInline && styles.hasInline]}>
             {post.tim && !postState.show_image && (
               <PostThumbnailComponent
                 postNo={postNo}
@@ -103,12 +104,16 @@ const styles = StyleSheet.create({
     padding: 5
   },
   postFlex: {
-    flexDirection: 'row',
-    flex: 1
+    flex: 1,
+    flexDirection: 'row'
+  },
+  hasInline: {
+    flexDirection: 'column'
   },
   inline: {
-    paddingRight: 0,
-    paddingLeft: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginBottom: 0,
     width: '100%'
   },
   opContainer: {

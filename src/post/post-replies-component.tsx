@@ -65,10 +65,7 @@ const styles = StyleSheet.create({
   },
   repliesShowing: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginLeft: -5,
-    marginRight: 5,
-    marginBottom: -5
+    flexWrap: 'wrap'
   },
   reply: {
     color: '#34345c',
