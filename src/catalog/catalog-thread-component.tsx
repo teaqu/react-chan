@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { AllHtmlEntities } from 'html-entities';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import FastImage from 'react-native-fast-image';
 
 import { RootState } from 'src/shared/root-reducer';
 import imageUtils from 'src/shared/utils/image-utils';
@@ -47,7 +48,7 @@ export const CatalogThreadComponent = React.memo(
           }}
         >
           {(thread.tim && (
-            <Image
+            <FastImage
               source={{
                 uri: thumbnailURI
                   .replace('[board]', boardId)
@@ -61,7 +62,7 @@ export const CatalogThreadComponent = React.memo(
             />
           )) || (
             // If no image found, show the file deleted image instead
-            <Image
+            <FastImage
               source={{ uri: fileDeletedURI }}
               style={[styles.thumbnail, styles.file_deleted]}
               resizeMode="contain"

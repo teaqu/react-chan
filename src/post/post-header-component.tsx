@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { useSelector } from 'react-redux';
+import FastImage from 'react-native-fast-image';
 
 import { RootState } from 'src/shared/root-reducer';
 
@@ -23,7 +24,7 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
         <Text style={styles.name}>{post.name}</Text>
         {post.trip && <Text style={styles.trip}>!{post.trip}</Text>}
         {post.since4pass && (
-          <Image
+          <FastImage
             source={{
               uri: since4passURI
             }}
@@ -36,7 +37,7 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
       </View>
       <View style={styles.headerFlex}>
         {post.country && (
-          <Image
+          <FastImage
             source={{
               uri: flagURI.replace('[country]', post.country.toLowerCase())
             }}
@@ -44,7 +45,7 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
           />
         )}
         {post.troll_country && (
-          <Image
+          <FastImage
             source={{
               uri: trollFlagURI.replace(
                 '[country]',
