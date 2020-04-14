@@ -39,3 +39,21 @@ export const initialPostState: PostState = {
   com_reply_links_showing: [],
   red_border: false
 };
+
+/**
+ * Find a reply state within the post state tree
+ *
+ * @param postStateKey
+ * @param replyNo
+ */
+export function findReplyInStateTree(
+  postStateKey: string,
+  replyNo: number
+): string {
+  const regex = new RegExp(`(.*?)${replyNo}(\\\[[0-9]*\\\])?`);
+  const matches = regex.exec(postStateKey);
+  if (matches) {
+    return matches[0];
+  }
+  return '';
+}

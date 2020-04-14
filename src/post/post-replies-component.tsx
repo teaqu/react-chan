@@ -6,6 +6,7 @@ import { RootState } from 'src/shared/root-reducer';
 
 import postActions from './post-actions';
 import { PostComponent } from './post-component';
+import { findReplyInStateTree } from './post-state';
 
 interface Props {
   postNo: number;
@@ -30,6 +31,8 @@ export const PostRepliesComponent = React.memo(
           <Text
             key={`reply-link-${replyNo}-${replyLinkIndex}`}
             style={[
+              findReplyInStateTree(postStateKey, replyNo).length > 0 &&
+                styles.replyShowing,
               postState.reply_links_showing.includes(replyNo) && styles.inline,
               styles.reply
             ]}
@@ -69,7 +72,12 @@ const styles = StyleSheet.create({
   },
   reply: {
     color: '#34345c',
-    fontSize: 13
+    fontSize: 13,
+    marginRight: 5
+  },
+  replyShowing: {
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'dashed'
   },
   inline: {
     opacity: 0.2

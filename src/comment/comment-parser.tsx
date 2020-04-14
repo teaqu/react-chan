@@ -1,12 +1,12 @@
 import React, { ReactNodeArray } from 'react';
 import reactStringReplace from 'react-string-replace';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, TextStyle } from 'react-native';
 import { AllHtmlEntities } from 'html-entities';
 
 import { SpoilerComponent } from './spoiler-component';
 
 /**
- * Cascading comment parser
+ * Cascading comment parser for shared parser logic.
  *
  * As the comment html is usually very predictable, simple regex is used to
  * reduce execution time.
@@ -60,7 +60,8 @@ export default function(comment: string): Parser {
       return parser;
     },
     quoteLinks(
-      onPress?: (replyNo: number, replyIndex: number) => void
+      onPress?: (replyNo: number, replyIndex: number) => void,
+      style?: TextStyle
     ): Parser {
       nodes = reactStringReplace(
         nodes,
@@ -69,7 +70,7 @@ export default function(comment: string): Parser {
           return (
             <Text
               key={match + i}
-              style={styles.quoteLink}
+              style={[styles.quoteLink, style]}
               onPress={() => onPress && onPress(parseInt(match, 10), i)}
             >
               >>{match}
@@ -106,9 +107,6 @@ export default function(comment: string): Parser {
 }
 
 const styles = StyleSheet.create({
-  comment: {
-    textAlign: 'center'
-  },
   quote: {
     color: '#789922'
   },

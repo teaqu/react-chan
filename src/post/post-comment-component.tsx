@@ -1,6 +1,8 @@
 import React, { ReactNodeArray } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { SelectableText } from '@astrocoders/react-native-selectable-text';
+import reactStringReplace from 'react-string-replace';
+import { Text, StyleSheet } from 'react-native';
 
 import { RootState } from 'src/shared/root-reducer';
 import commentParser from 'src/comment/comment-parser';
@@ -8,6 +10,7 @@ import commentParser from 'src/comment/comment-parser';
 import { Post } from './post';
 import { PostComponent } from './post-component';
 import postActions from './post-actions';
+import { findReplyInStateTree } from './post-state';
 
 interface Props {
   postNo: number;
@@ -20,13 +23,35 @@ export const PostCommentComponent = React.memo(
       dispatch(postActions.toggleComReply(postStateKey, replyNo, replyIndex));
     };
     const parseComment = (comment: string): ReactNodeArray => {
-      return commentParser(comment)
+      let nodes = commentParser(comment)
         .spoilers()
         .quotes()
-        .quoteLinks(onComLinkPress)
         .inlineQuoteLinks(onComLinkPress)
         .deadLinks()
         .getNodes();
+
+      nodes = reactStringReplace(
+        nodes,
+        /<a href=".*?" class="quotelink">>>(.*?)<\/a>/,
+        (match, i) => {
+          const replyNo = parseInt(match, 10);
+          return (
+            <Text
+              key={match + i}
+              style={[
+                styles.quoteLink,
+                findReplyInStateTree(postStateKey, replyNo).length > 0 &&
+                  styles.replyShowing
+              ]}
+              onPress={() => onComLinkPress(replyNo, i)}
+            >
+              >>{match}
+            </Text>
+          );
+        }
+      );
+
+      return nodes;
     };
 
     const post: Post = useSelector(
@@ -103,3 +128,13 @@ export const PostCommentComponent = React.memo(
     }
   }
 );
+
+const styles = StyleSheet.create({
+  quoteLink: {
+    color: '#d00'
+  },
+  replyShowing: {
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'dashed'
+  }
+});

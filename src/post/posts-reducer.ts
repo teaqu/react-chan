@@ -4,7 +4,7 @@ import threadActions from 'src/thread/thread-actions';
 import { Posts, PostStates } from 'src/shared/chan-api/chan-api';
 
 import postActions from './post-actions';
-import { initialPostState } from './post-state';
+import { initialPostState, findReplyInStateTree } from './post-state';
 
 export interface PostsState {
   posts: Posts;
@@ -109,18 +109,3 @@ export default createReducer(initialState, {
     state.postStates[action.payload].red_border = false;
   }
 });
-
-/**
- * Find a reply state within the post state tree
- *
- * @param postStateKey
- * @param replyNo
- */
-function findReplyInStateTree(postStateKey: string, replyNo: number) {
-  const regex = new RegExp(`(.*?)${replyNo}(\\\[[0-9]*\\\])?`);
-  const matches = regex.exec(postStateKey);
-  if (matches) {
-    return matches[0];
-  }
-  return null;
-}
