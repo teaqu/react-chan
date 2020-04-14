@@ -34,7 +34,9 @@ export function CatalogComponent() {
   );
 
   const keyExtractor = (item: any) => item.no.toString();
-
+  const threadsArray = Object.values(threads).sort(
+    (a, b) => b.last_modified - a.last_modified
+  );
   return (
     // Selectable text requires removeClippedSubviews={false}
     // https://github.com/facebook/react-native/issues/26264#issuecomment-558989904
@@ -43,7 +45,7 @@ export function CatalogComponent() {
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
       }
       style={styles.catalog}
-      data={Object.values(threads)}
+      data={threadsArray}
       numColumns={3}
       removeClippedSubviews={false}
       keyExtractor={keyExtractor}

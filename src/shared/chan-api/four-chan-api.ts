@@ -42,12 +42,9 @@ const fetchCatalog = (boardId: string): Promise<Threads> => {
         }))
       )
     )
-    .then(threads =>
-      threads.reduce(
-        (acc, curr) => ({ ...acc, [curr.no.toString()]: curr }),
-        {}
-      )
-    );
+    .then(threads => {
+      return threads.reduce((acc, curr) => ({ ...acc, [curr.no]: curr }), {});
+    });
 };
 
 const fetchThread = (boardId: string, threadNo: number): Promise<Posts> => {
@@ -58,7 +55,7 @@ const fetchThread = (boardId: string, threadNo: number): Promise<Posts> => {
     .then((thread: ThreadAPI) => thread.posts)
     .then(posts =>
       // Set posts array to no => post key value object
-      posts.reduce((acc, curr) => ({ ...acc, [curr.no]: { ...curr } }), {})
+      posts.reduce((acc, curr) => ({ ...acc, [curr.no]: curr }), {})
     );
 };
 
