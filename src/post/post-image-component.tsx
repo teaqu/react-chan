@@ -11,8 +11,9 @@ import postActions from './post-actions';
 
 interface Props {
   postNo: number;
+  postStateKey: string;
 }
-export const PostImageComponent = ({ postNo }: Props) => {
+export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
   const post = useSelector((state: RootState) => state.posts.posts[postNo]);
@@ -25,19 +26,12 @@ export const PostImageComponent = ({ postNo }: Props) => {
   const onLayout = (event: any) => {
     setWidth(event.nativeEvent.layout.width);
   };
-
-  const image = imageUtils.calculateAspectRatioFit(
-    post.w,
-    post.h,
-    width,
-    post.h
-  );
-
+  const image = imageUtils.calculateAspectRatio(post.w, post.h, width);
   return (
     <TouchableWithoutFeedback
       style={styles.imageContainer}
       onPress={() => {
-        dispatch(postActions.toggleImage(post.no));
+        dispatch(postActions.toggleImage(postStateKey));
       }}
       onLayout={onLayout}
     >

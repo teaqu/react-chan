@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { AllHtmlEntities } from 'html-entities';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { RootState } from 'src/shared/root-reducer';
 
@@ -10,40 +10,58 @@ import { PostHeaderComponent } from './post-header-component';
 import { PostImageComponent } from './post-image-component';
 import { PostThumbnailComponent } from './post-thumbnail-component';
 import { PostRepliesComponent } from './post-replies-component';
+import postActions from './post-actions';
 
 interface Props {
   postNo: number;
-  isReply?: boolean;
+  postStateKey?: string;
 }
 export const PostComponent = React.memo(
-  ({ postNo, isReply = false }: Props) => {
+  ({ postNo, postStateKey = postNo.toString() }: Props) => {
+    const dispatch = useDispatch();
+    const postState = useSelector(
+      (state: RootState) => state.posts.postStates[postStateKey]
+    );
     const post = useSelector((state: RootState) => state.posts.posts[postNo]);
-    // If the post is hidden and not an inline reply, return an empty view so
-    // the post isn't shown twice.
-    if (post.hidden && !isReply) {
-      return <></>;
+    useEffect(() => {
+      // Only show the the red outline for half a second
+      if (postState.red_border) {
+        setTimeout(() => {
+          dispatch(postActions.clearRedBorder(postStateKey));
+        }, 500);
+      }
+    });
+
+    if (postState.hidden) {
+      return null;
     }
-    const entities = new AllHtmlEntities();
-    const op = post.replies !== undefined; // as the replies var is only on op
+
+    const htmlEntities = new AllHtmlEntities(); // For parsing post titles
+    const isOp = post.replies !== undefined;
+    const isInline = postStateKey.includes('-');
     return (
       <View
         style={[
           styles.postContainer,
-          op && styles.opContainer,
-          isReply && styles.postReply
+          isOp && styles.opContainer,
+          isInline && styles.inline,
+          postState.red_border && styles.redBorder
         ]}
       >
         <PostHeaderComponent postNo={postNo} />
         <View style={[styles.post]}>
-          {post.tim && post.show_image && (
-            <PostImageComponent postNo={postNo} />
+          {post.tim && postState.show_image && (
+            <PostImageComponent postNo={postNo} postStateKey={postStateKey} />
           )}
           <View style={styles.postFlex}>
-            {post.tim && !post.show_image && (
-              <PostThumbnailComponent postNo={postNo} />
+            {post.tim && !postState.show_image && (
+              <PostThumbnailComponent
+                postNo={postNo}
+                postStateKey={postStateKey}
+              />
             )}
             <View style={styles.commentContainer}>
-              {post.tim && post.show_image_info && (
+              {post.tim && postState.show_image_info && (
                 <Text style={styles.filename}>
                   {post.filename}
                   {post.ext}
@@ -51,15 +69,20 @@ export const PostComponent = React.memo(
               )}
               {post.sub && (
                 <Text selectable={true} style={styles.sub}>
-                  {entities.decode(post.sub)}
+                  {htmlEntities.decode(post.sub)}
                 </Text>
               )}
-              {post.com && <PostCommentComponent comment={post.com} />}
+              {post.com && (
+                <PostCommentComponent
+                  postNo={post.no}
+                  postStateKey={postStateKey}
+                />
+              )}
             </View>
           </View>
         </View>
         {post.reply_links.length > 0 && (
-          <PostRepliesComponent postNo={postNo} />
+          <PostRepliesComponent postNo={postNo} postStateKey={postStateKey} />
         )}
       </View>
     );
@@ -67,30 +90,30 @@ export const PostComponent = React.memo(
 );
 
 const styles = StyleSheet.create({
-  postReply: {
-    paddingRight: 0,
-    paddingLeft: 0,
-    width: '100%'
-  },
   postContainer: {
-    paddingLeft: 5,
-    paddingRight: 5,
-    paddingBottom: 5
-  },
-  post: {
     borderColor: '#b7c5d9',
     borderWidth: 1,
-    padding: 5,
+    marginLeft: 5,
+    marginRight: 5,
+    marginBottom: 5
+  },
+  post: {
     paddingTop: 1,
-    backgroundColor: '#d6daf0'
+    backgroundColor: '#d6daf0',
+    padding: 5
   },
   postFlex: {
     flexDirection: 'row',
     flex: 1
   },
-  opContainer: {
+  inline: {
+    paddingRight: 0,
     paddingLeft: 0,
-    paddingRight: 0
+    width: '100%'
+  },
+  opContainer: {
+    marginLeft: 0,
+    marginRight: 0
   },
   filename: {
     fontSize: 12,
@@ -102,5 +125,9 @@ const styles = StyleSheet.create({
   },
   commentContainer: {
     flex: 1
+  },
+  redBorder: {
+    borderColor: 'red',
+    borderWidth: 1
   }
 });

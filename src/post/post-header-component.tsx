@@ -21,7 +21,7 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
     <View style={styles.postHeader}>
       <View style={styles.headerFlex}>
         <Text style={styles.name}>{post.name}</Text>
-        {post.trip && <Text>!{post.trip}</Text>}
+        {post.trip && <Text style={styles.trip}>!{post.trip}</Text>}
         {post.since4pass && (
           <Image
             source={{
@@ -60,8 +60,8 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
             style={[
               styles.id,
               {
-                // So that the colour is the same for every id, we use the id
-                // to calculate it.
+                // The id is used to calculate a colour so that we don't have
+                // to maintain a list of colours and their corresponding ids.
                 backgroundColor: `rgb(
                     ${post.id.charCodeAt(0) + post.id.charCodeAt(1)},
                     ${post.id.charCodeAt(2) + post.id.charCodeAt(3)},
@@ -107,9 +107,7 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     backgroundColor: '#c9cde8',
     borderColor: '#b7c5d9',
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1
+    borderBottomWidth: 1
   },
   headerFlex: {
     flex: 1,
@@ -120,5 +118,9 @@ const styles = StyleSheet.create({
   name: {
     color: '#117743',
     fontWeight: '700'
+  },
+  trip: {
+    color: '#117743',
+    paddingLeft: 5
   }
 });

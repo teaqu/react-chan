@@ -2,7 +2,7 @@ import { Thread } from 'src/thread/thread';
 import { Post } from 'src/post/post';
 import { Board } from 'src/board/board';
 
-import { ChanAPIState } from './chan-api-reducers';
+import { ChanAPI, ReplyLinks } from './chan-api';
 import { Posts, Threads } from './chan-api';
 
 interface CatalogAPI {
@@ -21,16 +21,14 @@ interface BoardAPI {
   };
 }
 
-export const FourChanState: ChanAPIState = {
-  thumbnail: 'https://i.4cdn.org/[board]/[tim]s.jpg',
-  image: 'https://i.4cdn.org/[board]/[tim]',
-  fileDeleted: 'https://s.4cdn.org/image/filedeleted.gif',
-  flag: 'https://s.4cdn.org/image/country/[country].gif',
-  trollFlag: 'https://s.4cdn.org/image/country/troll/[country].gif',
-  since4pass: 'https://s.4cdn.org/image/minileaf.gif'
-};
+const thumbnail = 'https://i.4cdn.org/[board]/[tim]s.jpg';
+const image = 'https://i.4cdn.org/[board]/[tim]';
+const fileDeleted = 'https://s.4cdn.org/image/filedeleted.gif';
+const flag = 'https://s.4cdn.org/image/country/[country].gif';
+const trollFlag = 'https://s.4cdn.org/image/country/troll/[country].gif';
+const since4pass = 'https://s.4cdn.org/image/minileaf.gif';
 
-export const fetchCatalog = (boardId: string): Promise<Threads> => {
+const fetchCatalog = (boardId: string): Promise<Threads> => {
   const uri = `https://a.4cdn.org/${boardId}/catalog.json`;
   return fetch(uri)
     .then(response => response.json())
@@ -52,10 +50,7 @@ export const fetchCatalog = (boardId: string): Promise<Threads> => {
     );
 };
 
-export const fetchThread = (
-  boardId: string,
-  threadNo: number
-): Promise<Posts> => {
+const fetchThread = (boardId: string, threadNo: number): Promise<Posts> => {
   const uri = `https://a.4cdn.org/${boardId}/thread/${threadNo}.json`;
   return fetch(uri)
     .then(response => response.json())
@@ -67,7 +62,7 @@ export const fetchThread = (
     );
 };
 
-export const fetchBoards = (): Promise<Board[]> => {
+const fetchBoards = (): Promise<Board[]> => {
   const uri = 'https://a.4cdn.org/boards.json';
   return fetch(uri)
     .then(response => response.json())
@@ -77,16 +72,18 @@ export const fetchBoards = (): Promise<Board[]> => {
 
 /**
  * Calculate replies for our post
- * As this must be calculated before we show can show the thread,
- * it must use as few loops and regex as possible.
+ *
  * @param posts
+ * @param postStates
  */
-export const calcReplies = (posts: Posts): Posts => {
+const calcReplies = (posts: Posts): ReplyLinks => {
   const regex = /class="quotelink">&gt;&gt;(.*?)</g; // look for >>(postNo)
   let matches = null;
+  let reply_links: ReplyLinks = {};
+
   // Find all replies within each post
   for (let no in posts) {
-    posts[no].reply_links = [];
+    reply_links[no] = [];
     do {
       matches = regex.exec(posts[no].com);
       if (matches) {
@@ -94,12 +91,24 @@ export const calcReplies = (posts: Posts): Posts => {
 
         // Add this post to the reply links of the post it's replying to.
         if (posts[match]) {
-          posts[match].reply_links.push(posts[no].no);
+          reply_links[match].push(posts[no].no);
         }
       }
     } while (matches);
   }
-  return posts;
+  return reply_links;
 };
 
-export default { fetchCatalog, fetchThread, fetchBoards, calcReplies };
+const fourChanAPI: ChanAPI = {
+  thumbnail,
+  image,
+  fileDeleted,
+  flag,
+  trollFlag,
+  since4pass,
+  fetchCatalog,
+  fetchThread,
+  fetchBoards,
+  calcReplies
+};
+export default fourChanAPI;

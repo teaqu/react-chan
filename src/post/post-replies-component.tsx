@@ -9,46 +9,48 @@ import { PostComponent } from './post-component';
 
 interface Props {
   postNo: number;
+  postStateKey: string;
 }
-export const PostRepliesComponent = React.memo(({ postNo }: Props) => {
-  const dispatch = useDispatch();
-  const post = useSelector((state: RootState) => state.posts.posts[postNo]);
-
-  const showReply = (replyNo: number) => {
-    dispatch(postActions.toggleReply(postNo, replyNo));
-  };
-
-  return (
-    (post.reply_links.length > 0 && (
-      <>
-        <View style={styles.replies}>
-          {post.reply_links.map((replyNo, index) => (
-            <Text
-              key={'reply-link-' + post.no + '-' + index}
-              style={[
-                post.reply_links_showing.includes(replyNo) && styles.inlined,
-                styles.reply
-              ]}
-              onPress={() => showReply(replyNo)}
-            >
-              >>{replyNo}
-            </Text>
-          ))}
-        </View>
+export const PostRepliesComponent = React.memo(
+  ({ postNo, postStateKey }: Props) => {
+    const dispatch = useDispatch();
+    const post = useSelector((state: RootState) => state.posts.posts[postNo]);
+    const postState = useSelector(
+      (state: RootState) => state.posts.postStates[postStateKey]
+    );
+    const toggleReply = (replyNo: number) => {
+      dispatch(postActions.toggleReply(postStateKey, replyNo));
+    };
+    if (!post.reply_links) {
+      return null;
+    }
+    return (
+      <View style={styles.replies}>
+        {post.reply_links.map((replyNo, replyLinkIndex) => (
+          <Text
+            key={`reply-link-${replyNo}-${replyLinkIndex}`}
+            style={[
+              postState.reply_links_showing.includes(replyNo) && styles.inline,
+              styles.reply
+            ]}
+            onPress={() => toggleReply(replyNo)}
+          >
+            >>{replyNo}
+          </Text>
+        ))}
         <View style={styles.repliesShowing}>
-          {post.reply_links_showing.map((replyNo, index) => (
+          {postState.reply_links_showing.map(replyNo => (
             <PostComponent
-              key={'reply-' + post.no + '-' + index}
+              key={postStateKey + '-' + replyNo}
+              postStateKey={postStateKey + '-' + replyNo}
               postNo={replyNo}
-              isReply={true}
             />
           ))}
         </View>
-      </>
-    )) ||
-    null
-  );
-});
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   replies: {
@@ -57,31 +59,22 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     backgroundColor: '#c9cde8',
     borderColor: '#b7c5d9',
-    borderBottomWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
+    borderTopWidth: 1,
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
   repliesShowing: {
-    paddingLeft: 3,
-    paddingRight: 3,
-    paddingTop: 3,
-    marginTop: -5,
-    paddingBottom: 0,
-    backgroundColor: '#c9cde8',
-    borderColor: '#b7c5d9',
-    borderBottomWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    marginLeft: -5,
+    marginRight: 5,
+    marginBottom: -5
   },
   reply: {
     color: '#34345c',
     fontSize: 13
   },
-  inlined: {
-    opacity: 0.5
+  inline: {
+    opacity: 0.2
   }
 });

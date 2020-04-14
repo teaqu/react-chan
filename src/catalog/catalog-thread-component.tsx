@@ -33,12 +33,8 @@ export const CatalogThreadComponent = React.memo(
     );
 
     // Scale our images to fit within the list of threads
-    const image = imageUtils.calculateAspectRatioFit(
-      thread.tn_w,
-      thread.tn_h,
-      100,
-      150
-    );
+    const { tn_w, tn_h } = thread;
+    const image = imageUtils.calculateAspectRatio(tn_w, tn_h, 100, 150);
 
     return (
       <View style={styles.thread}>

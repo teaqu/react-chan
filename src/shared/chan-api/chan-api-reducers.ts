@@ -1,23 +1,16 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import actions from './chan-api-actions';
-import { FourChanState } from './four-chan-api';
+import fourChanAPI from './four-chan-api';
+import { ChanAPI } from './chan-api';
 
-export interface ChanAPIState {
-  thumbnail: string;
-  image: string;
-  fileDeleted: string;
-  flag: string;
-  trollFlag: string;
-  since4pass: string;
-}
-
-const initialState = FourChanState;
+const initialState: ChanAPI = fourChanAPI;
 
 export default createReducer(initialState, {
   [actions.switchChanAPI.type]: (state, action) => {
     if (action.payload === '4chan') {
-      state = FourChanState;
+      // eslint-disable-next-line no-param-reassign
+      state = fourChanAPI;
     }
   }
 });

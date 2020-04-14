@@ -1,17 +1,25 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-import { CommentComponent } from 'src/comment/comment-component';
+import commentParser from 'src/comment/comment-parser';
 
 interface Props {
   comment: string;
 }
 export const CatalogCommentComponent = ({ comment }: Props) => {
-  // Remove whitespace as we want to show as much of the comment as possible
-  const trimmedComment = comment.replace('<br><br>', '<br>');
+  // Remove extra whitespace so we can show more of the comment
+  const trimmedComment = comment.replace(/(<br>){2,}/g, '<br>');
+
+  const nodes = commentParser(trimmedComment)
+    .spoilers()
+    .quoteLinks()
+    .deadLinks()
+    .quotes()
+    .getNodes();
+
   return (
-    <Text selectable={true} style={styles.comment}>
-      <CommentComponent html={trimmedComment} />
+    <Text style={styles.comment} selectable={true}>
+      {nodes}
     </Text>
   );
 };

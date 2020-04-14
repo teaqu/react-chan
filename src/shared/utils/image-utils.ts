@@ -14,11 +14,11 @@ export interface Ratio {
  * @param {Number} maxHeight maximum available height
  * @return {Object} { width, height }
  */
-export function calculateAspectRatioFit(
+export function calculateAspectRatio(
   srcWidth: number,
   srcHeight: number,
   maxWidth: number,
-  maxHeight: number
+  maxHeight: number = srcHeight
 ): Ratio {
   var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
 
@@ -26,7 +26,7 @@ export function calculateAspectRatioFit(
 }
 
 /**
- * Convert size in bytes to KB, MB
+ * Convert size in bytes to KB or MB
  * https://stackoverflow.com/a/18650828/2047666
  * @param bytes
  */
@@ -40,6 +40,6 @@ function bytesToSize(bytes: number): string {
 }
 
 export default {
-  calculateAspectRatioFit,
+  calculateAspectRatio,
   bytesToSize
 };

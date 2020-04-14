@@ -1,71 +1,126 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import threadActions from 'src/thread/thread-actions';
-import { Posts } from 'src/shared/chan-api/chan-api';
+import { Posts, PostStates } from 'src/shared/chan-api/chan-api';
 
 import postActions from './post-actions';
+import { initialPostState } from './post-state';
 
 export interface PostsState {
   posts: Posts;
+  postStates: PostStates;
 }
 
 const initialState: PostsState = {
-  posts: {}
+  posts: {},
+  postStates: {}
 };
 
 export default createReducer(initialState, {
+  [threadActions.fetchThread.type]: state => {
+    state.posts = {};
+    state.postStates = {};
+  },
   [threadActions.invalidateThread.type]: state => {
     state.posts = {};
+    state.postStates = {};
   },
   [threadActions.fetchThreadSucceeded.type]: (state, action) => {
     let posts = action.payload.posts;
     // set default state
     for (let no in posts) {
-      posts[no].show_image = false;
-      posts[no].show_image_info = false;
-      posts[no].reply_links_showing = [];
+      posts[no].reply_links = [];
+      state.postStates[no] = initialPostState;
     }
     state.posts = action.payload.posts;
   },
   [postActions.toggleImage.type]: (state, action) => {
-    const post = state.posts[action.payload];
-    post.show_image = !post.show_image;
+    const postState = state.postStates[action.payload];
+    postState.show_image = !postState.show_image;
   },
   [postActions.toggleImageInfo.type]: (state, action) => {
-    const post = state.posts[action.payload];
-    post.show_image_info = !post.show_image_info;
+    const postState = state.postStates[action.payload];
+    postState.show_image_info = !postState.show_image_info;
   },
   [postActions.toggleReply.type]: (state, action) => {
-    const postNo = action.payload.postNo; // the post
-    const replyNo = action.payload.replyNo; // The reply we want to inline
-    let post = state.posts[postNo];
-    if (!post.reply_links_showing.includes(replyNo)) {
-      // Show inline reply
-      post.reply_links_showing.unshift(replyNo);
-      state.posts[replyNo].hidden = true;
+    const { postStateKey, replyNo } = action.payload;
+    const postState = state.postStates[postStateKey];
+    const replyStateKey = `${postStateKey}-${replyNo}`;
+
+    // Show a red border if we're already showing this reply higher up
+    // in the inline post chain
+    const replyState = findReplyInStateTree(postStateKey, replyNo);
+    if (replyState) {
+      state.postStates[replyState].red_border = true;
+    }
+    // Show inline reply
+    else if (!postState.reply_links_showing.includes(replyNo)) {
+      state.postStates[replyStateKey] = initialPostState;
+      postState.reply_links_showing.unshift(replyNo);
+      state.postStates[replyNo].hidden = true;
     } else {
       // Clear inline reply
-      clearInline(state.posts, replyNo);
-      post.reply_links_showing = post.reply_links_showing.filter(
+      postState.reply_links_showing = postState.reply_links_showing.filter(
         r => r !== replyNo
       );
+      delete state.postStates[replyStateKey];
     }
+  },
+  [postActions.toggleComReply.type]: (state, action) => {
+    const { postStateKey, replyNo, replyIndex } = action.payload;
+    let postState = state.postStates[postStateKey];
+    const replyStateKey = `${postStateKey}-com-${replyNo}[${replyIndex}]`;
+
+    // Show a red border if we're already showing this reply higher up
+    // in the inline post chain
+    const replyState = findReplyInStateTree(postStateKey, replyNo);
+    if (replyState) {
+      state.postStates[replyState].red_border = true;
+    }
+    // Show the inline comment reply
+    else if (
+      !postState.com_reply_links_showing.some(link => link.index === replyIndex)
+    ) {
+      state.postStates[replyStateKey] = initialPostState;
+      postState.com_reply_links_showing.push({
+        no: replyNo,
+        index: replyIndex
+      });
+      postState.com_reply_links_showing = postState.com_reply_links_showing.sort(
+        (a, b) => a.index - b.index
+      );
+    }
+    // Clear inline comment reply
+    else {
+      postState.com_reply_links_showing = postState.com_reply_links_showing.filter(
+        r => r.index !== replyIndex
+      );
+      delete state.postStates[replyStateKey];
+    }
+  },
+  [threadActions.calcRepliesSucceeded.type]: (state, action) => {
+    const posts: Posts = state.posts;
+    const reply_links = action.payload;
+    for (let no in posts) {
+      posts[no].reply_links = reply_links[no];
+    }
+  },
+  [postActions.clearRedBorder.type]: (state, action) => {
+    state.postStates[action.payload].red_border = false;
   }
 });
 
 /**
- * Recursively clear inline replies from given index
+ * Find a reply state within the post state tree
  *
- * @param posts
- * @param postNo
+ * @param postStateKey
+ * @param replyNo
  */
-function clearInline(posts: Posts, postNo: number) {
-  const post = posts[postNo];
-  if (post.reply_links_showing.length > 0) {
-    post.reply_links_showing.map(replyNo => {
-      clearInline(posts, replyNo);
-    });
-    post.reply_links_showing = [];
+function findReplyInStateTree(postStateKey: string, replyNo: number) {
+  const regex = new RegExp(`(.*?)${replyNo}(\\\[[0-9]*\\\])?`);
+  const matches = regex.exec(postStateKey);
+  if (matches) {
+    return matches[0];
   }
-  post.hidden = false;
+  return null;
 }

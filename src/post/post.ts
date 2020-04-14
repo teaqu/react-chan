@@ -29,12 +29,6 @@ export interface Post {
   images: number;
   unique_ips: number;
 
-  // Post state
-  show_image: boolean;
-  show_image_info: boolean;
-  hidden: boolean;
-
-  // Replies to this post
+  // The list of replies to this post which must be calculated.
   reply_links: number[];
-  reply_links_showing: number[];
 }
