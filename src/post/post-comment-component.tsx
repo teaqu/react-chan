@@ -9,8 +9,8 @@ import commentParser from 'src/comment/comment-parser';
 
 import { Post } from './post';
 import { PostComponent } from './post-component';
-import postActions from './post-actions';
 import { findReplyInStateTree } from './post-state';
+import postActions from './post-actions';
 
 interface Props {
   postNo: number;
@@ -22,6 +22,8 @@ export const PostCommentComponent = React.memo(
     const postState = useSelector(
       (state: RootState) => state.posts.postStates[postStateKey]
     );
+    const opNo = useSelector((state: RootState) => state.thread.threadNo);
+
     const onComLinkPress = (replyNo: number, replyIndex: number) => {
       dispatch(postActions.toggleComReply(postStateKey, replyNo, replyIndex));
     };
@@ -42,7 +44,7 @@ export const PostCommentComponent = React.memo(
         /<a href=".*?" class="quotelink">>>(.*?)<\/a>/,
         match => {
           const replyNo = parseInt(match, 10);
-          let localIndex = inlineIndex;
+          const localIndex = inlineIndex;
           ++inlineIndex;
           return (
             <Text
@@ -56,7 +58,7 @@ export const PostCommentComponent = React.memo(
               ]}
               onPress={() => onComLinkPress(replyNo, localIndex)}
             >
-              >>{match}
+              >>{match} {opNo === parseInt(match, 10) && '(OP)'}
             </Text>
           );
         }

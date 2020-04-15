@@ -9,16 +9,19 @@ import {
 export interface ThreadState {
   isFetching: boolean;
   error: string;
+  threadNo: number;
 }
 
 const initialState: ThreadState = {
   isFetching: false,
-  error: ''
+  error: '',
+  threadNo: 0
 };
 
 export default createReducer(initialState, {
-  [fetchThread.type]: state => {
+  [fetchThread.type]: (state, action) => {
     state.isFetching = true;
+    state.threadNo = action.payload.threadNo;
   },
   [fetchThreadSucceeded.type]: state => {
     state.isFetching = false;
