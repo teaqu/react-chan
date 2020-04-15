@@ -19,31 +19,42 @@ interface Props {
 export const PostCommentComponent = React.memo(
   ({ postNo, postStateKey }: Props) => {
     const dispatch = useDispatch();
+    const postState = useSelector(
+      (state: RootState) => state.posts.postStates[postStateKey]
+    );
     const onComLinkPress = (replyNo: number, replyIndex: number) => {
       dispatch(postActions.toggleComReply(postStateKey, replyNo, replyIndex));
     };
+
+    // Used to keep track of the index of inline comment replies
+    let inlineIndex = 0;
+
     const parseComment = (comment: string): ReactNodeArray => {
       let nodes = commentParser(comment)
         .spoilers()
         .quotes()
-        .inlineQuoteLinks(onComLinkPress)
         .deadLinks()
         .getNodes();
 
+      // Replace comment quote links
       nodes = reactStringReplace(
         nodes,
         /<a href=".*?" class="quotelink">>>(.*?)<\/a>/,
-        (match, i) => {
+        match => {
           const replyNo = parseInt(match, 10);
+          let localIndex = inlineIndex;
+          ++inlineIndex;
           return (
             <Text
-              key={match + i}
+              key={match + localIndex}
               style={[
                 styles.quoteLink,
                 findReplyInStateTree(postStateKey, replyNo).length > 0 &&
-                  styles.replyShowing
+                  styles.replyShowing,
+                postState.reply_links_showing.includes(replyNo) &&
+                  styles.inlineQuoteLink
               ]}
-              onPress={() => onComLinkPress(replyNo, i)}
+              onPress={() => onComLinkPress(replyNo, localIndex)}
             >
               >>{match}
             </Text>
@@ -56,9 +67,6 @@ export const PostCommentComponent = React.memo(
 
     const post: Post = useSelector(
       (state: RootState) => state.posts.posts[postNo]
-    );
-    const postState = useSelector(
-      (state: RootState) => state.posts.postStates[postStateKey]
     );
 
     // Split up the comment if inline replies need to be shown.
@@ -79,7 +87,6 @@ export const PostCommentComponent = React.memo(
       // Loop through the split comment
       const comment: Element[] = []; // new comment to build
       let commentIndex = 0; // to give each subComment a unique key
-      let inlineIndex = 0; // to give each inline comment it's own state
       subComments.map(subComment => {
         const matches = subComment.match(/^&gt;&gt;(.*?)$/);
         // Show the inline reply
@@ -89,7 +96,7 @@ export const PostCommentComponent = React.memo(
               menuItems={['Quote']}
               key={postStateKey + commentIndex++}
               value={parseComment(
-                `<a href="#p${matches[1]}" class=\"quotelink inline\">` +
+                `<a href="#p${matches[1]}" class=\"quotelink\">` +
                   `&gt;&gt;${matches[1]}</a>`
               )}
             />
@@ -98,9 +105,8 @@ export const PostCommentComponent = React.memo(
             <PostComponent
               postNo={parseInt(matches[1], 10)}
               key={postStateKey + commentIndex++}
-              postStateKey={`${postStateKey}-com-${matches[1]}[${
-                postState.com_reply_links_showing[inlineIndex++].index
-              }]`}
+              postStateKey={`${postStateKey}-com-${matches[1]}[${inlineIndex -
+                1}]`}
             />
           );
         } else {
@@ -132,6 +138,9 @@ export const PostCommentComponent = React.memo(
 const styles = StyleSheet.create({
   quoteLink: {
     color: '#d00'
+  },
+  inlineQuoteLink: {
+    color: 'rgba(221, 0, 0, .2)'
   },
   replyShowing: {
     textDecorationLine: 'underline',

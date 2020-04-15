@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   inline: {
     marginLeft: 0,
     marginRight: 0,
-    marginBottom: 0,
+    marginBottom: 5,
     width: '100%'
   },
   opContainer: {

@@ -17,9 +17,6 @@ interface Parser {
   deadLinks(): Parser;
   quotes(): Parser;
   quoteLinks(onPress?: (replyNo: number, replyIndex: number) => void): Parser;
-  inlineQuoteLinks(
-    onPress?: (replyNo: number, replyIndex: number) => void
-  ): Parser;
 }
 
 export default function(comment: string): Parser {
@@ -79,26 +76,6 @@ export default function(comment: string): Parser {
         }
       );
       return parser;
-    },
-    inlineQuoteLinks(
-      onPress?: (replyNo: number, replyIndex: number) => void
-    ): Parser {
-      nodes = reactStringReplace(
-        nodes,
-        /<a href=".*?" class="quotelink inline">>>(.*?)<\/a>/,
-        (match, i) => {
-          return (
-            <Text
-              key={match + i}
-              style={[styles.quoteLink, styles.inline]}
-              onPress={() => onPress && onPress(parseInt(match, 10), i)}
-            >
-              >>{match}
-            </Text>
-          );
-        }
-      );
-      return parser;
     }
   };
   const entities = new AllHtmlEntities();
@@ -112,8 +89,5 @@ const styles = StyleSheet.create({
   },
   quoteLink: {
     color: '#d00'
-  },
-  inline: {
-    color: 'rgba(221, 0, 0, .2)'
   }
 });
