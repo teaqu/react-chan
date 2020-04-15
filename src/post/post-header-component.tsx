@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
+import { AllHtmlEntities } from 'html-entities';
 
 import { RootState } from 'src/shared/root-reducer';
 
@@ -17,11 +18,12 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
   const trollFlagURI = useSelector(
     (state: RootState) => state.chanAPI.trollFlag
   );
+  const entities = new AllHtmlEntities();
 
   return (
     <View style={styles.postHeader}>
       <View style={styles.headerFlex}>
-        <Text style={styles.name}>{post.name}</Text>
+        <Text style={styles.name}>{entities.decode(post.name)}</Text>
         {post.trip && <Text style={styles.trip}>!{post.trip}</Text>}
         {post.since4pass && (
           <FastImage
