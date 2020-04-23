@@ -1,6 +1,5 @@
 import React, { ReactNodeArray } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { SelectableText } from '@astrocoders/react-native-selectable-text';
 import reactStringReplace from 'react-string-replace';
 import { Text, StyleSheet } from 'react-native';
 
@@ -94,14 +93,12 @@ export const PostCommentComponent = React.memo(
         // Show the inline reply
         if (matches) {
           comment.push(
-            <SelectableText
-              menuItems={['Quote']}
-              key={postStateKey + commentIndex++}
-              value={parseComment(
+            <Text key={postStateKey + commentIndex++}>
+              {parseComment(
                 `<a href="#p${matches[1]}" class=\"quotelink\">` +
                   `&gt;&gt;${matches[1]}</a>`
               )}
-            />
+            </Text>
           );
           comment.push(
             <PostComponent
@@ -117,11 +114,9 @@ export const PostCommentComponent = React.memo(
           if (trimmedComment) {
             // Else append the comment as a selectable text
             comment.push(
-              <SelectableText
-                menuItems={['Quote']}
-                key={postStateKey + commentIndex++}
-                value={parseComment(trimmedComment)}
-              />
+              <Text key={postStateKey + commentIndex++}>
+                {parseComment(trimmedComment)}
+              </Text>
             );
           }
         }
@@ -130,9 +125,7 @@ export const PostCommentComponent = React.memo(
       // without any nested views or posts within Text elements.
       return <>{comment}</>;
     } else {
-      return (
-        <SelectableText menuItems={['Quote']} value={parseComment(post.com)} />
-      );
+      return <Text selectable>{parseComment(post.com)} </Text>;
     }
   }
 );
@@ -146,6 +139,6 @@ const styles = StyleSheet.create({
   },
   replyShowing: {
     textDecorationLine: 'underline',
-    textDecorationStyle: 'dashed'
+    textDecorationStyle: 'dotted'
   }
 });

@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   replyShowing: {
     textDecorationLine: 'underline',
-    textDecorationStyle: 'dashed'
+    textDecorationStyle: 'dotted'
   },
   inline: {
     opacity: 0.2

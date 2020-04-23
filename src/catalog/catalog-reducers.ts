@@ -34,5 +34,6 @@ export default createReducer(initialState, {
   },
   [actions.invalidateCatalog.type]: state => {
     state.threads = {};
+    state.isFetching = true;
   }
 });

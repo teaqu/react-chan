@@ -39,7 +39,6 @@ export function Navigator() {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#d6daf0',
-    height: 40,
     elevation: 2
   }
 });

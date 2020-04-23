@@ -24,22 +24,17 @@ export function CatalogComponent() {
   const isFetching: boolean = useSelector(
     (state: RootState) => state.catalog.isFetching
   );
-
   const onRefresh = React.useCallback(() => {
     dispatch(actions.fetchCatalog(boardId));
   }, [boardId, dispatch]);
-
   const renderItem = (item: any) => (
     <CatalogThreadComponent boardId={boardId} threadNo={item.item.no} />
   );
-
   const keyExtractor = (item: any) => item.no.toString();
-  const threadsArray = Object.values(threads).sort(
+  let threadsArray = Object.values(threads).sort(
     (a, b) => b.last_modified - a.last_modified
   );
   return (
-    // Selectable text requires removeClippedSubviews={false}
-    // https://github.com/facebook/react-native/issues/26264#issuecomment-558989904
     <FlatList<Thread>
       refreshControl={
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
@@ -47,7 +42,6 @@ export function CatalogComponent() {
       style={styles.catalog}
       data={threadsArray}
       numColumns={3}
-      removeClippedSubviews={false}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
     />
@@ -56,6 +50,7 @@ export function CatalogComponent() {
 
 const styles = StyleSheet.create({
   catalog: {
-    backgroundColor: '#eef2ff'
+    backgroundColor: '#eef2ff',
+    minHeight: 100
   }
 });
