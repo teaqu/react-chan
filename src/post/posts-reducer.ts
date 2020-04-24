@@ -64,6 +64,7 @@ export default createReducer(initialState, {
         r => r !== replyNo
       );
       delete state.postStates[replyStateKey];
+      state.postStates[replyNo].hidden = false;
     }
   },
   [postActions.toggleComReply.type]: (state, action) => {
