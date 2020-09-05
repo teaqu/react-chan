@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   Modal,
-  Alert,
   View,
   KeyboardAvoidingView,
   Platform
@@ -15,7 +14,7 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput
-} from 'react-native-gesture-handler';
+} from 'react-native';
 import reactStringReplace from 'react-string-replace';
 import fuzzysort from 'fuzzysort';
 
@@ -95,7 +94,7 @@ export function BoardPickerComponent() {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          setModalVisible(false);
         }}
       >
         <KeyboardAvoidingView
@@ -111,6 +110,7 @@ export function BoardPickerComponent() {
                 autoCapitalize="none"
                 onSubmitEditing={() => {
                   setSelectedValue(filtered[0].obj.board);
+                  setFiltered([]);
                   setModalVisible(false);
                 }}
                 onChangeText={text => {
@@ -130,10 +130,13 @@ export function BoardPickerComponent() {
                 <TouchableOpacity
                   style={styles.closeButton}
                   onPress={() => {
-                    setModalVisible(!modalVisible);
+                    setFiltered([]);
+                    setModalVisible(false);
                   }}
                 >
-                  <Text style={styles.textStyle}>Close</Text>
+                  <>
+                    <Text style={styles.textStyle}>Close</Text>
+                  </>
                 </TouchableOpacity>
               </View>
             </View>
@@ -143,6 +146,7 @@ export function BoardPickerComponent() {
               data={filtered.length ? filtered : boards}
               numColumns={1}
               removeClippedSubviews={false}
+              keyboardShouldPersistTaps={'handled'}
               keyExtractor={
                 filtered.length ? filteredKeyExtractor : boardKeyExtractor
               }
@@ -156,7 +160,7 @@ export function BoardPickerComponent() {
         <TouchableOpacity
           style={styles.title}
           onPress={() => {
-            setModalVisible(!modalVisible);
+            setModalVisible(true);
           }}
         >
           <Text>
@@ -174,12 +178,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: 30
+    paddingTop: Platform.OS === 'ios' ? 30 : 20,
+    paddingBottom: 40,
+    maxHeight: '95%'
   },
   modalView: {
     backgroundColor: '#eef2ff',
     borderRadius: 5,
-    padding: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
     shadowColor: '#000',
     width: '90%',
     alignSelf: 'center',
@@ -192,9 +199,7 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   closeButton: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
+    padding: 10
   },
   buttonView: {
     marginLeft: 'auto'
