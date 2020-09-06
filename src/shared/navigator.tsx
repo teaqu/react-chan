@@ -40,6 +40,7 @@ export function Navigator() {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#d6daf0'
+    backgroundColor: '#d6daf0',
+    shadowColor: '#b7c5d9'
   }
 });
