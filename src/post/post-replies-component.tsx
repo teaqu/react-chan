@@ -38,11 +38,11 @@ export const PostRepliesComponent = React.memo(
             ]}
             onPress={() => toggleReply(replyNo)}
           >
-            >>{replyNo}
+            &gt;&gt;{replyNo}
           </Text>
         ))}
         <View style={styles.repliesShowing}>
-          {postState.reply_links_showing.map(replyNo => (
+          {postState.reply_links_showing.map((replyNo) => (
             <PostComponent
               key={postStateKey + '-' + replyNo}
               postStateKey={postStateKey + '-' + replyNo}
@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
   },
   repliesShowing: {
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    marginBottom: -3
   },
   reply: {
     color: '#34345c',
