@@ -35,10 +35,10 @@ export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
       }}
       onLayout={onLayout}
     >
-      {imageLoading < 100 && (
+      {imageLoading < 98 && (
         // Show the thumbnail while image is loading
         <View style={{ width: image.width }}>
-          <View style={[styles.loading, { width: `${imageLoading}%` }]} />
+          <View style={[styles.loading, { width: `${2 + imageLoading}%` }]} />
           <FastImage
             source={{
               uri: thumbnailURI
@@ -50,13 +50,13 @@ export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
         </View>
       )}
       <FastImage
-        onProgress={event => {
+        onProgress={(event) => {
           const loaded = event.nativeEvent.loaded;
           const total = event.nativeEvent.total;
-          setImageLoading((loaded / total) * 100);
+          setImageLoading((loaded / total) * 98);
         }}
         onLoadEnd={() => {
-          setImageLoading(100);
+          setImageLoading(98);
         }}
         source={{
           uri:
@@ -67,7 +67,7 @@ export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
         style={
           // eslint-disable-next-line react-native/no-inline-styles
           {
-            height: imageLoading < 100 ? 0 : image.height,
+            height: imageLoading < 98 ? 0 : image.height,
             width: image.width
           }
         }
