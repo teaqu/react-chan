@@ -19,7 +19,7 @@ interface Parser {
   quoteLinks(onPress?: (replyNo: number, replyIndex: number) => void): Parser;
 }
 
-export default function(comment: string): Parser {
+export default function (comment: string): Parser {
   let nodes: ReactNodeArray;
 
   const parser: Parser = {
@@ -70,7 +70,7 @@ export default function(comment: string): Parser {
               style={[styles.quoteLink, style]}
               onPress={() => onPress && onPress(parseInt(match, 10), i)}
             >
-              >>{match}
+              &gt;&gt;{match}
             </Text>
           );
         }
@@ -79,7 +79,9 @@ export default function(comment: string): Parser {
     }
   };
   const entities = new AllHtmlEntities();
-  nodes = [entities.decode(comment).replace(/<br>/g, '\n')];
+  nodes = [
+    entities.decode(comment).replace(/<br>/g, '\n').replace(/<wbr>/g, '\u200B')
+  ];
   return parser;
 }
 

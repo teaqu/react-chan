@@ -1,6 +1,12 @@
+import rnTextSize, { TSFontSpecs } from 'react-native-text-size';
+import { Dimensions } from 'react-native';
+import { AllHtmlEntities } from 'html-entities';
+
 import { Thread } from 'src/thread/thread';
 import { Post } from 'src/post/post';
 import { Board } from 'src/board/board';
+
+import imageUtils from '../utils/image-utils';
 
 import { ChanAPI, ReplyLinks } from './chan-api';
 import { Posts, Threads } from './chan-api';
@@ -67,19 +73,13 @@ const fetchBoards = (): Promise<Board[]> => {
     .then((api: BoardAPI) => api.boards);
 };
 
-/**
- * Calculate replies for our post
- *
- * @param posts
- * @param postStates
- */
 const calcReplies = (posts: Posts): ReplyLinks => {
   const regex = /class="quotelink">&gt;&gt;(.*?)</g; // look for >>(postNo)
   let matches = null;
   let reply_links: ReplyLinks = {};
 
   // Find all replies within each post
-  for (let no in posts) {
+  Object.keys(posts).forEach(no => {
     reply_links[no] = [];
     do {
       matches = regex.exec(posts[no].com);
@@ -92,8 +92,119 @@ const calcReplies = (posts: Posts): ReplyLinks => {
         }
       }
     } while (matches);
-  }
+  });
   return reply_links;
+};
+
+const calcHeights = async (posts: Posts): Promise<number[]> => {
+  // Default font specs
+  const fontSpecs: TSFontSpecs = {
+    fontSize: 14
+  };
+  const entities = new AllHtmlEntities();
+  const texts: (string | null)[] = Object.values(posts).map(p => {
+    if (!p.com) {
+      return null;
+    }
+    // Remove HTML so that it doesn't influence height.
+    const newCom = p.com
+      .replace(/<br>/g, '\n')
+      .replace(/<wbr>/g, '\u200B')
+      .replace(/<(\/)?a(.*?)>/g, '')
+      .replace(/<(\/)?span(.*?)>/g, '')
+      .replace(/<(\/)?s>/g, '');
+    return entities.decode(newCom);
+  });
+
+  // Generate links
+  const linkTexts: (string | null)[] = Object.values(posts).map(
+    p =>
+      p.reply_links
+        .map(l => l + ' ')
+        .toString()
+        .replace(/,([0-9]*?)/g, '>>')
+        .replace(/^(?!$)/g, '>>') || null
+  );
+
+  const nameTexts: string[] = Object.values(posts).map(p => {
+    if (p.trip) {
+      return p.name + ' ' + p.trip;
+    } else {
+      return p.name;
+    }
+  });
+
+  const postWidth = Dimensions.get('screen').width - 12;
+
+  // Width of text
+  const textWidth = postWidth - 10;
+  const textHeights = await rnTextSize.flatHeights({
+    text: texts,
+    width: textWidth,
+    ...fontSpecs
+  });
+
+  // Width of texts if post image is present.
+  const widthWithImage = postWidth - 95;
+  const textHeightsWithImage = await rnTextSize.flatHeights({
+    text: texts,
+    width: widthWithImage,
+    ...fontSpecs
+  });
+
+  // Calculate the height of names with postWidth - (width of date + post no).
+  const nameWidth = postWidth - 255;
+  const nameHeights = await rnTextSize.flatHeights({
+    text: nameTexts,
+    width: nameWidth,
+    fontSize: 13,
+    fontWeight: '700'
+  });
+
+  // Calculate the height of names if full width.
+  const nameHeightsFullWidth = await rnTextSize.flatHeights({
+    text: nameTexts,
+    width: textWidth,
+    fontSize: 13,
+    fontWeight: '700'
+  });
+
+  // Calculate height of links
+  const linkWidth = postWidth - 6;
+  const linkHeights = await rnTextSize.flatHeights({
+    text: linkTexts,
+    width: linkWidth,
+    fontSize: 13
+  });
+
+  // Calculate height of each post by adding calculated heights
+  const postArr = Object.values(posts);
+  const heights: number[] = [];
+  for (let i = 0; i < postArr.length; ++i) {
+    const post = postArr[i];
+    heights[i] = textHeights[i];
+    if (post.tim) {
+      // Add the height of image unless the text is longer.
+      heights[i] = Math.max(
+        imageUtils.calculateAspectRatio(post.tn_w, post.tn_h, 80).height + 16.5,
+        textHeightsWithImage[i]
+      );
+    }
+    if (linkHeights[i]) {
+      heights[i] += linkHeights[i] + 7 || 0;
+    }
+    if (nameHeights[i] / 16 > 1) {
+      heights[i] += 16;
+    }
+    heights[i] += nameHeightsFullWidth[i];
+    heights[i] += 8; // header height padding
+    heights[i] += 10; // padding
+
+    if (post.country || post.id) {
+      heights[i] += 17;
+    }
+  }
+  return heights;
 };
 
 const fourChanAPI: ChanAPI = {
@@ -106,6 +217,7 @@ const fourChanAPI: ChanAPI = {
   fetchCatalog,
   fetchThread,
   fetchBoards,
-  calcReplies
+  calcReplies,
+  calcHeights
 };
 export default fourChanAPI;

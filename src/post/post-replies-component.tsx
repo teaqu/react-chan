@@ -19,30 +19,35 @@ export const PostRepliesComponent = React.memo(
     const postState = useSelector(
       (state: RootState) => state.posts.postStates[postStateKey]
     );
+    // Show/hide a reply on pressing a reply link
     const toggleReply = (replyNo: number) => {
       dispatch(postActions.toggleReply(postStateKey, replyNo));
+      dispatch(postActions.clearRedBorder(postStateKey));
     };
     if (!post.reply_links) {
       return null;
     }
     return (
       <View style={styles.replies}>
-        {post.reply_links.map((replyNo, replyLinkIndex) => (
-          <Text
-            key={`reply-link-${replyNo}-${replyLinkIndex}`}
-            style={[
-              findReplyInStateTree(postStateKey, replyNo).length > 0 &&
-                styles.replyShowing,
-              postState.reply_links_showing.includes(replyNo) && styles.inline,
-              styles.reply
-            ]}
-            onPress={() => toggleReply(replyNo)}
-          >
-            &gt;&gt;{replyNo}
-          </Text>
-        ))}
+        <Text style={styles.replyText}>
+          {post.reply_links.map((replyNo, replyLinkIndex) => (
+            <Text key={`reply-link-${replyNo}-${replyLinkIndex}`}>
+              <Text
+                style={[
+                  findReplyInStateTree(postStateKey, replyNo).length > 0 &&
+                    styles.replyShowing,
+                  postState.reply_links_showing.includes(replyNo) &&
+                    styles.inline
+                ]}
+                onPress={() => toggleReply(replyNo)}
+              >
+                &gt;&gt;{replyNo}
+              </Text>{' '}
+            </Text>
+          ))}
+        </Text>
         <View style={styles.repliesShowing}>
-          {postState.reply_links_showing.map((replyNo) => (
+          {postState.reply_links_showing.map(replyNo => (
             <PostComponent
               key={postStateKey + '-' + replyNo}
               postStateKey={postStateKey + '-' + replyNo}
@@ -57,9 +62,6 @@ export const PostRepliesComponent = React.memo(
 
 const styles = StyleSheet.create({
   replies: {
-    padding: 3,
-    paddingTop: 3,
-    paddingBottom: 3,
     backgroundColor: '#c9cde8',
     borderColor: '#b7c5d9',
     borderTopWidth: 1,
@@ -69,12 +71,9 @@ const styles = StyleSheet.create({
   repliesShowing: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: -3
-  },
-  reply: {
-    color: '#34345c',
-    fontSize: 13,
-    marginRight: 5
+    paddingLeft: 3,
+    paddingRight: 3,
+    marginBottom: -2
   },
   replyShowing: {
     textDecorationLine: 'underline',
@@ -82,5 +81,10 @@ const styles = StyleSheet.create({
   },
   inline: {
     opacity: 0.2
+  },
+  replyText: {
+    fontSize: 13,
+    color: '#34345c',
+    padding: 3
   }
 });

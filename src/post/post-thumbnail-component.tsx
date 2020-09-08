@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
   thumbnailContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
     marginTop: 4
   },
   imageInfo: {
@@ -89,6 +88,6 @@ const styles = StyleSheet.create({
   },
   touchable: {
     marginRight: 5,
-    minWidth: 40
+    minWidth: 80
   }
 });

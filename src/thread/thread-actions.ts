@@ -1,6 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
+import { FlatList } from 'react-native-gesture-handler';
 
 import { Posts, ReplyLinks } from 'src/shared/chan-api/chan-api';
+import { Post } from 'src/post/post';
 
 export const invalidateThread = createAction('INVALIDATE_THREAD');
 export const fetchThreadFailed = createAction<string>('FETCH_THREAD_FAILED');
@@ -32,6 +34,12 @@ export const calcRepliesSucceeded = createAction<ReplyLinks>(
   'CALC_REPLIES_SUCCEEDED'
 );
 export const calcRepliesFailed = createAction<string>('CALC_REPLIES_FAILED');
+export const setListRef = createAction<FlatList<Post>>('SET_LIST_REF');
+
+export const calcHeights = createAction('CALC_HEIGHTS');
+export const calcHeightsSucceeded = createAction<number[]>(
+  'CALC_HEIGHTS_SUCCEEDED'
+);
 
 export default {
   invalidateThread,
@@ -40,5 +48,7 @@ export default {
   fetchThread,
   calcRepliesFailed,
   calcRepliesSucceeded,
-  calcReplies
+  calcReplies,
+  calcHeights,
+  calcHeightsSucceeded
 };

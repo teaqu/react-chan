@@ -6,6 +6,8 @@ module.exports = {
   rules: {
     'no-param-reassign': 'error',
     'comma-dangle': ['error', 'never'],
+    'arrow-parens': ['error', 'as-needed'],
+    quotes: ['error', 'single'],
     'import/order': [
       'error',
       {

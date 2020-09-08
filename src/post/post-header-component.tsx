@@ -1,29 +1,34 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { useSelector } from 'react-redux';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import FastImage from 'react-native-fast-image';
-import { AllHtmlEntities } from 'html-entities';
 
 import { RootState } from 'src/shared/root-reducer';
+
+import { Post } from './post';
+import postActions from './post-actions';
 
 interface Props {
   postNo: number;
 }
 export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
+  const dispatch = useDispatch();
   const post = useSelector((state: RootState) => state.posts.posts[postNo]);
   const flagURI = useSelector((state: RootState) => state.chanAPI.flag);
+  const listRef: FlatList<Post> | null = useSelector(
+    (state: RootState) => state.thread.listRef
+  );
   const since4passURI = useSelector(
     (state: RootState) => state.chanAPI.since4pass
   );
   const trollFlagURI = useSelector(
     (state: RootState) => state.chanAPI.trollFlag
   );
-  const entities = new AllHtmlEntities();
 
   return (
     <View style={styles.postHeader}>
       <View style={styles.headerFlex}>
-        <Text style={styles.name}>{entities.decode(post.name)}</Text>
+        <Text style={styles.name}>{post.name}</Text>
         {post.trip && <Text style={styles.trip}>!{post.trip}</Text>}
         {post.since4pass && (
           <FastImage
@@ -33,9 +38,22 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
             style={styles.capCode}
           />
         )}
-        <Text style={styles.dateNo}>
-          {post.now} No.{post.no}
-        </Text>
+        <View style={styles.rightAlign}>
+          <Text style={styles.dateNo}>
+            {post.now} No.{post.no}
+          </Text>
+          <Text
+            style={styles.jumpTo}
+            onPress={() => {
+              if (listRef) {
+                dispatch(postActions.jumpToPost(postNo.toString()));
+                listRef.scrollToItem({ item: post, animated: true });
+              }
+            }}
+          >
+            #
+          </Text>
+        </View>
       </View>
       <View style={styles.headerFlex}>
         {post.country && (
@@ -66,10 +84,10 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
                 // The id is used to calculate a colour so that we don't have
                 // to maintain a list of colours and their corresponding ids.
                 backgroundColor: `rgb(
-                    ${post.id.charCodeAt(0) + post.id.charCodeAt(1)},
-                    ${post.id.charCodeAt(2) + post.id.charCodeAt(3)},
-                    ${post.id.charCodeAt(4) + post.id.charCodeAt(5)}
-                  )`
+                  ${post.id.charCodeAt(0) + post.id.charCodeAt(1)},
+                  ${post.id.charCodeAt(2) + post.id.charCodeAt(3)},
+                  ${post.id.charCodeAt(4) + post.id.charCodeAt(5)}
+                )`
               }
             ]}
           >
@@ -95,6 +113,12 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     borderRadius: 2
   },
+  rightAlign: {
+    marginLeft: 'auto',
+    flexDirection: 'row',
+    width: 240,
+    alignItems: 'center'
+  },
   dateNo: {
     marginLeft: 'auto',
     fontSize: 12
@@ -113,17 +137,22 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   headerFlex: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap'
   },
   name: {
     color: '#117743',
+    fontSize: 13,
     fontWeight: '700'
   },
   trip: {
     color: '#117743',
+    paddingLeft: 5
+  },
+  jumpTo: {
+    color: '#34345c',
+    fontWeight: 'bold',
     paddingLeft: 5
   }
 });

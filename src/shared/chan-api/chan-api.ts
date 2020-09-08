@@ -15,6 +15,14 @@ export interface ChanAPI {
   fetchThread(boardId: string, threadNo: number): Promise<Posts>;
   fetchBoards(): Promise<Board[]>;
   calcReplies(posts: Posts): ReplyLinks;
+
+  /**
+   * Calculate the height of each post so that we can jump to them before they
+   * are rendered.
+   *
+   * @param posts
+   */
+  calcHeights(posts: Posts): Promise<number[]>;
 }
 
 export interface Posts {

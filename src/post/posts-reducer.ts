@@ -27,12 +27,16 @@ export default createReducer(initialState, {
   },
   [threadActions.fetchThreadSucceeded.type]: (state, action) => {
     let posts = action.payload.posts;
+
+    // post index within thread
+    let i = 0;
+
     // set default state
-    for (let no in posts) {
+    Object.keys(posts).forEach(no => {
       posts[no].reply_links = [];
-      state.postStates[no] = initialPostState;
-    }
-    state.posts = action.payload.posts;
+      state.postStates[no] = { ...initialPostState, index: i++ };
+    });
+    state.posts = posts;
   },
   [postActions.toggleImage.type]: (state, action) => {
     const postState = state.postStates[action.payload];
@@ -102,11 +106,32 @@ export default createReducer(initialState, {
   [threadActions.calcRepliesSucceeded.type]: (state, action) => {
     const posts: Posts = state.posts;
     const reply_links = action.payload;
-    for (let no in posts) {
+
+    // Add reply links to each post
+    Object.keys(posts).forEach(no => {
       posts[no].reply_links = reply_links[no];
-    }
+    });
   },
   [postActions.clearRedBorder.type]: (state, action) => {
     state.postStates[action.payload].red_border = false;
+  },
+  [postActions.setHeight.type]: (state, action) => {
+    const { postStateKey, height } = action.payload;
+    state.postStates[postStateKey].height = height;
+  },
+  [postActions.jumpToPost.type]: (state, action) => {
+    const states = state.postStates;
+    Object.values(states).forEach(s => {
+      s.jumped = false;
+    });
+    states[action.payload].jumped = true;
+    states[action.payload].hidden = false;
+  },
+  [threadActions.calcHeightsSucceeded.type]: (state, action) => {
+    const postStates = Object.values(state.postStates);
+    const heights: number[] = action.payload;
+    for (let i = 0; i < postStates.length; i++) {
+      postStates[i].height = heights[i];
+    }
   }
 });

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { FlatList, StyleSheet, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 import { Post } from 'src/post/post';
 import { RootStackParamList } from 'src/shared/navigator';
@@ -20,6 +21,7 @@ export const ThreadComponent = () => {
   const { boardId, threadNo } = route.params;
 
   const posts = useSelector((state: RootState) => state.posts.posts);
+  const postStates = useSelector((state: RootState) => state.posts.postStates);
 
   useEffect(() => {
     dispatch(actions.fetchThread(boardId, threadNo));
@@ -42,20 +44,74 @@ export const ThreadComponent = () => {
   const keyExtractor = (item: any) => {
     return item.no.toString();
   };
-  return (
-    <FlatList<Post>
-      refreshControl={
-        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
-      }
-      style={styles.thread}
-      data={Object.values(posts)}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      removeClippedSubviews={false}
-    />
-  );
-};
 
+  /**
+   * Get the item layout so that we can jump to the given index.
+   *
+   * @param data the posts
+   * @param index
+   */
+  const getItemLayout = (data: Post[] | null | undefined, index: number) => {
+    let offset = 0;
+    if (data) {
+      let postStatesArr = Object.values(postStates);
+
+      // Calculate offset by adding heights of all the posts before the
+      // given index.
+      for (let i = 0; i < index; i++) {
+        if (!postStatesArr[i].hidden) {
+          offset += postStatesArr[i].height + 5; // Post height + padding
+        }
+      }
+      return {
+        length: postStates[data[index].no].height,
+        offset,
+        index
+      };
+    } else {
+      return {
+        length: 0,
+        offset,
+        index
+      };
+    }
+  };
+  let data = Object.values(posts);
+  let refresh = 0;
+  if (
+    Object.values(postStates).length >= data.length &&
+    typeof Object.values(postStates)[0] === 'object' &&
+    Object.values(postStates)[0].height > 0
+  ) {
+    return (
+      <FlatList<Post>
+        refreshControl={
+          <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+        }
+        getItemLayout={getItemLayout}
+        style={styles.thread}
+        data={data}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        removeClippedSubviews={false}
+        extraData={refresh}
+        ref={ref => {
+          if (ref) {
+            dispatch(actions.setListRef(ref));
+          }
+        }}
+      />
+    );
+  } else {
+    return (
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+        }
+      />
+    );
+  }
+};
 const styles = StyleSheet.create({
   thread: {
     backgroundColor: '#eef2ff'

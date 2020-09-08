@@ -57,7 +57,7 @@ export const PostCommentComponent = React.memo(
               ]}
               onPress={() => onComLinkPress(replyNo, localIndex)}
             >
-              >>{match} {opNo === parseInt(match, 10) && '(OP)'}
+              &gt;&gt;{match} {opNo === parseInt(match, 10) && '(OP)'}
             </Text>
           );
         }
@@ -80,7 +80,7 @@ export const PostCommentComponent = React.memo(
 
       // Split the comment on inline quote links that need to show a post.
       const regex = new RegExp(
-        `<a href=\"#p(?:${showingLinks})\" class=\"quotelink\">` +
+        `<a href="#p(?:${showingLinks})" class="quotelink">` +
           `(&gt;&gt;(?:${showingLinks}))</a>`
       );
       const subComments = post.com.split(regex).filter(c => c);
@@ -95,7 +95,7 @@ export const PostCommentComponent = React.memo(
           comment.push(
             <Text key={postStateKey + commentIndex++}>
               {parseComment(
-                `<a href="#p${matches[1]}" class=\"quotelink\">` +
+                `<a href="#p${matches[1]}" class="quotelink">` +
                   `&gt;&gt;${matches[1]}</a>`
               )}
             </Text>
@@ -104,8 +104,9 @@ export const PostCommentComponent = React.memo(
             <PostComponent
               postNo={parseInt(matches[1], 10)}
               key={postStateKey + commentIndex++}
-              postStateKey={`${postStateKey}-com-${matches[1]}[${inlineIndex -
-                1}]`}
+              postStateKey={`${postStateKey}-com-${matches[1]}[${
+                inlineIndex - 1
+              }]`}
             />
           );
         } else {

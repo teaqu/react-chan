@@ -20,6 +20,15 @@ export interface PostState {
 
   // Shown if the user tries to open a reply to a post that is already showing.
   red_border: boolean;
+
+  // Show a red background if we jumped to this post.
+  jumped: boolean;
+
+  // The index of this post within the thread list.
+  index: number;
+
+  // Calculated height of this post.
+  height: number;
 }
 
 export interface ComReplyLink {
@@ -37,7 +46,10 @@ export const initialPostState: PostState = {
   hidden: false,
   reply_links_showing: [],
   com_reply_links_showing: [],
-  red_border: false
+  red_border: false,
+  jumped: false,
+  index: -1,
+  height: -1
 };
 
 /**
@@ -50,7 +62,7 @@ export function findReplyInStateTree(
   postStateKey: string,
   replyNo: number
 ): string {
-  const regex = new RegExp(`(.*?)${replyNo}(\\\[[0-9]*\\\])?`);
+  const regex = new RegExp(`(.*?)${replyNo}(\\[[0-9]*])?`);
   const matches = regex.exec(postStateKey);
   if (matches) {
     return matches[0];

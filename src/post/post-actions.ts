@@ -3,6 +3,7 @@ import { createAction } from '@reduxjs/toolkit';
 const toggleImage = createAction<string>('TOGGLE_IMAGE');
 const toggleImageInfo = createAction<string>('TOGGLE_IMAGE_INFO');
 const clearRedBorder = createAction<string>('CLEAR_RED_BORDER');
+const jumpToPost = createAction<string>('JUMP_TO_POST');
 const toggleReply = createAction('TOGGLE_REPLY', function prepare(
   postStateKey: string,
   replyNo: number
@@ -11,6 +12,17 @@ const toggleReply = createAction('TOGGLE_REPLY', function prepare(
     payload: {
       postStateKey,
       replyNo
+    }
+  };
+});
+const setHeight = createAction('SET_HEIGHT', function prepare(
+  postStateKey: string,
+  height: number
+) {
+  return {
+    payload: {
+      postStateKey,
+      height
     }
   };
 });
@@ -33,5 +45,7 @@ export default {
   toggleImageInfo,
   toggleReply,
   toggleComReply,
-  clearRedBorder
+  clearRedBorder,
+  jumpToPost,
+  setHeight
 };

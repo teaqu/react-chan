@@ -23,6 +23,7 @@ export const PostComponent = React.memo(
       (state: RootState) => state.posts.postStates[postStateKey]
     );
     const post = useSelector((state: RootState) => state.posts.posts[postNo]);
+
     useEffect(() => {
       // Only show the the red outline for half a second
       if (postState.red_border) {
@@ -48,9 +49,14 @@ export const PostComponent = React.memo(
           isInline && styles.inline,
           postState.red_border && styles.redBorder
         ]}
+        onLayout={event => {
+          dispatch(
+            postActions.setHeight(postStateKey, event.nativeEvent.layout.height)
+          );
+        }}
       >
         <PostHeaderComponent postNo={postNo} />
-        <View style={[styles.post]}>
+        <View style={[styles.post, postState.jumped && styles.jumped]}>
           {post.tim && postState.show_image && (
             <PostImageComponent postNo={postNo} postStateKey={postStateKey} />
           )}
@@ -101,10 +107,11 @@ const styles = StyleSheet.create({
   post: {
     paddingTop: 1,
     backgroundColor: '#d6daf0',
-    padding: 5
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingBottom: 5
   },
   postFlex: {
-    flex: 1,
     flexDirection: 'row'
   },
   hasInline: {
@@ -129,10 +136,14 @@ const styles = StyleSheet.create({
     color: '#0f0c5d'
   },
   commentContainer: {
-    flex: 1
+    flex: 1,
+    paddingTop: 2
   },
   redBorder: {
     borderColor: 'red',
     borderWidth: 1
+  },
+  jumped: {
+    backgroundColor: '#d6bad0'
   }
 });

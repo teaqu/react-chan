@@ -1,5 +1,5 @@
 {
-  "name": "ReactChan",
+  "name": "react-chan",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -25,6 +25,7 @@
     "react-native-reanimated": "^1.13.0",
     "react-native-safe-area-context": "^3.1.7",
     "react-native-screens": "^2.10.1",
+    "react-native-text-size": "^4.0.0-rc.1",
     "react-redux": "^7.2.0",
     "react-string-replace": "^0.4.4",
     "redux": "^4.0.5",
@@ -51,7 +52,6 @@
     "metro-react-native-babel-preset": "^0.59.0",
     "react-native-testing-library": "^1.13.0",
     "react-test-renderer": "16.13.1",
-    "prettier": "^2.0.4",
     "typescript": "^3.8.3"
   },
   "jest": {
