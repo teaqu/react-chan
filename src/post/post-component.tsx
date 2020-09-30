@@ -48,6 +48,7 @@ export const PostComponent = React.memo(
           isOp && styles.opContainer,
           isInline && styles.inline,
           postState.red_border && styles.redBorder
+          // { height: postState.height }
         ]}
         onLayout={event => {
           dispatch(

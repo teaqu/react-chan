@@ -186,19 +186,21 @@ const calcHeights = async (posts: Posts): Promise<number[]> => {
     if (post.tim) {
       // Add the height of image unless the text is longer.
       heights[i] = Math.max(
-        imageUtils.calculateAspectRatio(post.tn_w, post.tn_h, 80).height + 16.5,
+        imageUtils.calculateAspectRatio(post.tn_w, post.tn_h, 80).height + 18,
         textHeightsWithImage[i]
       );
     }
     if (linkHeights[i]) {
       heights[i] += linkHeights[i] + 7 || 0;
     }
-    if (nameHeights[i] / 16 > 1) {
-      heights[i] += 16;
+    if (nameHeights[i] / 18 > 1) {
+      heights[i] += nameHeightsFullWidth[i];
+      heights[i] += 18;
+    } else {
+      heights[i] += nameHeights[i];
     }
-    heights[i] += nameHeightsFullWidth[i];
     heights[i] += 8; // header height padding
-    heights[i] += 10; // padding
+    heights[i] += 10.5; // padding
 
     if (post.country || post.id) {
       heights[i] += 17;
