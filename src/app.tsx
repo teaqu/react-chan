@@ -12,7 +12,7 @@ declare var global: { HermesInternal: null | {} };
 export default function App() {
   return (
     <Provider store={store}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor="#b8bccf" />
       <NavigationContainer>
         <Navigator />
       </NavigationContainer>
