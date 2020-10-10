@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { Animated, StyleSheet, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { useCollapsibleStack } from 'react-navigation-collapsible';
 
 import { RootState } from 'src/shared/root-reducer';
 import { Threads } from 'src/shared/chan-api/chan-api';
@@ -11,6 +12,11 @@ import { CatalogThreadComponent } from './catalog-thread-component';
 import actions from './catalog-actions';
 
 export function CatalogComponent() {
+  const {
+    onScroll,
+    containerPaddingTop,
+    scrollIndicatorInsetTop
+  } = useCollapsibleStack();
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
 
@@ -35,12 +41,20 @@ export function CatalogComponent() {
     (a, b) => b.last_modified - a.last_modified
   );
   return (
-    <FlatList<Thread>
+    <Animated.FlatList<Thread>
+      data={threadsArray}
+      // @ts-ignore
+      onScroll={onScroll}
+      contentContainerStyle={{ paddingTop: containerPaddingTop }}
+      scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
       refreshControl={
-        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+        <RefreshControl
+          refreshing={isFetching}
+          onRefresh={onRefresh}
+          progressViewOffset={40}
+        />
       }
       style={styles.catalog}
-      data={threadsArray}
       numColumns={3}
       keyExtractor={keyExtractor}
       renderItem={renderItem}

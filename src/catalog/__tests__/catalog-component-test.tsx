@@ -10,6 +10,13 @@ jest.mock('react-redux', () => ({
   useSelector: jest.fn(),
   useDispatch: () => mockedDispatch
 }));
+jest.mock('react-navigation-collapsible', () => ({
+  useCollapsibleStack: () => ({
+    onScroll: jest.fn(),
+    containerPaddingTop: 10,
+    scrollIndicatorInsetTop: 10
+  })
+}));
 jest.mock('src/catalog/catalog-thread-component', () => {
   'CatalogThreadComponent';
 });

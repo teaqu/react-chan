@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { StyleSheet, RefreshControl, Animated } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useCollapsibleStack } from 'react-navigation-collapsible';
 
 import { Post } from 'src/post/post';
 import { RootStackParamList } from 'src/shared/navigator';
@@ -16,6 +16,12 @@ import * as actions from './thread-actions';
  */
 export const ThreadComponent = () => {
   const dispatch = useDispatch();
+
+  const {
+    onScroll,
+    containerPaddingTop,
+    scrollIndicatorInsetTop
+  } = useCollapsibleStack();
 
   const route: RouteProp<RootStackParamList, 'Thread'> = useRoute();
   const { boardId, threadNo } = route.params;
@@ -84,16 +90,23 @@ export const ThreadComponent = () => {
     Object.values(postStates)[0].height > 0
   ) {
     return (
-      <FlatList<Post>
+      <Animated.FlatList<Post>
         refreshControl={
-          <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={onRefresh}
+            progressViewOffset={40}
+          />
         }
         getItemLayout={getItemLayout}
         style={styles.thread}
         data={data}
+        // @ts-ignore
+        onScroll={onScroll}
+        contentContainerStyle={{ paddingTop: containerPaddingTop }}
+        scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
-        removeClippedSubviews={false}
         extraData={refresh}
         ref={ref => {
           if (ref) {
@@ -103,13 +116,7 @@ export const ThreadComponent = () => {
       />
     );
   } else {
-    return (
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
-        }
-      />
-    );
+    return <></>;
   }
 };
 const styles = StyleSheet.create({

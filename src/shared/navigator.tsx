@@ -3,7 +3,8 @@ import {
   createStackNavigator,
   TransitionPresets
 } from '@react-navigation/stack';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
+import { createCollapsibleStack } from 'react-navigation-collapsible';
 
 import { ThreadComponent } from 'src/thread/thread-component';
 import { CatalogComponent } from 'src/catalog/catalog-component';
@@ -25,24 +26,28 @@ export function Navigator() {
         ...TransitionPresets.SlideFromRightIOS
       }}
     >
-      <RootStack.Screen
-        name="Catalog"
-        component={CatalogComponent}
-        options={{
-          headerTitle: () => <BoardPickerComponent />,
-          headerRight: () => <View />,
-          headerStyle: styles.header
-        }}
-      />
-      <RootStack.Screen
-        name="Thread"
-        component={ThreadComponent}
-        options={{
-          gestureEnabled: true,
-          headerTitle: () => <Text />,
-          headerStyle: styles.header
-        }}
-      />
+      {createCollapsibleStack(
+        <RootStack.Screen
+          name="Catalog"
+          component={CatalogComponent}
+          options={{
+            headerTitle: () => <BoardPickerComponent />,
+            headerTitleAlign: 'center',
+            headerStyle: styles.header
+          }}
+        />
+      )}
+      {createCollapsibleStack(
+        <RootStack.Screen
+          name="Thread"
+          component={ThreadComponent}
+          options={{
+            gestureEnabled: true,
+            headerTitle: () => <Text />,
+            headerStyle: styles.header
+          }}
+        />
+      )}
     </RootStack.Navigator>
   );
 }

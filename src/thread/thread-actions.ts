@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { FlatList } from 'react-native-gesture-handler';
+import { Animated } from 'react-native';
 
 import { Posts, ReplyLinks } from 'src/shared/chan-api/chan-api';
 import { Post } from 'src/post/post';
@@ -34,7 +34,7 @@ export const calcRepliesSucceeded = createAction<ReplyLinks>(
   'CALC_REPLIES_SUCCEEDED'
 );
 export const calcRepliesFailed = createAction<string>('CALC_REPLIES_FAILED');
-export const setListRef = createAction<FlatList<Post>>('SET_LIST_REF');
+export const setListRef = createAction<Animated.FlatList<Post>>('SET_LIST_REF');
 
 export const calcHeights = createAction('CALC_HEIGHTS');
 export const calcHeightsSucceeded = createAction<number[]>(
