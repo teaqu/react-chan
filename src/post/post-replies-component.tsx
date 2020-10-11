@@ -36,8 +36,9 @@ export const PostRepliesComponent = React.memo(
                 style={[
                   findReplyInStateTree(postStateKey, replyNo).length > 0 &&
                     styles.replyShowing,
-                  postState.reply_links_showing.includes(replyNo) &&
-                    styles.inline
+                  (postState.reply_links_showing.includes(replyNo) &&
+                    styles.inline) ||
+                    styles.notInline
                 ]}
                 onPress={() => toggleReply(replyNo)}
               >
@@ -80,11 +81,13 @@ const styles = StyleSheet.create({
     textDecorationStyle: 'dotted'
   },
   inline: {
-    opacity: 0.2
+    color: '#8587a6'
+  },
+  notInline: {
+    color: '#34345c'
   },
   replyText: {
     fontSize: 13,
-    color: '#34345c',
     padding: 3
   }
 });

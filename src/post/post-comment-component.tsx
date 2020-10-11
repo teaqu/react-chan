@@ -36,7 +36,7 @@ export const PostCommentComponent = React.memo(
         .quotes()
         .deadLinks()
         .getNodes();
-
+      console.log(postState);
       // Replace comment quote links
       nodes = reactStringReplace(
         nodes,
@@ -49,15 +49,19 @@ export const PostCommentComponent = React.memo(
             <Text
               key={match + localIndex}
               style={[
-                styles.quoteLink,
+                styles.replyLink,
                 findReplyInStateTree(postStateKey, replyNo).length > 0 &&
                   styles.replyShowing,
-                postState.reply_links_showing.includes(replyNo) &&
-                  styles.inlineQuoteLink
+                (postState.com_reply_links_showing.some(
+                  l => l.no === replyNo
+                ) &&
+                  styles.inlineQuoteLink) ||
+                  styles.notInlineQuoteLink
               ]}
               onPress={() => onComLinkPress(replyNo, localIndex)}
             >
-              &gt;&gt;{match} {opNo === parseInt(match, 10) && '(OP)'}
+              &gt;&gt;{match}
+              {opNo === parseInt(match, 10) && ' (OP)'}
             </Text>
           );
         }
@@ -132,14 +136,17 @@ export const PostCommentComponent = React.memo(
 );
 
 const styles = StyleSheet.create({
-  quoteLink: {
-    color: '#d00'
-  },
   inlineQuoteLink: {
-    color: 'rgba(221, 0, 0, .2)'
+    color: '#d96d78'
+  },
+  notInlineQuoteLink: {
+    color: '#d00'
   },
   replyShowing: {
     textDecorationLine: 'underline',
     textDecorationStyle: 'dotted'
+  },
+  replyLink: {
+    textDecorationLine: 'underline'
   }
 });
