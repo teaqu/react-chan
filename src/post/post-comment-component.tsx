@@ -36,7 +36,6 @@ export const PostCommentComponent = React.memo(
         .quotes()
         .deadLinks()
         .getNodes();
-      console.log(postState);
       // Replace comment quote links
       nodes = reactStringReplace(
         nodes,
