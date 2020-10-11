@@ -3,8 +3,7 @@ import {
   createStackNavigator,
   TransitionPresets
 } from '@react-navigation/stack';
-import { Text, StyleSheet } from 'react-native';
-import { createCollapsibleStack } from 'react-navigation-collapsible';
+import { Text } from 'react-native';
 
 import { ThreadComponent } from 'src/thread/thread-component';
 import { CatalogComponent } from 'src/catalog/catalog-component';
@@ -26,35 +25,22 @@ export function Navigator() {
         ...TransitionPresets.SlideFromRightIOS
       }}
     >
-      {createCollapsibleStack(
-        <RootStack.Screen
-          name="Catalog"
-          component={CatalogComponent}
-          options={{
-            headerTitle: () => <BoardPickerComponent />,
-            headerTitleAlign: 'center',
-            headerStyle: styles.header
-          }}
-        />
-      )}
-      {createCollapsibleStack(
-        <RootStack.Screen
-          name="Thread"
-          component={ThreadComponent}
-          options={{
-            gestureEnabled: true,
-            headerTitle: () => <Text />,
-            headerStyle: styles.header
-          }}
-        />
-      )}
+      <RootStack.Screen
+        name="Catalog"
+        component={CatalogComponent}
+        options={{
+          headerTitle: () => <BoardPickerComponent />,
+          headerTitleAlign: 'center'
+        }}
+      />
+      <RootStack.Screen
+        name="Thread"
+        component={ThreadComponent}
+        options={{
+          gestureEnabled: true,
+          headerTitle: () => <Text />
+        }}
+      />
     </RootStack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: '#d6daf0',
-    shadowColor: '#b7c5d9'
-  }
-});

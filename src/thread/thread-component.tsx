@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet, RefreshControl, Animated } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { useCollapsibleStack } from 'react-navigation-collapsible';
+import { useCollapsibleHeader } from 'react-navigation-collapsible';
 
 import { Post } from 'src/post/post';
 import { RootStackParamList } from 'src/shared/navigator';
@@ -17,11 +17,15 @@ import * as actions from './thread-actions';
 export const ThreadComponent = () => {
   const dispatch = useDispatch();
 
+  const options = {
+    headerStyle: { backgroundColor: '#d6daf0' },
+    elevation: 1
+  };
   const {
-    onScroll,
-    containerPaddingTop,
-    scrollIndicatorInsetTop
-  } = useCollapsibleStack();
+    onScroll /* Event handler */,
+    containerPaddingTop /* number */,
+    scrollIndicatorInsetTop /* number */
+  } = useCollapsibleHeader(options);
 
   const route: RouteProp<RootStackParamList, 'Thread'> = useRoute();
   const { boardId, threadNo } = route.params;

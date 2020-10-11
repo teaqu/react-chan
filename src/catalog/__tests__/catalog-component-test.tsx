@@ -11,7 +11,7 @@ jest.mock('react-redux', () => ({
   useDispatch: () => mockedDispatch
 }));
 jest.mock('react-navigation-collapsible', () => ({
-  useCollapsibleStack: () => ({
+  useCollapsibleHeader: () => ({
     onScroll: jest.fn(),
     containerPaddingTop: 10,
     scrollIndicatorInsetTop: 10

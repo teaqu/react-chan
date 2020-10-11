@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Animated, StyleSheet, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCollapsibleStack } from 'react-navigation-collapsible';
+import { useCollapsibleHeader } from 'react-navigation-collapsible';
 
 import { RootState } from 'src/shared/root-reducer';
 import { Threads } from 'src/shared/chan-api/chan-api';
@@ -12,11 +12,17 @@ import { CatalogThreadComponent } from './catalog-thread-component';
 import actions from './catalog-actions';
 
 export function CatalogComponent() {
+  const options = {
+    headerStyle: {
+      backgroundColor: '#d6daf0'
+    },
+    elevation: 1
+  };
   const {
-    onScroll,
-    containerPaddingTop,
-    scrollIndicatorInsetTop
-  } = useCollapsibleStack();
+    onScroll /* Event handler */,
+    containerPaddingTop /* number */,
+    scrollIndicatorInsetTop /* number */
+  } = useCollapsibleHeader(options);
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
 
