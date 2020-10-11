@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, RefreshControl, Animated } from 'react-native';
+import { StyleSheet, RefreshControl, Animated, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCollapsibleHeader } from 'react-navigation-collapsible';
@@ -120,7 +120,18 @@ export const ThreadComponent = () => {
       />
     );
   } else {
-    return <></>;
+    // Show loading indicator before thread has loaded.
+    return (
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={onRefresh}
+            progressViewOffset={40}
+          />
+        }
+      />
+    );
   }
 };
 const styles = StyleSheet.create({
