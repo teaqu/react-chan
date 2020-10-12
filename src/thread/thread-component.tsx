@@ -73,6 +73,10 @@ export const ThreadComponent = () => {
           offset += postStatesArr[i].height + 5; // Post height + padding
         }
       }
+      // Remove heading padding
+      if (index !== 0) {
+        offset += 50;
+      }
       return {
         length: postStates[data[index].no].height,
         offset,
