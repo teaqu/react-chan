@@ -39,9 +39,7 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
           />
         )}
         <View style={styles.rightAlign}>
-          <Text style={styles.dateNo}>
-            {post.now} No.{post.no}
-          </Text>
+          <Text style={styles.now}>{post.now}</Text>
           <Text
             style={styles.jumpTo}
             onPress={() => {
@@ -51,7 +49,7 @@ export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
               }
             }}
           >
-            #
+            #{post.no}
           </Text>
         </View>
       </View>
@@ -119,7 +117,7 @@ const styles = StyleSheet.create({
     width: 240,
     alignItems: 'center'
   },
-  dateNo: {
+  now: {
     marginLeft: 'auto',
     fontSize: 12
   },
@@ -152,7 +150,7 @@ const styles = StyleSheet.create({
   },
   jumpTo: {
     color: '#34345c',
-    fontWeight: 'bold',
+    fontSize: 12,
     paddingLeft: 5
   }
 });
