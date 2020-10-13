@@ -8,6 +8,7 @@ import { Post } from 'src/post/post';
 import { RootStackParamList } from 'src/shared/navigator';
 import { RootState } from 'src/shared/root-reducer';
 import { PostComponent } from 'src/post/post-component';
+import { ThreadFooterComponent } from 'src/thread/thread-footer-component';
 
 import * as actions from './thread-actions';
 
@@ -77,6 +78,13 @@ export const ThreadComponent = () => {
       if (index !== 0) {
         offset += 50;
       }
+
+      // Extra padding at bottom of thread
+      // This helps when using scrollToEnd
+      if (data.length === index + 1) {
+        offset += 10;
+      }
+
       return {
         length: postStates[data[index].no].height,
         offset,
@@ -121,6 +129,7 @@ export const ThreadComponent = () => {
             dispatch(actions.setListRef(ref));
           }
         }}
+        ListFooterComponent={ThreadFooterComponent}
       />
     );
   } else {
