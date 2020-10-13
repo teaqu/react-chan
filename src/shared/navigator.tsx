@@ -8,6 +8,7 @@ import { Text } from 'react-native';
 import { ThreadComponent } from 'src/thread/thread-component';
 import { CatalogComponent } from 'src/catalog/catalog-component';
 import { BoardPickerComponent } from 'src/board/board-picker/board-picker-component';
+import { ThreadMenuComponent } from 'src/thread/thread-menu-component';
 
 export type RootStackParamList = {
   Catalog: typeof CatalogComponent;
@@ -38,7 +39,8 @@ export function Navigator() {
         component={ThreadComponent}
         options={{
           gestureEnabled: true,
-          headerTitle: () => <Text />
+          headerTitle: () => <Text />,
+          headerRight: () => <ThreadMenuComponent />
         }}
       />
     </RootStack.Navigator>

@@ -21,10 +21,10 @@ export const ThreadComponent = () => {
     headerStyle: { backgroundColor: '#d6daf0' },
     elevation: 1
   };
-  const {
-    onScroll /* Event handler */,
-    containerPaddingTop /* number */,
-    scrollIndicatorInsetTop /* number */
+  let {
+    onScroll,
+    containerPaddingTop,
+    scrollIndicatorInsetTop
   } = useCollapsibleHeader(options);
 
   const route: RouteProp<RootStackParamList, 'Thread'> = useRoute();
