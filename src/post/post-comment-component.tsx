@@ -19,7 +19,7 @@ export const PostCommentComponent = React.memo(
   ({ postNo, postStateKey }: Props) => {
     const dispatch = useDispatch();
     const postState = useSelector(
-      (state: RootState) => state.posts.postStates[postStateKey]
+      (state: RootState) => state.thread.postStates[postStateKey]
     );
     const opNo = useSelector((state: RootState) => state.thread.threadNo);
 
@@ -70,7 +70,7 @@ export const PostCommentComponent = React.memo(
     };
 
     const post: Post = useSelector(
-      (state: RootState) => state.posts.posts[postNo]
+      (state: RootState) => state.thread.posts[postNo]
     );
 
     // Split up the comment if inline replies need to be shown.

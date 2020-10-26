@@ -37,7 +37,7 @@ export function* fetchThread(action: fetchThreadAction) {
 export function* calcReplies() {
   try {
     const chanAPI: ChanAPI = yield getContext('chanAPI');
-    let posts: Posts = yield select((state: RootState) => state.posts.posts);
+    let posts: Posts = yield select((state: RootState) => state.thread.posts);
 
     const replyLinks = yield call(chanAPI.calcReplies, posts);
     yield put(actions.calcRepliesSucceeded(replyLinks));
@@ -53,7 +53,7 @@ export function* calcReplies() {
 export function* calcHeights() {
   try {
     const chanAPI: ChanAPI = yield getContext('chanAPI');
-    let posts: Posts = yield select((state: RootState) => state.posts.posts);
+    let posts: Posts = yield select((state: RootState) => state.thread.posts);
     const heights = yield call(chanAPI.calcHeights, posts);
     yield put(actions.calcHeightsSucceeded(heights));
   } catch (e) {

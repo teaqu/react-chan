@@ -17,9 +17,9 @@ interface Props {
 export const PostThumbnailComponent = React.memo(
   ({ postNo, postStateKey }: Props) => {
     const dispatch = useDispatch();
-    const post = useSelector((state: RootState) => state.posts.posts[postNo]);
+    const post = useSelector((state: RootState) => state.thread.posts[postNo]);
     const postState = useSelector(
-      (state: RootState) => state.posts.postStates[postStateKey]
+      (state: RootState) => state.thread.postStates[postStateKey]
     );
     const boardId = useSelector(
       (state: RootState) => state.boardPicker.boardId

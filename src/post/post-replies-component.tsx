@@ -15,9 +15,9 @@ interface Props {
 export const PostRepliesComponent = React.memo(
   ({ postNo, postStateKey }: Props) => {
     const dispatch = useDispatch();
-    const post = useSelector((state: RootState) => state.posts.posts[postNo]);
+    const post = useSelector((state: RootState) => state.thread.posts[postNo]);
     const postState = useSelector(
-      (state: RootState) => state.posts.postStates[postStateKey]
+      (state: RootState) => state.thread.postStates[postStateKey]
     );
     // Show/hide a reply on pressing a reply link
     const toggleReply = (replyNo: number) => {

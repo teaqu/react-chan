@@ -50,5 +50,6 @@ export default {
   calcRepliesSucceeded,
   calcReplies,
   calcHeights,
-  calcHeightsSucceeded
+  calcHeightsSucceeded,
+  setListRef
 };

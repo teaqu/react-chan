@@ -20,9 +20,9 @@ export const PostComponent = React.memo(
   ({ postNo, postStateKey = postNo.toString() }: Props) => {
     const dispatch = useDispatch();
     const postState = useSelector(
-      (state: RootState) => state.posts.postStates[postStateKey]
+      (state: RootState) => state.thread.postStates[postStateKey]
     );
-    const post = useSelector((state: RootState) => state.posts.posts[postNo]);
+    const post = useSelector((state: RootState) => state.thread.posts[postNo]);
 
     useEffect(() => {
       // Only show the the red outline for half a second

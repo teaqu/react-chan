@@ -16,7 +16,7 @@ interface Props {
 export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
-  const post = useSelector((state: RootState) => state.posts.posts[postNo]);
+  const post = useSelector((state: RootState) => state.thread.posts[postNo]);
   const [imageLoading, setImageLoading] = useState(0);
   const chanApi = useSelector((state: RootState) => state.chanAPI);
   const [width, setWidth] = useState(0);

@@ -13,7 +13,7 @@ interface Props {
 }
 export const PostHeaderComponent = React.memo(({ postNo }: Props) => {
   const dispatch = useDispatch();
-  const post = useSelector((state: RootState) => state.posts.posts[postNo]);
+  const post = useSelector((state: RootState) => state.thread.posts[postNo]);
   const flagURI = useSelector((state: RootState) => state.chanAPI.flag);
   const listRef: FlatList<Post> | null = useSelector(
     (state: RootState) => state.thread.listRef

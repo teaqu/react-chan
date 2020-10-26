@@ -31,8 +31,8 @@ export const ThreadComponent = () => {
   const route: RouteProp<RootStackParamList, 'Thread'> = useRoute();
   const { boardId, threadNo } = route.params;
 
-  const posts = useSelector((state: RootState) => state.posts.posts);
-  const postStates = useSelector((state: RootState) => state.posts.postStates);
+  const posts = useSelector((state: RootState) => state.thread.posts);
+  const postStates = useSelector((state: RootState) => state.thread.postStates);
 
   useEffect(() => {
     dispatch(actions.fetchThread(boardId, threadNo));
@@ -98,6 +98,7 @@ export const ThreadComponent = () => {
       };
     }
   };
+
   let data = Object.values(posts);
   let refresh = 0;
   if (
