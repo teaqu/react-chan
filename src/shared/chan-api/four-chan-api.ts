@@ -209,6 +209,16 @@ const calcHeights = async (posts: Posts): Promise<number[]> => {
   return heights;
 };
 
+const genImageURI = (boardId: string, tim: number, ext: string): string => {
+  return (
+    image.replace('[board]', boardId).replace('[tim]', tim.toString()) + ext
+  );
+};
+
+const genThumbnailUri = (boardId: string, tim: number): string => {
+  return thumbnail.replace('[board]', boardId).replace('[tim]', tim.toString());
+};
+
 const fourChanAPI: ChanAPI = {
   thumbnail,
   image,
@@ -220,6 +230,8 @@ const fourChanAPI: ChanAPI = {
   fetchThread,
   fetchBoards,
   calcReplies,
-  calcHeights
+  calcHeights,
+  genImageURI,
+  genThumbnailUri
 };
 export default fourChanAPI;

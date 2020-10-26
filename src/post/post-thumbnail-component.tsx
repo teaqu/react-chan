@@ -13,6 +13,7 @@ interface Props {
   postNo: number;
   postStateKey: string;
 }
+
 export const PostThumbnailComponent = React.memo(
   ({ postNo, postStateKey }: Props) => {
     const dispatch = useDispatch();
@@ -23,9 +24,7 @@ export const PostThumbnailComponent = React.memo(
     const boardId = useSelector(
       (state: RootState) => state.boardPicker.boardId
     );
-    const thumbnailURI = useSelector(
-      (state: RootState) => state.chanAPI.thumbnail
-    );
+    const chanApi = useSelector((state: RootState) => state.chanAPI);
 
     // Set image width to <= 80
     const { tn_w, tn_h } = post;
@@ -44,9 +43,7 @@ export const PostThumbnailComponent = React.memo(
         <View style={[styles.thumbnailContainer, { height: thumbnail.height }]}>
           <FastImage
             source={{
-              uri: thumbnailURI
-                .replace('[board]', boardId)
-                .replace('[tim]', post.tim.toString())
+              uri: chanApi.genThumbnailUri(boardId, post.tim)
             }}
             style={[
               styles.thumbnail,

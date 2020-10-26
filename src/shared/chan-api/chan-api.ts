@@ -15,6 +15,8 @@ export interface ChanAPI {
   fetchThread(boardId: string, threadNo: number): Promise<Posts>;
   fetchBoards(): Promise<Board[]>;
   calcReplies(posts: Posts): ReplyLinks;
+  genImageURI(boardId: string, tim: number, ext: string): string;
+  genThumbnailUri(boardId: string, tim: number): string;
 
   /**
    * Calculate the height of each post so that we can jump to them before they

@@ -17,11 +17,8 @@ export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
   const post = useSelector((state: RootState) => state.posts.posts[postNo]);
-  const imageURI = useSelector((state: RootState) => state.chanAPI.image);
   const [imageLoading, setImageLoading] = useState(0);
-  const thumbnailURI = useSelector(
-    (state: RootState) => state.chanAPI.thumbnail
-  );
+  const chanApi = useSelector((state: RootState) => state.chanAPI);
   const [width, setWidth] = useState(0);
   const onLayout = (event: any) => {
     setWidth(event.nativeEvent.layout.width);
@@ -41,9 +38,7 @@ export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
           <View style={[styles.loading, { width: `${imageLoading}%` }]} />
           <FastImage
             source={{
-              uri: thumbnailURI
-                .replace('[board]', boardId)
-                .replace('[tim]', post.tim.toString())
+              uri: chanApi.genThumbnailUri(boardId, post.tim)
             }}
             style={{ height: image.height, width: image.width }}
           />
@@ -59,10 +54,7 @@ export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
           setImageLoading(100);
         }}
         source={{
-          uri:
-            imageURI
-              .replace('[board]', boardId)
-              .replace('[tim]', post.tim.toString()) + post.ext
+          uri: chanApi.genImageURI(boardId, post.tim, post.ext)
         }}
         style={
           // eslint-disable-next-line react-native/no-inline-styles
