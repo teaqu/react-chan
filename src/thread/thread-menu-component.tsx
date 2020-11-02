@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import { RootState } from 'src/shared/root-reducer';
 
 export function ThreadMenuComponent() {
   const listRef = useSelector((state: RootState) => state.thread.listRef);
+  const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
+  const threadNo = useSelector((state: RootState) => state.thread.threadNo);
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
   const itemTop = () => {
     listRef?.scrollToIndex({ index: 0 });
     setModalVisible(false);
@@ -15,6 +19,13 @@ export function ThreadMenuComponent() {
     listRef?.scrollToEnd();
     setModalVisible(false);
     listRef?.scrollToEnd();
+  };
+  const itemGallery = () => {
+    setModalVisible(false);
+    navigation.navigate('Gallery', {
+      boardId: boardId,
+      threadNo: threadNo
+    });
   };
   return (
     <>
@@ -30,6 +41,11 @@ export function ThreadMenuComponent() {
           <TouchableOpacity onPress={itemTop}>
             <View style={styles.menuItem}>
               <Text>Top</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={itemGallery}>
+            <View style={styles.menuItem}>
+              <Text>Gallery</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={itemBottom}>

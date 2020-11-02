@@ -7,16 +7,11 @@ import { findReplyInStateTree, initialPostState } from 'src/post/post-state';
 import postActions from 'src/post/post-actions';
 import { Posts, PostStates } from 'src/shared/chan-api/chan-api';
 
-interface Image {
-  uri: string;
-}
-
 export interface ThreadState {
   isFetching: boolean;
   error: string;
   threadNo: number;
   listRef: FlatList<Post> | null;
-  gallery: Image[] | null;
   posts: Posts;
   postStates: PostStates;
 }
@@ -26,7 +21,6 @@ const initialState: ThreadState = {
   error: '',
   threadNo: 0,
   listRef: null,
-  gallery: null,
   posts: {},
   postStates: {}
 };
