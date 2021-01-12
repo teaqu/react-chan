@@ -12,6 +12,7 @@ export interface ThreadState {
   error: string;
   threadNo: number;
   listRef: FlatList<Post> | null;
+  galleryPos: number;
   posts: Posts;
   postStates: PostStates;
 }
@@ -21,6 +22,7 @@ const initialState: ThreadState = {
   error: '',
   threadNo: 0,
   listRef: null,
+  galleryPos: 0,
   posts: {},
   postStates: {}
 };
@@ -38,6 +40,9 @@ export default createReducer(initialState, {
   },
   [threadActions.setListRef.type]: (state, action) => {
     state.listRef = action.payload;
+  },
+  [threadActions.setGalleryPos.type]: (state, action) => {
+    state.galleryPos = action.payload;
   },
   [threadActions.invalidateThread.type]: state => {
     state.posts = {};

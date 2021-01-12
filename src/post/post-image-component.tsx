@@ -13,17 +13,19 @@ interface Props {
   postNo: number;
   postStateKey: string;
 }
+
 export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
   const dispatch = useDispatch();
   const boardId = useSelector((state: RootState) => state.boardPicker.boardId);
   const post = useSelector((state: RootState) => state.thread.posts[postNo]);
-  const [imageLoading, setImageLoading] = useState(0);
   const chanApi = useSelector((state: RootState) => state.chanAPI);
   const [width, setWidth] = useState(0);
   const onLayout = (event: any) => {
     setWidth(event.nativeEvent.layout.width);
   };
   const image = imageUtils.calculateAspectRatio(post.w, post.h, width);
+
+  const [imageLoading, setImageLoading] = useState(0);
   return (
     <TouchableWithoutFeedback
       style={styles.imageContainer}
@@ -38,7 +40,7 @@ export const PostImageComponent = ({ postNo, postStateKey }: Props) => {
           <View style={[styles.loading, { width: `${imageLoading}%` }]} />
           <FastImage
             source={{
-              uri: chanApi.genThumbnailUri(boardId, post.tim)
+              uri: chanApi.genImageURI(boardId, post.tim, post.ext)
             }}
             style={{ height: image.height, width: image.width }}
           />

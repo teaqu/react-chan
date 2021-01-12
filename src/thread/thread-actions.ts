@@ -41,6 +41,8 @@ export const calcHeightsSucceeded = createAction<number[]>(
   'CALC_HEIGHTS_SUCCEEDED'
 );
 
+export const setGalleryPos = createAction<number>('SET_GALLERY_POS');
+
 export default {
   invalidateThread,
   fetchThreadFailed,
@@ -51,5 +53,6 @@ export default {
   calcReplies,
   calcHeights,
   calcHeightsSucceeded,
-  setListRef
+  setListRef,
+  setGalleryPos
 };
